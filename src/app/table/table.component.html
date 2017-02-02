@@ -1,0 +1,12 @@
+<td-data-table  
+[selectable]="selectable" 
+[data]="data" 
+[columns]="columns" 
+[multiple]="multiple" 
+[sortable]="sortable" 
+[sortBy]="sortBy"
+[sortOrder]="sortOrder" 
+(sortChange)="sortTable($event)" 
+(rowSelect)="itemSelected($event)">
+ 
+</td-data-table>

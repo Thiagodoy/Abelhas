@@ -1,3 +1,7 @@
-<h1>
-  {{title}}
-</h1>
+<div  layout="row">
+    <md-toolbar *ngIf="showToolbar" class="app-position" color="primary">
+</md-toolbar>
+</div>
+<div layout="column" style="margin-top: 60px;align-items: center">
+  <router-outlet></router-outlet>
+</div>

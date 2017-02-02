@@ -1,3 +1,71 @@
-<p>
-  list-apiary works!
-</p>
+<md-card style="margin: 20px;">
+  <md-card-title>Apiarios</md-card-title>
+  <md-card-subtitle>
+    <div layout="row">
+      <div flex="25" layout="column">
+        <md-radio-group>
+          <md-radio-button name="filtro" value="option_1">Todos</md-radio-button>
+          <md-radio-button name="filtro" value="option_2">Validados</md-radio-button>
+          <md-radio-button name="filtro" value="option_2">Não Validados</md-radio-button>
+        </md-radio-group>
+      </div>
+      <div flex="25" layout="column">date time</div>
+      <div flex="25" layout="column"></div>
+      <div flex="25" layout="column"> <button md-button>Pesquisar</button></div>
+    </div>
+  </md-card-subtitle>
+  <md-card-content>
+    <div layout="row">
+   <table td-data-table>
+    <th td-data-table-column>
+      Validado
+    </th>
+    <th td-data-table-column>
+      Especie
+    </th>
+    <th td-data-table-column>
+      Apicultor
+    </th>
+    <th td-data-table-column>
+      Status
+    </th>
+    <th td-data-table-column>
+      Data
+    </th>
+    <th td-data-table-column>
+      #
+    </th>
+    <tbody>
+      <tr td-data-table-row *ngFor="let apiario of data">
+        <td td-data-table-cell [numeric]="false">
+          <md-icon [style.color]="apiario.validado=='Sim' ? 'green' : apiario.validado=='Não' ? 'red' : '#ffd740'">{{apiario.validado == 'Sim' ? 'check_circle': apiario.validado == 'Não' ? 'report':'warning' }}</md-icon>
+        </td>
+        <td td-data-table-cell [numeric]="false">
+          {{apiario.especie}}
+        </td>
+        <td td-data-table-cell [numeric]="false">
+          {{apiario.apicultor}}
+        </td>
+        <td td-data-table-cell [numeric]="false">
+          {{apiario.status}}
+        </td>
+        <td td-data-table-cell [numeric]="false">
+          {{apiario.data}}
+        </td>
+        <td td-data-table-cell [numeric]="false">
+          <button md-icon-button [mdMenuTriggerFor]="menu">
+             <md-icon>menu</md-icon>
+        </button>
+          <md-menu #menu="mdMenu">
+            <button md-menu-item> Validar </button>
+            <button md-menu-item> Editar </button>
+            <button md-menu-item> Excluir </button>
+            <button md-menu-item disabled> Histórico </button>
+          </md-menu>
+        </td>
+      </tr>
+    </tbody>
+  </table>
+    </div>
+  </md-card-content>
+</md-card>
