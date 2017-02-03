@@ -13,6 +13,11 @@ import { LoginComponent } from './login/login.component';
 import { TableComponent } from './table/table.component';
 
 import{ route } from './route/route';
+import { MessageDialogComponent } from './message-dialog/message-dialog.component';
+
+import { DialogService } from './service/dialog.service';
+import { LeafletService } from './service/leaflet.service';
+import { ParseService } from './service/parse.service';
 
 
 
@@ -21,7 +26,7 @@ import{ route } from './route/route';
     AppComponent,    
     ListApiaryComponent, 
     LoginComponent, 
-    TableComponent    
+    TableComponent, MessageDialogComponent    
     
   ],
   imports: [
@@ -33,7 +38,8 @@ import{ route } from './route/route';
     CovalentCoreModule.forRoot(),
     LayoutModule
   ],
-  providers: [],
-  bootstrap: [AppComponent]
+  providers: [DialogService,ParseService,LeafletService],
+  bootstrap: [AppComponent],
+  entryComponents:[MessageDialogComponent]
 })
 export class AppModule { }
