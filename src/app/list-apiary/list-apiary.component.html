@@ -23,7 +23,7 @@
             <div flex style="display: inline-flex; flex-wrap: wrap">
               <div>
                 <md-icon class="date-picker-icon">date_range</md-icon>
-                <app-data-picker-custom [fontFamily]="font" [dateFormat]="'DD-MM-YYYY'" [placeholder]="'DD/MM/YYYY'" class="date-picker-custom date-picker-input">
+                <app-data-picker-custom [fontFamily]="font" [dateFormat]="'DD-MM-YYYY'" [placeholder]="'DD/MM/YYYY'" [disabled]="false" class="date-picker-custom date-picker-input">
                 </app-data-picker-custom>
               </div>
               <span class="between-generic"> à </span>
@@ -34,16 +34,19 @@
               </div>
             </div>
           </div>
-          <div layout="row" flex="15" layout-align="start end">
+          <div layout="column" flex="15">
             <div flex="">
-              <md-input-container style="margin-top: 37px">
-                <input md-input placeholder="Nome apicultor" value="Marcelo">
+              <h3 style="height: 5px">Apicultor</h3>
+            </div>
+            <div flex="">
+              <md-input-container [floatingPlaceholder]="false" [dividerColor]="warn" style="width: 100% !important;">
+                <input md-input placeholder="Nome" value="Marcelo">
               </md-input-container>
             </div>
           </div>
-          <div layout="row" flex="10" layout-align="start end">
-            <div flex="">
-              <button md-raised-button style="margin-bottom: 10px;width: 152px"><md-icon>search</md-icon></button>
+          <div layout="row" flex="20" layout-align="center end">
+            <div>
+              <button md-raised-button style="margin-bottom:10px;width: 152px"><md-icon>search</md-icon></button>
             </div>
           </div>
         </div>
