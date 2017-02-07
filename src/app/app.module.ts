@@ -4,6 +4,8 @@ import { FormsModule } from '@angular/forms';
 import { HttpModule } from '@angular/http';
 import { MaterialModule  } from '@angular/material';
 import { RouterModule  } from '@angular/router';
+
+//Bibliotecas de terceiros
 import { CovalentCoreModule } from '@covalent/core';
 import { LayoutModule } from 'ng2-flex-layout';
 
@@ -18,7 +20,9 @@ import { MessageDialogComponent } from './message-dialog/message-dialog.componen
 import { DialogService } from './service/dialog.service';
 import { LeafletService } from './service/leaflet.service';
 import { ParseService } from './service/parse.service';
+import { DataPickerCustomComponent } from './data-picker-custom/data-picker-custom.component';
 
+import { TablePaginationComponent } from './table-pagination/table-pagination.component';
 
 
 @NgModule({
@@ -26,7 +30,7 @@ import { ParseService } from './service/parse.service';
     AppComponent,    
     ListApiaryComponent, 
     LoginComponent, 
-    TableComponent, MessageDialogComponent    
+    TableComponent, MessageDialogComponent, DataPickerCustomComponent,  TablePaginationComponent
     
   ],
   imports: [
@@ -36,7 +40,7 @@ import { ParseService } from './service/parse.service';
     MaterialModule.forRoot(),
     RouterModule.forRoot(route),
     CovalentCoreModule.forRoot(),
-    LayoutModule
+    LayoutModule    
   ],
   providers: [DialogService,ParseService,LeafletService],
   bootstrap: [AppComponent],

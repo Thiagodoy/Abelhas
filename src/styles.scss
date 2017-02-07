@@ -1,0 +1,15 @@
+/* You can add global styles to this file, and also import other style files */
+@import '~@angular/material/core/theming/prebuilt/deeppurple-amber.css';
+@import '~@angular/material/core/theming/all-theme';
+@import '~@covalent/core/theming/all-theme';
+
+//table custom
+.md-selected{
+    background-color: #faf3d6;
+}
+// .td-data-table-row:hover{
+//     background-color: #fafafa;
+// }
+.td-data-table-clicked{
+    background-color: #faf3d6;
+}

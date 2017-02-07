@@ -12,7 +12,9 @@ export class DialogService {
 
     let dialogRef: MdDialogRef<MessageDialogComponent>;
     let config = new MdDialogConfig();
+
     config.viewContainerRef = viewContainerRef;
+    config.disableClose = true;
 
     dialogRef = this.dialog.open(MessageDialogComponent, config);
 

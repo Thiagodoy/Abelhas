@@ -1,73 +1,58 @@
 <md-card style="margin: 20px;">
   <md-card-title>Apiarios</md-card-title>
-  <md-card-subtitle>
-    <div layout="row">
-      <div flex="25" layout="column">
-        <md-radio-group>
-          <md-radio-button name="filtro" value="option_1">Todos</md-radio-button>
-          <md-radio-button name="filtro" value="option_2">Validados</md-radio-button>
-          <md-radio-button name="filtro" value="option_2">Não Validados</md-radio-button>
-        </md-radio-group>
-      </div>
-      <div flex="25" layout="column">date time</div>
-      <div flex="25" layout="column"></div>
-      <div flex="25" layout="column"> <button md-button>Pesquisar</button></div>
-    </div>
-  </md-card-subtitle>
+  <div layout="row">
+    <md-card style="width: 100%">
+      <md-card-content>
+        <div layout="row">
+          <div layout="column" flex="25">
+            <div flex>
+              <h3>Filtros</h3>
+            </div>
+            <div flex>
+              <md-radio-group>
+                <md-radio-button name="filtro" value="todos">Todos</md-radio-button>
+                <md-radio-button name="filtro" value="validados">Validados</md-radio-button>
+                <md-radio-button name="filtro" value="nok">Não Validados</md-radio-button>
+              </md-radio-group>
+            </div>
+          </div>
+          <div layout="column" flex="30">
+            <div flex>
+              <h3>Periodo</h3>
+            </div>
+            <div flex style="display: inline-flex; flex-wrap: wrap">
+              <div>
+                <md-icon class="date-picker-icon">date_range</md-icon>
+                <app-data-picker-custom [fontFamily]="font" [dateFormat]="'DD-MM-YYYY'" [placeholder]="'DD/MM/YYYY'" class="date-picker-custom date-picker-input">
+                </app-data-picker-custom>
+              </div>
+              <span class="between-generic"> à </span>
+              <div>
+                <md-icon class="date-picker-icon">date_range</md-icon>
+                <app-data-picker-custom [fontFamily]="font" [dateFormat]="'DD-MM-YYYY'" [placeholder]="'DD/MM/YYYY'" class="date-picker-custom date-picker-input">
+                </app-data-picker-custom>
+              </div>
+            </div>
+          </div>
+          <div layout="row" flex="15" layout-align="start end">
+            <div flex="">
+              <md-input-container style="margin-top: 37px">
+                <input md-input placeholder="Nome apicultor" value="Marcelo">
+              </md-input-container>
+            </div>
+          </div>
+          <div layout="row" flex="10" layout-align="start end">
+            <div flex="">
+              <button md-raised-button style="margin-bottom: 10px;width: 152px"><md-icon>search</md-icon></button>
+            </div>
+          </div>
+        </div>
+      </md-card-content>
+    </md-card>
+  </div>
   <md-card-content>
     <div layout="row">
-   <table td-data-table>
-    <th td-data-table-column>
-      Validado
-    </th>
-    <th td-data-table-column>
-      Especie
-    </th>
-    <th td-data-table-column>
-      Apicultor
-    </th>
-    <th td-data-table-column>
-      Status
-    </th>
-    <th td-data-table-column>
-      Data
-    </th>
-    <th td-data-table-column>
-      #
-    </th>
-    <tbody>
-      <tr td-data-table-row *ngFor="let apiario of data">
-        <td td-data-table-cell [numeric]="false">
-          <md-icon [style.color]="apiario.validado=='Sim' ? 'green' : apiario.validado=='Não' ? 'red' : '#ffd740'">{{apiario.validado == 'Sim' ? 'check_circle': apiario.validado == 'Não' ? 'report':'warning' }}</md-icon>
-        </td>
-        <td td-data-table-cell [numeric]="false">
-          {{apiario.especie}}
-        </td>
-        <td td-data-table-cell [numeric]="false">
-          {{apiario.apicultor}}
-        </td>
-        <td td-data-table-cell [numeric]="false">
-          {{apiario.status}}
-        </td>
-        <td td-data-table-cell [numeric]="false">
-          {{apiario.data}}
-        </td>
-        <td td-data-table-cell [numeric]="false">
-          <button md-icon-button [mdMenuTriggerFor]="menu">
-             <md-icon>menu</md-icon>
-        </button>
-          <md-menu #menu="mdMenu">
-            <button md-menu-item (click)="confirmValidation()"> Validar </button>
-            <button md-menu-item> Editar </button>
-            <button md-menu-item> Excluir </button>
-            <button md-menu-item disabled> Histórico </button>
-          </md-menu>
-        </td>
-      </tr>
-    </tbody>
-  </table>
+      <app-table style="width: 100%" [data]="data" [columns]="columns" [selectable]="false" [showPagination]="'true'" (itemSelected2)="itemSelected($event)"></app-table>
     </div>
   </md-card-content>
 </md-card>
-
-

@@ -4,7 +4,7 @@ import {MdDialogRef} from '@angular/material';
 @Component({
   selector: 'app-message-dialog',
   templateUrl: './message-dialog.component.html',
-  styleUrls: ['./message-dialog.component.sass']
+  styleUrls: ['./message-dialog.component.scss']
 })
 export class MessageDialogComponent implements OnInit {
 
@@ -12,7 +12,6 @@ export class MessageDialogComponent implements OnInit {
   public  title:string;
 
   constructor(public dialogRef: MdDialogRef<MessageDialogComponent>) { }
-
   ngOnInit() {
   }
 

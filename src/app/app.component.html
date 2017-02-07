@@ -1,7 +1,85 @@
-<div  layout="row">
-    <md-toolbar *ngIf="showToolbar" class="app-position" color="primary">
-</md-toolbar>
-</div>
-<div layout="column" style="margin-top: 60px;align-items: center">
+<md-sidenav-container class="example-container">
+  <md-sidenav #sidenav class="example-sidenav">
+    <!--<md-list>
+      <div *ngFor="let itemMenu of listMenu">
+        <md-list-item (click)="sidenav.toggle()">
+          <md-icon class="md-24" md-list-avatar [svgIcon]="listMenu[4].icon"></md-icon>
+          <h4 md-line>{{itemMenu.text}}</h4>         
+        </md-list-item>
+        <md-divider></md-divider>
+      </div>
+      <md-list-item>  
+        <md-icon md-list-avatar >exit_to_app</md-icon>
+        <h4 md-line>Sair</h4> 
+      </md-list-item>
+    </md-list>-->
+    <td-expansion-panel expand="true">
+      <template td-expansion-panel-label>
+        <md-icon class="md-16" md-list-avatar>menu</md-icon>
+      </template>
+      <template td-expansion-panel-sublabel>
+       <h4>Categoria 1</h4>
+      </template>
+      <td-expansion-summary>
+        <md-list>
+          <md-list-item class="margin-item-menu" (click)="sidenav.toggle()">
+            <md-icon class="md-16" md-list-avatar>folder</md-icon>
+            <h4 md-line>Sub-menu</h4>
+          </md-list-item>
+        </md-list>
+      </td-expansion-summary>
+    </td-expansion-panel>
+
+    <td-expansion-panel expand="true">
+      <template td-expansion-panel-label>
+        <md-icon class="md-16" md-list-avatar>menu</md-icon>
+      </template>
+      <template td-expansion-panel-sublabel>
+       <h4>Categoria 2</h4>
+      </template>
+      <td-expansion-summary>
+        <md-list>
+          <md-list-item class="margin-item-menu" (click)="sidenav.toggle()">
+            <md-icon class="md-16" md-list-avatar>folder</md-icon>
+            <h4 md-line>Sub-menu</h4>
+          </md-list-item>
+          <md-list-item class="margin-item-menu" (click)="sidenav.toggle()">
+            <md-icon class="md-16" md-list-avatar>home</md-icon>
+            <h4 md-line>Sub-menu</h4>
+          </md-list-item>
+        </md-list>
+      </td-expansion-summary>
+    </td-expansion-panel>
+    <td-expansion-panel expand="true">
+      <template td-expansion-panel-label>
+         <md-icon class="md-16" md-list-avatar>menu</md-icon>
+      </template>
+      <template td-expansion-panel-sublabel>
+       <h4>Categoria 3</h4>
+      </template>
+      <td-expansion-summary>
+        <md-list>
+          <md-list-item class="margin-item-menu" (click)="sidenav.toggle()">
+            <md-icon class="md-16" md-list-avatar>home</md-icon>
+            <h4 md-line>Sub-menu</h4>
+          </md-list-item>
+          <md-list-item class="margin-item-menu" (click)="sidenav.toggle()">
+            <md-icon class="md-16" md-list-avatar>home</md-icon>
+            <h4 md-line>Sub-menu</h4>
+          </md-list-item>
+          <md-list-item  class="margin-item-menu" (click)="sidenav.toggle()">
+            <md-icon class="md-16" md-list-avatar>home</md-icon>
+            <h4 md-line>Sub-menu</h4>
+          </md-list-item>
+        </md-list>
+      </td-expansion-summary>
+    </td-expansion-panel>
+  </md-sidenav>
+  <md-toolbar *ngIf="true" class="app-position" color="accent">
+    <button md-icon-button (click)="sidenav.toggle()">
+             <md-icon>menu</md-icon>
+        </button>
+    <md-icon md-list-avatar>person</md-icon>
+  </md-toolbar>
   <router-outlet></router-outlet>
-</div>
+</md-sidenav-container>

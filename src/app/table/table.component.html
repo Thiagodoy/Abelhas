@@ -1,12 +1,32 @@
 <td-data-table  
 [selectable]="selectable" 
-[data]="data" 
+[data]="filteredData" 
 [columns]="columns" 
 [multiple]="multiple" 
 [sortable]="sortable" 
 [sortBy]="sortBy"
 [sortOrder]="sortOrder" 
 (sortChange)="sortTable($event)" 
-(rowSelect)="itemSelected($event)">
+(rowSelect)="itemSelected($event)" id="table">
+
+<template tdDataTableTemplate="validado" let-value="value" let-row="row" let-column="column">
+    <div layout="row">
+       <md-icon [style.color]="row[column]=='Sim' ? 'green' : row[column]=='Não' ? 'red' : '#ffd740'">{{row[column] == 'Sim' ? 'check_circle': row[column] == 'Não' ? 'report':'warning' }}</md-icon>
+    </div>
+  </template>
+  <template tdDataTableTemplate="acoes" let-value="value" let-row="row" let-column="column">
+    <div layout="row">
+       <button md-icon-button [mdMenuTriggerFor]="menu">
+              <md-icon>menu</md-icon>
+              </button>
+              <md-menu #menu="mdMenu">
+                <button md-menu-item (click)="confirmarValidacao()"> Validar </button>
+                <button md-menu-item> Editar </button>
+                <button md-menu-item> Excluir </button>
+                <button md-menu-item disabled> Histórico </button>
+              </md-menu>
+    </div>
+  </template>
  
 </td-data-table>
+<td-paging-bar2 *ngIf="showPagination" [pageSizes]="[5, 10, 15, 20]" [total]="data.length" (change)="page($event)"></td-paging-bar2>
