@@ -23,6 +23,8 @@ import { ParseService } from './service/parse.service';
 import { DataPickerCustomComponent } from './data-picker-custom/data-picker-custom.component';
 
 import { TablePaginationComponent } from './table-pagination/table-pagination.component';
+import { EditApiaryComponent } from './edit-apiary/edit-apiary.component';
+import { MapaComponent } from './mapa/mapa.component';
 
 
 @NgModule({
@@ -30,7 +32,7 @@ import { TablePaginationComponent } from './table-pagination/table-pagination.co
     AppComponent,    
     ListApiaryComponent, 
     LoginComponent, 
-    TableComponent, MessageDialogComponent, DataPickerCustomComponent,  TablePaginationComponent
+    TableComponent, MessageDialogComponent, DataPickerCustomComponent,  TablePaginationComponent, EditApiaryComponent, MapaComponent
     
   ],
   imports: [
