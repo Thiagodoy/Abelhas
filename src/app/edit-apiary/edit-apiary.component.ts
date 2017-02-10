@@ -7,6 +7,11 @@ import { Component, OnInit } from '@angular/core';
 })
 export class EditApiaryComponent implements OnInit {
 
+  // MOCK
+  apicultores: any[] = [{ nome: 'Valdir Correa Nogueira', value: 1 }];
+  propriedades: any[] = [{ nome: 'Sítio do Catelan - sto augustinho', value: 1 }];
+  culturas: any[] = [{ nome: 'Soja' }, { nome: 'Pinus' }, { nome: 'Pasto' }, { nome: 'Milho' }, { nome: 'Melão' }, { nome: 'Maracujá' }];
+
   constructor() { }
 
   ngOnInit() {

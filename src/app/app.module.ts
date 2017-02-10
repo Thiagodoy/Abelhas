@@ -20,6 +20,8 @@ import { MessageDialogComponent } from './message-dialog/message-dialog.componen
 import { DialogService } from './service/dialog.service';
 import { LeafletService } from './service/leaflet.service';
 import { ParseService } from './service/parse.service';
+import { GeocodingService } from './service/geocode.service';
+
 import { DataPickerCustomComponent } from './data-picker-custom/data-picker-custom.component';
 
 import { TablePaginationComponent } from './table-pagination/table-pagination.component';
@@ -44,7 +46,7 @@ import { MapaComponent } from './mapa/mapa.component';
     CovalentCoreModule.forRoot(),
     LayoutModule    
   ],
-  providers: [DialogService,ParseService,LeafletService],
+  providers: [DialogService,ParseService,LeafletService,GeocodingService],
   bootstrap: [AppComponent],
   entryComponents:[MessageDialogComponent]
 })

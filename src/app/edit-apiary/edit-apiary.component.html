@@ -1,23 +1,61 @@
-<md-card>   
-   <md-card-title>Edição do Apiário</md-card-title>   
+<md-card>
+  <md-card-title>Edição do Apiário</md-card-title>
   <md-card-content>
     <div layout="row" layout-align="center center">
-      <div layout="column" flex="60" style="background: rebeccapurple">
+      <div layout="column" flex="60">
         <form>
           <div layout="column">
-            <div layout="row">row</div>
-            <div layout="row">row</div>
-            <div layout="row">row</div>
-            <div layout="row">row</div>
+            <div layout="column" layout-align="space-between start">
+              <md-select placeholder="Apicultor" name="apicultor" style="width: 40%;margin-bottom: 20px;">
+                <md-option selected *ngFor="let apicultor of apicultores" [value]="apicultor.value">
+                  {{apicultor.nome}}
+                </md-option>
+              </md-select>
+              <md-select placeholder="Propriedade" name="propriedade" style="width: 40%;margin-bottom: 20px;">
+                <md-option selected *ngFor="let propriedade of propriedades" [value]="propriedade.value">
+                  {{propriedade.nome}}
+                </md-option>
+              </md-select>
+            </div>
+            <div layout="row" style="margin-bottom: 20px;">
+              <div layout="column">
+                <h4>Culturas</h4>
+              </div>
+              <div layout="row" style="flex-wrap: wrap;margin-top: 16px">
+                <md-checkbox flex="15" style="margin-left: 15px" *ngFor="let cultura of culturas" value="cultura.nome" [checked]="true">{{cultura.nome}}</md-checkbox>
+              </div>
+            </div>
+            <div layout="row">
+              <div layout="column">
+                <h4>Migratório</h4>
+              </div>
+              <div layout="row" style="flex-wrap: wrap;margin-top: 14px">
+                <md-radio-group class="example-radio-group" style="margin-left: 15px;">
+                  <md-radio-button>Sim </md-radio-button>
+                  <md-radio-button>Não </md-radio-button>
+                </md-radio-group>
+              </div>
+            </div>
+            <div layout="row">
+              <div layout="column"  layout-align="space-between start" style="width: 100%">
+                <md-input-container class="example-full-width" style="width: 40%">
+                  <input md-input placeholder="Quantidade de caixas">
+                </md-input-container>
+                <md-input-container class="example-full-width" style="width: 40%">
+                  <input md-input placeholder="Distancia deslocamento de caixa">
+                </md-input-container>
+              </div>
+            </div>
           </div>
         </form>
       </div>
-      <div layout="column" flex="40" style="background: red">div</div>
+      <div layout="column" flex="40"><strong>FOTO</strong></div>
     </div>
   </md-card-content>
   <md-card-actions layout="row" layout-align="start center">
-    <button md-button>Action 1</button>
-    <button md-button>Action 2</button>
-    <button md-button>Action 3</button>    
+    <button md-button color="primary">Validar</button>
+    <button md-button color="primary">Excluir</button>
+    <button md-button color="primary">Salvar</button>
   </md-card-actions>
 </md-card>
+<app-mapa style="margin-top: 10px; "></app-mapa>
