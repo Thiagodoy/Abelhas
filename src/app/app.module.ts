@@ -6,12 +6,13 @@ import { HttpModule } from '@angular/http';
 import { AppComponent } from './app.component';
 import { ListApiaryComponent } from './list-apiary/list-apiary.component';
 import { LoginComponent } from './login/login.component';
+import { EditMultipleApiaryComponent } from './edit-multiple-apiary/edit-multiple-apiary.component';
 
 
 @NgModule({
   declarations: [
     AppComponent,    
-    ListApiaryComponent, LoginComponent
+    ListApiaryComponent, LoginComponent, EditMultipleApiaryComponent
   ],
   imports: [
     BrowserModule,
