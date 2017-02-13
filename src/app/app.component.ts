@@ -19,13 +19,14 @@ export class AppComponent {
     //Aplicação de icons customizados
     mdIconRegistry.addSvgIcon('bee', sanitizer.bypassSecurityTrustResourceUrl('assets/bee.svg'));
 
+    // Exibe a modal da imagem do componente Editar
     EditApiaryComponent.pop.subscribe((event) => {
       Jquery('#myModal').toggle();
       Jquery('#img01').attr('src', event.src);
     });
 
     Jquery('#closeModal').click(function(){
-      Jquery('#myModal').hide();
+      Jquery('#myModal').toggle();
     });
 
 
