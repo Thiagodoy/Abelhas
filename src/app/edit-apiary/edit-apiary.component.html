@@ -1,0 +1,144 @@
+<md-card>
+  <md-card-title>Edição do Apiário</md-card-title>
+  <md-card-content>
+    <div layout="row" layout-align="center center">
+      <div layout="column" flex="60">
+        <form>
+          <div layout="column">
+            <div layout="column" layout-align="space-between start">
+              <md-select placeholder="Apicultor" name="apicultor" style="width: 40%;margin-bottom: 20px;">
+                <md-option selected *ngFor="let apicultor of apicultores" [value]="apicultor.value">
+                  {{apicultor.nome}}
+                </md-option>
+              </md-select>
+              <md-select placeholder="Propriedade" name="propriedade" style="width: 40%;margin-bottom: 20px;">
+                <md-option selected *ngFor="let propriedade of propriedades" [value]="propriedade.value">
+                  {{propriedade.nome}}
+                </md-option>
+              </md-select>
+            </div>
+            <div layout="row" style="margin-bottom: 20px;">
+              <div layout="column">
+                <h4>Culturas</h4>
+              </div>
+              <div layout="row" flex="50" style="flex-wrap: wrap;margin-top: 16px">
+                <div flex="35" *ngFor="let cultura of culturas">
+                    <md-checkbox style="margin-left: 15px" >{{cultura.nome}}</md-checkbox>               
+                </div>                
+              </div>
+            </div>
+            <div layout="row">
+              <div layout="column">
+                <h4>Migratório</h4>
+              </div>
+              <div layout="row" style="flex-wrap: wrap;margin-top: 14px">
+                <md-radio-group class="example-radio-group" style="margin-left: 15px;">
+                  <md-radio-button name="migratorio" value="sim">Sim </md-radio-button>
+                  <md-radio-button name="migratorio" value="nao">Não </md-radio-button>
+                </md-radio-group>
+              </div>
+            </div>
+            <div layout="row">
+              <div layout="column" layout-align="space-between start" style="width: 100%">
+                <md-input-container class="example-full-width" style="width: 40%">
+                  <input md-input placeholder="Quantidade de caixas">
+                   <span md-suffix>unidades.</span>
+                </md-input-container>
+                <md-input-container class="example-full-width" style="width: 40%">
+                  <input md-input placeholder="Distancia deslocamento de caixa">
+                   <span md-suffix>metros.</span>
+                </md-input-container>
+              </div>
+            </div>
+            <div layout="row">
+              <md-select placeholder="Espécie de abelhas" name="especie" style="width: 40%;margin-bottom: 20px;margin-top: 16px;">
+                <md-option selected *ngFor="let especie of especies">
+                  {{especie.name}}
+                </md-option>
+              </md-select>
+            </div>
+            <div layout="column">
+              <div flex="">
+                <h3>Exitência de mortalidade de abelha (últimos 30 dias)</h3>
+              </div>
+              <div flex="">
+                <md-radio-group class="example-radio-group" style="margin-left: 15px;">
+                  <md-radio-button name="mortalidade" value="sim">Sim </md-radio-button>
+                  <md-radio-button name="mortalidade" value="sim">Não </md-radio-button>
+                </md-radio-group>
+              </div>
+            </div>
+            <div layout="row">
+              <md-select placeholder="Motivo mortandade" name="motivo" style="width: 40%;margin-bottom: 20px;margin-top: 27px">
+                <md-option selected *ngFor="let moditvo of motivoMortandade">
+                  {{moditvo.name}}
+                </md-option>
+              </md-select>
+            </div>
+            <div layout="row">
+              <div layout="column">
+                <h4>Tem comprovação por análise?</h4>
+              </div>
+              <div layout="row" style="flex-wrap: wrap;margin-top: 16px">
+                <md-radio-group class="example-radio-group" style="margin-left: 15px;">
+                  <md-radio-button name="comprovacao" value="sim">Sim </md-radio-button>
+                  <md-radio-button name="comprovacao" value="sim">Não </md-radio-button>
+                </md-radio-group>
+              </div>
+            </div>
+            <div layout="row" style="margin-bottom: 12px;">
+              <div layout="column">
+                <h4>Histórico mortandade?</h4>
+              </div>
+              <div layout="row" style="flex-wrap: wrap;margin-top: 16px">
+                <md-radio-group class="example-radio-group" style="margin-left: 15px;">
+                  <md-radio-button name="historico_mortandade" value="sim">Sim </md-radio-button>
+                  <md-radio-button name="historico_mortandade" value="sim">Não </md-radio-button>
+                </md-radio-group>
+              </div>
+            </div>
+            <div layout="row">
+              <md-select placeholder="Motivo Histórico mortandade" name="motivo" style="width: 40%;margin-bottom: 20px;">
+                <md-option selected *ngFor="let moditvo of motivoMortandade">
+                  {{moditvo.name}}
+                </md-option>
+              </md-select>
+            </div>
+            <div layout="row" style="margin-bottom: 20px;">
+              <div layout="column">
+                <h4>Histórico teve comprovação por análise?</h4>
+              </div>
+              <div layout="row" style="flex-wrap: wrap;margin-top: 16px">
+                <md-radio-group class="example-radio-group" style="margin-left: 15px;">
+                  <md-radio-button name="comprovacao_analise" value="sim">Sim </md-radio-button>
+                  <md-radio-button name="comprovacao_analise" value="sim">Não </md-radio-button>
+                </md-radio-group>
+              </div>
+            </div>
+            <div layout="column">
+              <div flex="">
+                <md-input-container style="width: 40%">
+                  <textarea md-input placeholder="Observação">Lorem ipsum dolor sit amet, consectetur adipisicing elit. Officiis ducimus sint facere cumque inventore optio sapiente veniam, officia tempore libero voluptates, recusandae quis ad quidem voluptate laboriosam vero, laudantium </textarea>
+                </md-input-container>
+              </div>
+            </div>
+          </div>
+        </form>
+      </div>
+      <div layout="column" flex="40" layout-align="start start">
+        <div flex="">
+          <img id="myImg" src="assets/apiario_template.JPG" style="width: 50%;height: 50%; position: absolute;left: 660px; top: 155px;" alt="Modelo"
+         >
+        </div>
+        
+      </div>
+    </div>
+  </md-card-content>
+  <md-card-actions layout="row" layout-align="start center">
+    <button md-raised-button color="primary">Validar</button>
+    <button md-raised-button color="warn">Excluir</button>
+    <button md-raised-button color="acent">Salvar</button>
+  </md-card-actions>
+</md-card>
+<app-mapa style="margin-top: 10px; "></app-mapa>
+

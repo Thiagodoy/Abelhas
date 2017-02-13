@@ -2,6 +2,14 @@
 
 This project was generated with [angular-cli](https://github.com/angular/angular-cli) version 1.0.0-beta.20-4.
 
+BEFORE YOU INSTALL: please read the prerequisites
+
+1° - npm install -g @angular/cli
+
+2° - npm install
+
+3° - ng serve
+
 ## Development server
 Run `ng serve` for a dev server. Navigate to `http://localhost:4200/`. The app will automatically reload if you change any of the source files.
 
