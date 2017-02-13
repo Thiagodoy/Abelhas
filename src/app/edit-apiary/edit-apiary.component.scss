@@ -2,3 +2,11 @@
     color: black !important;
     border-bottom: 1px solid black !important;
 }
+
+// MODAL IMAGE
+#myImg {
+    border-radius: 5px;
+    cursor: pointer;
+    transition: 0.3s;
+}
+#myImg:hover {opacity: 0.7;}

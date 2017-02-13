@@ -29,6 +29,8 @@ import { EditApiaryComponent } from './edit-apiary/edit-apiary.component';
 import { MapaComponent } from './mapa/mapa.component';
 
 
+
+
 @NgModule({
   declarations: [
     AppComponent,    

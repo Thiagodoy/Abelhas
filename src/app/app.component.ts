@@ -1,6 +1,8 @@
 import { Component } from '@angular/core';
-import {MdIconRegistry} from '@angular/material';
-import {DomSanitizer} from '@angular/platform-browser';
+import { MdIconRegistry } from '@angular/material';
+import { DomSanitizer } from '@angular/platform-browser';
+import { EditApiaryComponent } from './edit-apiary/edit-apiary.component';
+let Jquery = require('jquery');
 
 @Component({
   selector: 'app-root',
@@ -13,9 +15,20 @@ export class AppComponent {
   { icon: 'note', text: 'Culturas', router: '' }, { icon: 'bee', text: 'Espécie Abelha', router: '' }, { icon: 'note', text: 'Mortandade', router: '' },
   { icon: 'note', text: 'Modivo destivação apiário', router: '' }, { icon: 'note', text: 'Atividade apícula', router: '' }];
 
-  constructor(mdIconRegistry:MdIconRegistry,sanitizer: DomSanitizer ){
+  constructor(mdIconRegistry: MdIconRegistry, sanitizer: DomSanitizer) {
     //Aplicação de icons customizados
-    mdIconRegistry.addSvgIcon('bee', sanitizer.bypassSecurityTrustResourceUrl('assets/bee.svg'));   
+    mdIconRegistry.addSvgIcon('bee', sanitizer.bypassSecurityTrustResourceUrl('assets/bee.svg'));
+
+    EditApiaryComponent.pop.subscribe((event) => {
+      Jquery('#myModal').toggle();
+      Jquery('#img01').attr('src', event.src);
+    });
+
+    Jquery('#closeModal').click(function(){
+      Jquery('#myModal').hide();
+    });
+
 
   }
+  
 }
