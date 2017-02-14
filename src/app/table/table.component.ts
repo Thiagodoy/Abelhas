@@ -1,4 +1,4 @@
-import { Component, OnInit, Input, Output,EventEmitter,ViewContainerRef,ElementRef,ViewChild,AfterViewInit} from '@angular/core';
+import { Component, OnInit, Input, Output, EventEmitter, ViewContainerRef, ElementRef, ViewChild, AfterViewInit } from '@angular/core';
 import { ITdDataTableColumn, TdDataTableSortingOrder, IPageChangeEvent, TdDataTableService } from '@covalent/core';
 import { MdDialog, MdDialogRef } from '@angular/material';
 import { DialogService } from '../service/dialog.service';
@@ -19,8 +19,9 @@ export class TableComponent implements OnInit, AfterViewInit {
   @Input() sortable: boolean;
   @Input() sortBy: boolean;
   @Input() sortOrder: string;
-  @Input() showPagination: boolean;  
-  
+  @Input() showPagination: boolean;
+  @Input() showSelectionJquery: boolean=true;
+
   @Output('itemSelected2') itemSelected2 = new EventEmitter<Object>();
 
   filteredData: any[] = this.data;
@@ -32,30 +33,31 @@ export class TableComponent implements OnInit, AfterViewInit {
   //sortOrderR: TdDataTableSortingOrder = TdDataTableSortingOrder.Descending
 
   constructor(
-    private _dataTableService: TdDataTableService, 
+    private _dataTableService: TdDataTableService,
     private dialogService: DialogService,
     private viewContainerRef: ViewContainerRef,
-    private elementRef:ElementRef) {
-   }
+    private elementRef: ElementRef) {
+  }
 
-   ngAfterViewInit(){
-     // Aplica a uma class para seleção de linha 
-     Jquery('#table').find('tbody').on('click','tr',function(el){
+  ngAfterViewInit() {
+    // Aplica a uma class para seleção de linha 
+    if (this.showSelectionJquery) {
+      Jquery('#table').find('tbody').on('click', 'tr', function (el) {
         Jquery(el.currentTarget).closest('tbody').find('.td-data-table-row').removeClass('td-data-table-clicked');
         Jquery(el.currentTarget).addClass('td-data-table-clicked');
-       
-    });
-   }
+      });
+    }
+  }
 
-  ngOnInit() {  
+  ngOnInit() {
     let tem: any[] = this.data;
     tem = this._dataTableService.pageData(tem, this.paginaInicial, this.paginaAtual * this.paginaTotal);
     this.filteredData = tem;
   }
 
-  sortTable(event) {}
+  sortTable(event) { }
 
-  itemSelected(event) {      
+  itemSelected(event) {
     this.itemSelected2.emit(event);
   }
 
@@ -68,13 +70,13 @@ export class TableComponent implements OnInit, AfterViewInit {
     this.filteredData = temp;
   }
 
-   confirmarValidacao() {
+  confirmarValidacao() {
 
     let menssagem = '<p>Tem certeza que deseja validar este dado?</p>' +
-                    '<p>Este procedimento não poderáser revertido!</p>';
+      '<p>Este procedimento não poderáser revertido!</p>';
 
     this.dialogService.confirm('Confirmar validação', menssagem, this.viewContainerRef).subscribe((value) => {
-    //  TODO - IMPLEMENTAR A LOGICA QUE VALIDA OU NAO O APIARIO
+      //  TODO - IMPLEMENTAR A LOGICA QUE VALIDA OU NAO O APIARIO
     });
   }
 
