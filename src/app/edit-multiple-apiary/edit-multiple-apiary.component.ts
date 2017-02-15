@@ -7,9 +7,12 @@ import { Component, OnInit } from '@angular/core';
 })
 export class EditMultipleApiaryComponent implements OnInit {
 
+
+  perfil:string = undefined;
   constructor() { }
 
   ngOnInit() {
+    this.perfil = 'Apicultor';
   }
 
 }

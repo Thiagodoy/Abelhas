@@ -7,9 +7,18 @@ import { Component, OnInit } from '@angular/core';
 })
 export class EditUserComponent implements OnInit {
 
+
+perfis:any[] = [{nome:'Apicultor',value:'Apicultor'},{nome:'Associação',value:'Associação'},{nome:'Gestor',value:'Gestor'}];
+
+selectedValue:string = 'Apicultor';
+
   constructor() { }
 
   ngOnInit() {
+  }
+
+  perfilSelecionado(event){
+    console.log(event);
   }
 
 }
