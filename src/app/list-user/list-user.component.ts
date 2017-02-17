@@ -1,0 +1,35 @@
+import { Component, OnInit } from '@angular/core';
+import { ITdDataTableColumn } from '@covalent/core';
+
+@Component({
+  selector: 'app-list-user',
+  templateUrl: './list-user.component.html',
+  styleUrls: ['./list-user.component.scss']
+})
+export class ListUserComponent implements OnInit {
+  
+   // MOCK
+  private data: any[] = [
+      {usuario:'Luis',nome:'Luis Carlos de Souza',perfil:'Apicultor',status:'Ativo',acoes_usuario:null},
+      {usuario:'Sandro',nome:'Sandro Perez',perfil:'Gestor',status:'Ativo',acoes_usuario:null},
+      {usuario:'Orestes',nome:'Orestes Barbieri',perfil:'Associação',status:'Aguardando Termo',acoes_usuario:null},
+      {usuario:'Leandro',nome:'Leandro Rosa',perfil:'Associação',status:'Termo de compromisso expirado',acoes_usuario:null},
+      {usuario:'Marcelo',nome:'Marcelo Trevisan',perfil:'Gestor',status:'Ativo',acoes_usuario:null},
+      {usuario:'Gabriel',nome:'Gabriel Franschini',perfil:'Apicultor',status:'Desativado',acoes_usuario:null}   
+
+  ];
+
+  columns: ITdDataTableColumn[] = [
+    { name: 'usuario',  label: 'Usuario' },
+    { name: 'nome', label: 'Nome' },
+    { name: 'perfil', label: 'Perfil'},
+    { name: 'status', label: 'Status'},
+    { name: 'acoes_usuario', label: 'Ações'},
+    ];
+
+  constructor() { }
+
+  ngOnInit() {
+  }
+
+}

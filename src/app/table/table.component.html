@@ -14,6 +14,11 @@
        <md-icon [style.color]="row[column]=='Sim' ? 'green' : row[column]=='Não' ? 'red' : '#ffd740'">{{row[column] == 'Sim' ? 'check_circle': row[column] == 'Não' ? 'report':'warning' }}</md-icon>
     </div>
   </template>
+  <template tdDataTableTemplate="usuario" let-value="value" let-row="row" let-column="column">
+    <div layout="row">
+       <md-icon style="margin-right: 10px;">person</md-icon><span class="md-body-1">{{row[column]}}</span>
+    </div>
+  </template>
   <template tdDataTableTemplate="acoes" let-value="value" let-row="row" let-column="column">
     <div layout="row">
        <button md-icon-button [mdMenuTriggerFor]="menu">
@@ -24,6 +29,17 @@
                 <button md-menu-item> <md-icon>mode_edit</md-icon>Editar </button>
                 <button md-menu-item> <md-icon>delete</md-icon> Excluir </button>
                 <button md-menu-item disabled> <md-icon>history</md-icon> Histórico </button>
+              </md-menu>
+    </div>
+  </template>
+  <template tdDataTableTemplate="acoes_usuario" let-value="value" let-row="row" let-column="column">
+    <div layout="row">
+       <button md-icon-button [mdMenuTriggerFor]="menuUser">
+              <md-icon>menu</md-icon>
+              </button>
+              <md-menu #menuUser="mdMenu">                
+                <button md-menu-item> <md-icon>mode_edit</md-icon>Editar </button>
+                <button md-menu-item> <md-icon>delete</md-icon> Excluir </button>                
               </md-menu>
     </div>
   </template>

@@ -30,6 +30,7 @@ import { DataPickerCustomComponent } from './data-picker-custom/data-picker-cust
 import { TablePaginationComponent } from './table-pagination/table-pagination.component';
 import { EditApiaryComponent } from './edit-apiary/edit-apiary.component';
 import { MapaComponent } from './mapa/mapa.component';
+import { ListUserComponent } from './list-user/list-user.component';
 
 
 @NgModule({
@@ -38,7 +39,7 @@ import { MapaComponent } from './mapa/mapa.component';
     ListApiaryComponent, LoginComponent, EditMultipleApiaryComponent,
     ListApiaryComponent,
     LoginComponent,
-    TableComponent, MessageDialogComponent, DataPickerCustomComponent,  TablePaginationComponent, EditApiaryComponent, MapaComponent
+    TableComponent, MessageDialogComponent, DataPickerCustomComponent,  TablePaginationComponent, EditApiaryComponent, MapaComponent,  ListUserComponent
 
 
   ],

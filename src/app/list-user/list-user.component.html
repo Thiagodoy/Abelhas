@@ -1,0 +1,11 @@
+<md-card>
+  <md-card-title>Usuários</md-card-title>
+  <md-card-content>
+    <div layout="row" layout-align="end center">
+      <button md-raised-button color="primary" style="margin-bottom: 25px;height: 35px;"> <md-icon>add</md-icon> Adicionar</button>
+    </div>
+      <app-table style="width: 100%" [data]="data" [columns]="columns" [selectable]="false" [showPagination]="true" [multiple]="false"
+        [showSelectionJquery]="true"></app-table>
+  </md-card-content>
+</md-card>
+
