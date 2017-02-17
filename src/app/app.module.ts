@@ -31,6 +31,7 @@ import { TablePaginationComponent } from './table-pagination/table-pagination.co
 import { EditApiaryComponent } from './edit-apiary/edit-apiary.component';
 import { MapaComponent } from './mapa/mapa.component';
 import { ListUserComponent } from './list-user/list-user.component';
+import { EditAssociationComponent } from './edit-association/edit-association.component';
 
 
 @NgModule({
@@ -39,7 +40,7 @@ import { ListUserComponent } from './list-user/list-user.component';
     ListApiaryComponent, LoginComponent, EditMultipleApiaryComponent,
     ListApiaryComponent,
     LoginComponent,
-    TableComponent, MessageDialogComponent, DataPickerCustomComponent,  TablePaginationComponent, EditApiaryComponent, MapaComponent,  ListUserComponent
+    TableComponent, MessageDialogComponent, DataPickerCustomComponent,  TablePaginationComponent, EditApiaryComponent, MapaComponent,  ListUserComponent, EditAssociationComponent
 
 
   ],
