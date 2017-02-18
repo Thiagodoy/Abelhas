@@ -1,0 +1,35 @@
+<div layout="row" layout-align="center center">
+  <md-card style="width: 33%">
+    <md-card-title>Propriedade</md-card-title>
+    <md-card-content>
+      <form>
+        <div layout="column">
+          <div layout="row">
+            <md-icon class="icon-position">label</md-icon>
+            <md-input-container style="width: 60%">
+              <input md-input placeholder="Nome" value="Loren lorenm lorem">
+            </md-input-container>
+          </div>
+          <div layout="row">
+            <md-icon class="icon-position">room</md-icon>
+            <md-input-container style="width: 60%">
+              <input md-input placeholder="Rota de acesso" value="1APR_E">
+            </md-input-container>
+          </div>
+          <div layout="row" style="margin-top: 15px;">
+            <md-icon class="icon-position">view_comfy</md-icon>
+            <md-select placeholder="Municipio" name="municipio" style="width: 40%;">
+              <!--<md-option selected *ngFor="let apicultor of apicultores" [value]="apicultor.value">
+                  {{apicultor.nome}}
+                </md-option>-->
+            </md-select>
+          </div>           
+        </div>
+      </form>
+    </md-card-content>
+    <md-card-actions layout="row" layout-align="start center">
+      <button md-raised-button color="warn">Excluir</button>
+      <button md-raised-button color="primary">Salvar</button>
+    </md-card-actions>
+  </md-card>
+</div>

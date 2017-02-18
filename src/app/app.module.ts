@@ -17,7 +17,7 @@ import { EditMultipleApiaryComponent } from './edit-multiple-apiary/edit-multipl
 
 import { TableComponent } from './table/table.component';
 
-import{ route } from './route/route';
+import { route } from './route/route';
 import { MessageDialogComponent } from './message-dialog/message-dialog.component';
 
 import { DialogService } from './service/dialog.service';
@@ -33,6 +33,7 @@ import { MapaComponent } from './mapa/mapa.component';
 import { ListUserComponent } from './list-user/list-user.component';
 import { EditAssociationComponent } from './edit-association/edit-association.component';
 import { ListAssociationComponent } from './list-association/list-association.component';
+import { EditPropertyComponent } from './edit-property/edit-property.component';
 
 
 @NgModule({
@@ -41,9 +42,16 @@ import { ListAssociationComponent } from './list-association/list-association.co
     ListApiaryComponent, LoginComponent, EditMultipleApiaryComponent,
     ListApiaryComponent,
     LoginComponent,
-    TableComponent, MessageDialogComponent, DataPickerCustomComponent,  TablePaginationComponent, EditApiaryComponent, MapaComponent,  ListUserComponent, EditAssociationComponent, ListAssociationComponent
-
-
+    TableComponent,
+    MessageDialogComponent,
+    DataPickerCustomComponent,
+    TablePaginationComponent,
+    EditApiaryComponent,
+    MapaComponent,
+    ListUserComponent,
+    EditAssociationComponent,
+    ListAssociationComponent,
+    EditPropertyComponent
   ],
   imports: [
     BrowserModule,
@@ -53,9 +61,10 @@ import { ListAssociationComponent } from './list-association/list-association.co
     RouterModule.forRoot(route),
     CovalentCoreModule.forRoot(),
     LayoutModule
+
   ],
-  providers: [DialogService,ParseService,LeafletService,GeocodingService],
+  providers: [DialogService, ParseService, LeafletService, GeocodingService],
   bootstrap: [AppComponent],
-  entryComponents:[MessageDialogComponent]
+  entryComponents: [MessageDialogComponent]
 })
 export class AppModule { }
