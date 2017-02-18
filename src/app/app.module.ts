@@ -34,6 +34,7 @@ import { ListUserComponent } from './list-user/list-user.component';
 import { EditAssociationComponent } from './edit-association/edit-association.component';
 import { ListAssociationComponent } from './list-association/list-association.component';
 import { EditPropertyComponent } from './edit-property/edit-property.component';
+import { ListPropertyComponent } from './list-property/list-property.component';
 
 
 @NgModule({
@@ -51,7 +52,8 @@ import { EditPropertyComponent } from './edit-property/edit-property.component';
     ListUserComponent,
     EditAssociationComponent,
     ListAssociationComponent,
-    EditPropertyComponent
+    EditPropertyComponent,
+    ListPropertyComponent
   ],
   imports: [
     BrowserModule,

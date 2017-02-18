@@ -24,6 +24,11 @@
        <md-icon style="margin-right: 10px;">view_comfy</md-icon><span class="md-body-1">{{row[column]}}</span>
     </div>
   </template>
+   <template tdDataTableTemplate="propriedade" let-value="value" let-row="row" let-column="column">
+    <div layout="row">
+       <md-icon style="margin-right: 10px;">label</md-icon><span class="md-body-1">{{row[column]}}</span>
+    </div>
+  </template>
   <template tdDataTableTemplate="acoes" let-value="value" let-row="row" let-column="column">
     <div layout="row">
        <button md-icon-button [mdMenuTriggerFor]="menu">
@@ -54,6 +59,17 @@
               <md-icon>menu</md-icon>
               </button>
               <md-menu #menuAssociacao="mdMenu">                
+                <button md-menu-item> <md-icon>mode_edit</md-icon>Editar </button>
+                <button md-menu-item> <md-icon>delete</md-icon> Excluir </button>                
+              </md-menu>
+    </div>
+  </template>
+  <template tdDataTableTemplate="acoes_propriedade" let-value="value" let-row="row" let-column="column">
+    <div layout="row">
+       <button md-icon-button [mdMenuTriggerFor]="menuPropriedade">
+              <md-icon>menu</md-icon>
+              </button>
+              <md-menu #menuPropriedade="mdMenu">                
                 <button md-menu-item> <md-icon>mode_edit</md-icon>Editar </button>
                 <button md-menu-item> <md-icon>delete</md-icon> Excluir </button>                
               </md-menu>
