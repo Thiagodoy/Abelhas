@@ -8,6 +8,7 @@ import { EditAssociationComponent} from '../edit-association/edit-association.co
 import { ListAssociationComponent } from '../list-association/list-association.component';
 import { EditPropertyComponent } from '../edit-property/edit-property.component';
 import {  ListPropertyComponent } from '../list-property/list-property.component';
+import {  DataDeactivationComponent } from '../data-deactivation/data-deactivation.component'
 
 
 export const route: Routes = [
@@ -18,5 +19,6 @@ export const route: Routes = [
     { path: 'edit/association', component: EditAssociationComponent},
     { path: 'list/association', component: ListAssociationComponent},
     { path: 'edit/property', component: EditPropertyComponent},
-    { path: 'list/property', component: ListPropertyComponent}
+    { path: 'list/property', component: ListPropertyComponent},
+    { path: 'deactivation', component: DataDeactivationComponent}
 ]    

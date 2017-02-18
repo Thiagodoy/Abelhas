@@ -75,7 +75,7 @@ export class TableComponent implements OnInit, AfterViewInit {
     let menssagem = '<p>Tem certeza que deseja validar este dado?</p>' +
       '<p>Este procedimento não poderáser revertido!</p>';
 
-    this.dialogService.confirm('Confirmar validação', menssagem, this.viewContainerRef).subscribe((value) => {
+    this.dialogService.confirm('Confirmar validação', menssagem, null, this.viewContainerRef).subscribe((value) => {
       //  TODO - IMPLEMENTAR A LOGICA QUE VALIDA OU NAO O APIARIO
     });
   }

@@ -8,7 +8,7 @@ export class DialogService {
 
   constructor(private dialog: MdDialog) { }
 
-  confirm(title: string, message: string, viewContainerRef: ViewContainerRef): Observable<boolean> {
+  confirm(title: string, message: string, type: string , viewContainerRef: ViewContainerRef): Observable<boolean> {
 
     let dialogRef: MdDialogRef<MessageDialogComponent>;
     let config = new MdDialogConfig();
@@ -20,6 +20,7 @@ export class DialogService {
 
     dialogRef.componentInstance.title = title;
     dialogRef.componentInstance.message = message;
+    dialogRef.componentInstance.type = !type ? 'MESSAGE': type;
 
     return dialogRef.afterClosed();
 

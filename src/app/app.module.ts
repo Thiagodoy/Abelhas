@@ -35,6 +35,7 @@ import { EditAssociationComponent } from './edit-association/edit-association.co
 import { ListAssociationComponent } from './list-association/list-association.component';
 import { EditPropertyComponent } from './edit-property/edit-property.component';
 import { ListPropertyComponent } from './list-property/list-property.component';
+import { DataDeactivationComponent } from './data-deactivation/data-deactivation.component';
 
 
 @NgModule({
@@ -53,7 +54,8 @@ import { ListPropertyComponent } from './list-property/list-property.component';
     EditAssociationComponent,
     ListAssociationComponent,
     EditPropertyComponent,
-    ListPropertyComponent
+    ListPropertyComponent,
+    DataDeactivationComponent
   ],
   imports: [
     BrowserModule,

@@ -1,8 +1,18 @@
-
-<h1 md-dialog-title>{{ title }}</h1>
-<div md-dialog-content [innerHTML]="message"></div>
-<!--<md-dialog-close></md-dialog-close>-->
+<h1 md-dialog-title>
+  {{ title }}</h1>
+<div md-dialog-content *ngIf="type == 'MESSAGE'" [innerHTML]="message"></div>
+<div md-dialog-content *ngIf="type == 'TABLE'">
+  <div>
+    <td-search-box #searchBox backIcon="arrow_back" class="push-right-sm" placeholder="Pesquise aqui" 
+      flex>
+    </td-search-box>
+  </div>
+  <md-divider></md-divider>
+  <app-table style="width: 100%" [data]="data" [columns]="columns" [selectable]="true" [showPagination]="true" [multiple]="false"
+    [showSelectionJquery]="true"></app-table>
+</div>
 <div md-dialog-actions>
-    <button md-button (click)="dialogRef.close(true)">Sim</button>
-    <button md-button (click)="dialogRef.close(false)">Não</button>
+  <button md-button *ngIf="type == 'MESSAGE'" (click)="dialogRef.close(true)">Sim</button>
+  <button md-button *ngIf="type == 'MESSAGE'" (click)="dialogRef.close(false)">Não</button>
+  <button md-raised-button color="primary" *ngIf="type == 'TABLE'" (click)="dialogRef.close(false)">OK</button>
 </div>

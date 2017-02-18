@@ -1,0 +1,34 @@
+<div layout="row" layout-align="center center">
+  <md-card style="width: 33%">
+    <md-card-title>Dados de desativação</md-card-title>
+    <md-card-content>
+      <form>
+        <div layout="column">
+          <div layout="row">
+            <md-input-container style="width: 60%">
+              <input md-input placeholder="Nome" value="Loren lorenm lorem">
+            </md-input-container>
+            <button md-raised-button color="primary" style="height: 35px;margin-left: 24px;" (click)="search()"><md-icon>search</md-icon> Pesquisar</button>
+          </div>
+          <div layout="row" style="margin-top: 8px">
+            <md-icon class="date-picker-icon">date_range</md-icon>
+            <app-data-picker-custom [fontFamily]="font" [dateFormat]="'DD-MM-YYYY'" [placeholder]="'DD/MM/YYYY'" [disabled]="false" class="date-picker-custom date-picker-input" style="margin-left: 12px;">
+            </app-data-picker-custom>
+          </div>
+          <div layout="row" style="margin-top: 20px;">
+            <md-icon class="icon-position">view_comfy</md-icon>
+            <md-select placeholder="Motivo desativação" name="motivo" style="width: 40%;">
+              <!--<md-option selected *ngFor="let apicultor of apicultores" [value]="apicultor.value">
+                  {{apicultor.nome}}
+                </md-option>-->
+            </md-select>
+          </div>
+        </div>
+      </form>
+    </md-card-content>
+    <md-card-actions layout="row" layout-align="start center">
+      <button md-raised-button color="warn">Cancelar</button>
+      <button md-raised-button color="primary">Concluir</button>
+    </md-card-actions>
+  </md-card>
+</div>
