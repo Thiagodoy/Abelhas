@@ -18,6 +18,8 @@ export class AppComponent {
   constructor(mdIconRegistry: MdIconRegistry, sanitizer: DomSanitizer) {
     //Aplicação de icons customizados
     mdIconRegistry.addSvgIcon('bee', sanitizer.bypassSecurityTrustResourceUrl('assets/bee.svg'));
+    mdIconRegistry.addSvgIcon('cpf', sanitizer.bypassSecurityTrustResourceUrl('assets/id-card.svg'));
+    mdIconRegistry.addSvgIcon('edit_profile', sanitizer.bypassSecurityTrustResourceUrl('assets/edit-profile.svg'));
 
     // Exibe a modal da imagem do componente Editar
     EditApiaryComponent.pop.subscribe((event) => {

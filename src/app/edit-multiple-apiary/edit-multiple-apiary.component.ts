@@ -8,8 +8,6 @@ import { ITdDataTableColumn } from '@covalent/core';
 })
 export class EditMultipleApiaryComponent implements OnInit {
 
-
-
    // MOCK
   private data: any[] = [
     {codigo:1,propriedade: 'Propriedade 1', apicultor: 'Marcelo de Souza',  data: '12/12/2015', },
@@ -17,8 +15,7 @@ export class EditMultipleApiaryComponent implements OnInit {
     {codigo:3,propriedade: 'Propriedade 1', apicultor: 'Marcos',  data: '12/12/2015', },
     {codigo:4,propriedade: 'Propriedade 1', apicultor: 'Thiago',  data: '12/12/2015', },
     {codigo:5,propriedade: 'Propriedade 1', apicultor: 'Diego',  data: '12/12/2015', },
-    {codigo:6,propriedade: 'Propriedade 1', apicultor: 'Delmas Mattos',  data: '12/12/2015', },
-    
+    {codigo:6,propriedade: 'Propriedade 1', apicultor: 'Delmas Mattos',  data: '12/12/2015', },    
 
   ];
 
@@ -29,10 +26,12 @@ export class EditMultipleApiaryComponent implements OnInit {
     { name: 'data', label: 'Data da criação'},
     ];
 
+  perfil:string = undefined;
 
   constructor() { }
 
   ngOnInit() {
+    this.perfil = 'Apicultor';
   }
 
 }

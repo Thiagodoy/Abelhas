@@ -30,12 +30,15 @@ import { DataPickerCustomComponent } from './data-picker-custom/data-picker-cust
 import { TablePaginationComponent } from './table-pagination/table-pagination.component';
 import { EditApiaryComponent } from './edit-apiary/edit-apiary.component';
 import { MapaComponent } from './mapa/mapa.component';
+
 import { ListUserComponent } from './list-user/list-user.component';
 import { EditAssociationComponent } from './edit-association/edit-association.component';
 import { ListAssociationComponent } from './list-association/list-association.component';
 import { EditPropertyComponent } from './edit-property/edit-property.component';
 import { ListPropertyComponent } from './list-property/list-property.component';
 import { DataDeactivationComponent } from './data-deactivation/data-deactivation.component';
+import { EditUserComponent } from './edit-user/edit-user.component';
+
 
 
 @NgModule({
@@ -55,7 +58,8 @@ import { DataDeactivationComponent } from './data-deactivation/data-deactivation
     ListAssociationComponent,
     EditPropertyComponent,
     ListPropertyComponent,
-    DataDeactivationComponent
+    DataDeactivationComponent,
+    EditUserComponent
   ],
   imports: [
     BrowserModule,
