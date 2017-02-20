@@ -17,15 +17,14 @@ import { EditUserComponent } from '../edit-user/edit-user.component';
 
 export const route: Routes = [
     { path: '', component: ListApiaryComponent },
-    { path: 'edit', component: EditApiaryComponent},
-
-    { path: 'multiple', component: EditMultipleApiaryComponent},
-    { path: 'list', component: ListUserComponent},
-    { path: 'edit/association', component: EditAssociationComponent},
-    { path: 'list/association', component: ListAssociationComponent},
-    { path: 'edit/property', component: EditPropertyComponent},
-    { path: 'list/property', component: ListPropertyComponent},
-    { path: 'deactivation', component: DataDeactivationComponent},
-    { path: 'user', component: EditUserComponent}
+    { path: 'editar/apiario', component: EditApiaryComponent},
+    { path: 'edicao/multipla', component: EditMultipleApiaryComponent},
+    { path: 'usuarios', component: ListUserComponent},
+    { path: 'editar/associação', component: EditAssociationComponent},
+    { path: 'associações', component: ListAssociationComponent},
+    { path: 'editar/propriedade', component: EditPropertyComponent},
+    { path: 'propriedades', component: ListPropertyComponent},
+    { path: 'dados/desativação', component: DataDeactivationComponent},
+    { path: 'editar/usuario', component: EditUserComponent}
 
 ]    

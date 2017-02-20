@@ -22,9 +22,9 @@
       </template>
       <td-expansion-summary>
         <md-list>
-          <md-list-item class="margin-item-menu" (click)="sidenav.toggle()">
+          <md-list-item *ngFor="let menu of menus" [routerLink]="[menu.route]" class="margin-item-menu" (click)="sidenav.toggle()">
             <md-icon class="md-16" md-list-avatar>folder</md-icon>
-            <h4 md-line>Sub-menu</h4>
+            <h4 md-line>{{menu.descricao}}</h4>
           </md-list-item>
         </md-list>
       </td-expansion-summary>

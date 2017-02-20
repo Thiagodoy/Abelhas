@@ -15,6 +15,20 @@ export class AppComponent {
   { icon: 'note', text: 'Culturas', router: '' }, { icon: 'bee', text: 'Espécie Abelha', router: '' }, { icon: 'note', text: 'Mortandade', router: '' },
   { icon: 'note', text: 'Modivo destivação apiário', router: '' }, { icon: 'note', text: 'Atividade apícula', router: '' }];
 
+
+  menus:any[] = [
+    { route: '', descricao:'Listar apiarios'  },
+    { route: 'editar/apiario', descricao:'Editar Apiário' },
+    { route: 'edicao/multipla', descricao:'Edição Multipla' },
+    { route: 'usuarios', descricao:'Listar usuários' },
+    { route: 'editar/associação', descricao:'Editar Associação' },
+    { route: 'associações', descricao:'Listar Associações' },
+    { route: 'editar/propriedade', descricao:'Editar Propriedade' },
+    { route: 'propriedades', descricao:'Listar propriedades' },
+    { route: 'dados/desativação', descricao:'Dados de desativação' },
+    { route: 'editar/usuario', descricao:'Editar Usuário' }
+  ];
+
   constructor(mdIconRegistry: MdIconRegistry, sanitizer: DomSanitizer) {
     //Aplicação de icons customizados
     mdIconRegistry.addSvgIcon('bee', sanitizer.bypassSecurityTrustResourceUrl('assets/bee.svg'));

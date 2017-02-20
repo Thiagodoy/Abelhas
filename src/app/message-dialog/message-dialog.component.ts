@@ -15,18 +15,19 @@ export class MessageDialogComponent implements OnInit {
 
 
    private data: any[] = [
-      {especie:'Melaponinae',apicultor:'apicultor F'},
-      {especie:'Melaponinae',apicultor:'apicultor Y'},
-      {especie:'Melaponinae',apicultor:'apicultor I'},
-      {especie:'Melaponinae',apicultor:'apicultor '},
-      {especie:'Melaponinae',apicultor:'apicultor B'},
-      {especie:'Melaponinae',apicultor:'apicultor '}   
+      {especie:'Melaponinae',data:'12/12/2017',apicultor:'apicultor F'},
+      {especie:'Melaponinae',data:'12/12/2017',apicultor:'apicultor Y'},
+      {especie:'Melaponinae',data:'12/12/2017',apicultor:'apicultor I'},
+      {especie:'Melaponinae',data:'12/12/2017',apicultor:'apicultor '},
+      {especie:'Melaponinae',data:'12/12/2017',apicultor:'apicultor B'},
+      {especie:'Melaponinae',data:'12/12/2017',apicultor:'apicultor '}   
 
   ];
 
   columns: ITdDataTableColumn[] = [
     { name: 'especie',  label: 'Especie' },
     { name: 'apicultor', label: 'Apicultor' },
+    { name: 'data', label: 'Data' },
   
     
     ];
