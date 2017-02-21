@@ -27,6 +27,7 @@ export class LeafletService {
   }
 
   buildMap(map: string) {
+    
     this.map = this.core.map(map, {
       zoomControl: false,
       center: L.latLng(40.731253, -73.996139),
@@ -40,6 +41,8 @@ export class LeafletService {
     this.core.control.zoom({ position: "topright" }).addTo(this.map);
     this.core.control.layers(this.baseMaps).addTo(this.map);
     this.core.control.scale().addTo(this.map);
+
+    return this.map;
   }
 
   putLocations(locations: any) {        

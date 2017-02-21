@@ -1,4 +1,4 @@
-import { Component, OnInit, Input, Output, EventEmitter, ViewContainerRef, ElementRef, ViewChild, AfterViewInit } from '@angular/core';
+import { Component, OnInit, Input, Output, EventEmitter, ViewContainerRef, ElementRef, ViewChild, AfterViewInit,OnChanges } from '@angular/core';
 import { ITdDataTableColumn, TdDataTableSortingOrder, IPageChangeEvent, TdDataTableService } from '@covalent/core';
 import { MdDialog, MdDialogRef } from '@angular/material';
 import { DialogService } from '../service/dialog.service';
@@ -10,7 +10,7 @@ let Jquery = require('jquery');
   templateUrl: './table.component.html',
   styleUrls: ['./table.component.scss']
 })
-export class TableComponent implements OnInit, AfterViewInit {
+export class TableComponent implements OnInit, AfterViewInit,OnChanges {
 
   @Input() data: any[] = [];
   @Input() columns: ITdDataTableColumn[];
@@ -49,8 +49,22 @@ export class TableComponent implements OnInit, AfterViewInit {
     }
   }
 
+
+
+  ngOnChanges(){
+     if(!this.data){
+      return;
+    }
+    let tem: any[] = this.data;    
+    tem = this._dataTableService.pageData(tem, this.paginaInicial, this.paginaAtual * this.paginaTotal);
+    this.filteredData = tem;
+  }
+
   ngOnInit() {
-    let tem: any[] = this.data;
+    if(!this.data){
+      return;
+    }
+    let tem: any[] = this.data;    
     tem = this._dataTableService.pageData(tem, this.paginaInicial, this.paginaAtual * this.paginaTotal);
     this.filteredData = tem;
   }
@@ -62,6 +76,7 @@ export class TableComponent implements OnInit, AfterViewInit {
   }
 
   page(pagingEvent: IPageChangeEvent): void {
+    debugger;
     this.paginaInicial = pagingEvent.fromRow;
     this.paginaAtual = pagingEvent.page;
     this.paginaTotal = pagingEvent.pageSize;
