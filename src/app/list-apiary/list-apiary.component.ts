@@ -1,14 +1,11 @@
-import { Component, OnInit, ElementRef, ViewContainerRef, ViewChild } from '@angular/core';
-import { TableComponent } from '../table/table.component';
-import { ITdDataTableColumn, IPageChangeEvent, TdDataTableService, TdDataTableSortingOrder, TdDataTableComponent } from '@covalent/core';
-import { MdDialog, MdDialogRef } from '@angular/material';
-
-import { DialogService } from '../service/dialog.service';
+import { Component, OnInit, ViewChild, ContentChild, AfterContentInit, NgZone } from '@angular/core';
+import { Router } from '@angular/router'
+import { ITdDataTableColumn } from '@covalent/core';
 import { ParseService } from '../service/parse.service';
-
-
-// TESTE PARSE
-import * as parse from 'parse';
+import { MomentService } from '../service/moment.service';
+import { Apiario } from '../models/apiario';
+import { Apicultor } from '../models/apicultor';
+import { TableComponent } from '../table/table.component';
 
 
 
@@ -19,71 +16,102 @@ import * as parse from 'parse';
 })
 export class ListApiaryComponent implements OnInit {
 
+  @ContentChild(TableComponent) viewchield: TableComponent;
+  listApiario: any[] = [];
+  queryApiario: Parse.Query;
+  filter: any = { status: undefined, startDate: undefined, endDate: undefined, apicultor: undefined };
 
-  // MOCK
-  private data: any[] = [
-    { id: 1, validado: 'Sim', especie: 'Meliponinae', apicultor: 'Marcelo de Souza', status: 'Modificado pelo gestor', data: '12/12/2015', },
-    { id: 2, validado: 'Sim', especie: 'Meliponinae', apicultor: 'Rodrigo', status: 'Modificado pelo gestor', data: '12/12/2015', },
-    { id: 3, validado: 'Sim', especie: 'Meliponinae', apicultor: 'Marcos', status: 'Modificado pelo gestor', data: '12/12/2015', },
-    { id: 4, validado: 'Sim', especie: 'Meliponinae', apicultor: 'Thiago', status: 'Modificado pelo gestor', data: '12/12/2015', },
-    { id: 5, validado: 'Sim', especie: 'Meliponinae', apicultor: 'Diego', status: 'Modificado pelo gestor', data: '12/12/2015', },
-    { id: 6, validado: 'Sim', especie: 'Apis Mellifera', apicultor: 'Delmas Mattos', status: 'Modificado pelo gestor', data: '12/12/2015', },
-    { id: 7, validado: 'Não', especie: 'Apis Mellifera', apicultor: 'Felipe Auguusto', status: 'Modificado pelo gestor', data: '12/12/2015', },
-    { id: 8, validado: 'Não', especie: 'Apis Mellifera', apicultor: 'Cristiano da Silva', status: 'Modificado pelo gestor', data: '12/12/2015', },
-    { id: 9, validado: 'Não', especie: 'Apis Mellifera', apicultor: 'Anderson Merchan', status: 'Modificado pelo gestor', data: '12/12/2015', },
-    { id: 10, validado: 'Não', especie: 'Apis Mellifera', apicultor: 'Iuian', status: 'Modificado pelo gestor', data: '12/12/2015', },
-    { id: 11, validado: 'Não', especie: 'Apis Mellifera', apicultor: 'Daise', status: 'Modificado pelo gestor', data: '12/12/2015', },
-    { id: 12, validado: 'Não', especie: 'Meliponinae', apicultor: 'Bruno', status: 'Modificado pelo gestor', data: '12/12/2015', },
-    { id: 13, validado: 'Erro', especie: 'Apis Mellifera', apicultor: 'Marcelo de Souza', status: 'Modificado pelo gestor', data: '12/12/2015', },
-    { id: 14, validado: 'Erro', especie: 'Meliponinae', apicultor: 'Marcelo de Souza', status: 'Modificado pelo gestor', data: '12/12/2015', },
-    { id: 15, validado: 'Erro', especie: 'Apis Mellifera', apicultor: 'Marcelo de Souza', status: 'Modificado pelo gestor', data: '12/12/2015', },
-    { id: 20, validado: 'Erro', especie: 'Meliponinae', apicultor: 'Marcelo de Souza', status: 'Modificado pelo gestor', data: '12/12/2015', },
-    { id: 16, validado: 'Erro', especie: 'Apis Mellifera', apicultor: 'Marcelo de Souza', status: 'Modificado pelo gestor', data: '12/12/2015', },
-    { id: 17, validado: 'Erro', especie: 'Meliponinae', apicultor: 'Marcelo de Souza', status: 'Modificado pelo gestor', data: '12/12/2015', },
-    { id: 18, validado: 'Erro', especie: 'Apis Mellifera', apicultor: 'Marcelo de Souza', status: 'Modificado pelo gestor', data: '12/12/2015', },
-    { id: 19, validado: 'Erro', especie: 'Meliponinae', apicultor: 'Marcelo de Souza', status: 'Modificado pelo gestor', data: '12/12/2015', },
-
-  ];
 
   columns: ITdDataTableColumn[] = [
-    { name: 'validado', label: 'Validado' },
-    { name: 'especie', label: 'Espécie' },
-    { name: 'apicultor', label: 'Apicultor' },
-    { name: 'status', label: 'Status' },
-    { name: 'data', label: 'Data' },
-    { name: 'acoes', label: 'Ações' },];
-
-
-
-
-
-  sortOrder: TdDataTableSortingOrder = TdDataTableSortingOrder.Descending;
+    { name: 'attributes.ativo', label: 'Validado' },
+    { name: 'attributes.especieAbelha.attributes.nome', label: 'Espécie' },
+    { name: 'attributes.apicultor.attributes.nome', label: 'Apicultor' },
+    { name: 'attributes.status', label: 'Status' },
+    { name: 'createdAt', label: 'Data', format: (value) => { return this.momentService.core(value).format('DD/MM/YYYY HH:mm') } },
+    { name: 'acoes', label: 'Ações' }];
 
   dateFormat: string = 'DD-MM-YYYY';
   font: string = 'Roboto,"Helvetica Neue",sans-serif';
 
-  constructor(private dialogService: DialogService,
-    private viewContainerRef: ViewContainerRef,
-    private _dataTableService: TdDataTableService,
-    private serviceParse:ParseService) {
-
-  }
+  constructor(
+    private serviceParse: ParseService,
+    private momentService: MomentService,
+    private route: Router,
+    private zone: NgZone
+  ) { }
 
   ngOnInit() {
 
+    this.queryApiario = this.serviceParse.createQuery(Apiario);
+    this.queryApiario.include('apicultor');
+    this.queryApiario.include('especieAbelha');
+    this.queryApiario.select('apicultor', 'especieAbelha', 'ativo');
   }
 
+  itemSelected(apiario: Apiario) { }
+  confirmarValidacao(apiario: Apiario) { }
+  confirmarExclusao(apiario: Apiario) { }
 
-  itemSelected(event) {
-    console.log(event);
+  listarApiario() {
+
+
+    if (this.filter.apicultor) {
+      let queryApicultor = this.serviceParse.createQuery(Apicultor);
+      queryApicultor.contains('nome', 'Genesio');
+      this.queryApiario.matchesQuery('apicultor', queryApicultor);
+    }
+
+    if (this.filter.apicultor) {
+      let querydateGreater = this.serviceParse.createQuery(Apiario);
+      let querydateLess = this.serviceParse.createQuery(Apiario);
+
+      querydateGreater.greaterThanOrEqualTo('createdAt', this.filter.startDate);
+      querydateLess.lessThanOrEqualTo('createdAt', this.filter.endDate);
+      let queryMerge = this.serviceParse.or(querydateGreater, querydateLess);
+      this.queryApiario.matchesQuery('createdAt', queryMerge);
+
+    }
+
+    if (this.filter.status) { }
+
+
+    this.serviceParse.executeQuery(this.queryApiario).then(result => {
+      this.zone.run(() => {
+        this.atualiza(result);
+      });
+    });
+
   }
 
-  testeLogin() {
-    let user = new parse.User();
-    user.setUsername('thiago');
-    user.setPassword('thiago');
-  debugger;
-    this.serviceParse.login(user);
+  selectDate(paran, event) {
+    this.filter[paran] = event;
+  }
 
+  atualiza(result) {
+    if (result && result.length > 0) {
+      this.listApiario = result;
+    } else {
+      this.listApiario = [];
+    }
+
+  }
+
+  excluir(apiario:Apiario) {
+        // this.serviceParse.destroy(apiario)
+        // .done(()=>{})
+        // .fail(()=>{});
+  }
+
+  acoes(param) {
+    switch (param.acao) {
+      case 'EDITAR':
+        this.route.navigate(['editar/apiario'], { queryParams: { apiario: param.element.id } });
+        break;
+      case 'EXCLUIR':
+         this.excluir(param.element); 
+        break;
+      case 'HISTORICO':
+        break;
+    }
   }
 }

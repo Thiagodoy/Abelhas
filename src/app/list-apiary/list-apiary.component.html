@@ -39,14 +39,14 @@
               <h3 style="height: 5px">Apicultor</h3>
             </div>
             <div flex="">
-              <md-input-container [floatingPlaceholder]="false" [dividerColor]="warn" style="width: 100% !important;">
-                <input md-input placeholder="Nome" value="Marcelo">
+              <md-input-container style="width: 100% !important;">
+                <input mdInput placeholder="Nome" value="Marcelo">
               </md-input-container>
             </div>
           </div>
           <div layout="row" flex="20" layout-align="center end">
             <div>
-              <button md-raised-button style="margin-bottom:10px;width: 152px"><md-icon>search</md-icon></button>
+              <button md-raised-button style="margin-bottom:10px;width: 152px" (click)="listarApiario()"><md-icon>search</md-icon></button>
             </div>
           </div>
         </div>
@@ -55,7 +55,7 @@
   </div>
   <md-card-content>
     <div layout="row">
-      <app-table style="width: 100%" [data]="data" [columns]="columns" [selectable]="false" [showPagination]="'true'" (itemSelected2)="itemSelected($event)"></app-table>
+      <app-table style="width: 100%" [data]="listApiario" [columns]="columns" [selectable]="false" [showPagination]="'true'" (itemSelected2)="acoes($event)"></app-table>
     </div>
   </md-card-content>
 </md-card>

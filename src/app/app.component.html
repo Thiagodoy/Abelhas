@@ -1,3 +1,4 @@
+
 <md-sidenav-container class="example-container">
   <md-sidenav #sidenav class="example-sidenav">
     <!--<md-list>
@@ -81,9 +82,12 @@
         </button>
     <md-icon md-list-avatar>person</md-icon>
   </md-toolbar>
-  <router-outlet></router-outlet>
-</md-sidenav-container>
+   
+    <router-outlet></router-outlet>
 
+</md-sidenav-container>
+<div class="teste" *tdLoading="'loading'; mode:'indeterminate'; type:'circle'; strategy:'overlay'; color:'accent'">
+</div> 
 
 <!-- The Modal -->
 <div id="myModal" class="modal">

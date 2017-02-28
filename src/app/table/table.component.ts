@@ -1,6 +1,5 @@
-import { Component, OnInit, Input, Output, EventEmitter, ViewContainerRef, ElementRef, ViewChild, AfterViewInit,OnChanges } from '@angular/core';
-import { ITdDataTableColumn, TdDataTableSortingOrder, IPageChangeEvent, TdDataTableService } from '@covalent/core';
-import { MdDialog, MdDialogRef } from '@angular/material';
+import { Component, OnInit, Input, Output, EventEmitter, ViewContainerRef, ElementRef, AfterViewInit, OnChanges,SimpleChanges } from '@angular/core';
+import { ITdDataTableColumn, IPageChangeEvent, TdDataTableService } from '@covalent/core';
 import { DialogService } from '../service/dialog.service';
 
 let Jquery = require('jquery');
@@ -10,7 +9,7 @@ let Jquery = require('jquery');
   templateUrl: './table.component.html',
   styleUrls: ['./table.component.scss']
 })
-export class TableComponent implements OnInit, AfterViewInit,OnChanges {
+export class TableComponent implements OnInit, AfterViewInit, OnChanges {
 
   @Input() data: any[] = [];
   @Input() columns: ITdDataTableColumn[];
@@ -20,7 +19,7 @@ export class TableComponent implements OnInit, AfterViewInit,OnChanges {
   @Input() sortBy: boolean;
   @Input() sortOrder: string;
   @Input() showPagination: boolean;
-  @Input() showSelectionJquery: boolean=true;
+  @Input() showSelectionJquery: boolean = true;
 
   @Output('itemSelected2') itemSelected2 = new EventEmitter<Object>();
 
@@ -29,8 +28,7 @@ export class TableComponent implements OnInit, AfterViewInit,OnChanges {
   paginaInicial: number = 1;
   paginaAtual: number = 1;
   paginaTotal: number = 5;
-
-  //sortOrderR: TdDataTableSortingOrder = TdDataTableSortingOrder.Descending
+  itemCurrent: any; 
 
   constructor(
     private _dataTableService: TdDataTableService,
@@ -42,7 +40,7 @@ export class TableComponent implements OnInit, AfterViewInit,OnChanges {
   ngAfterViewInit() {
     // Aplica a uma class para seleção de linha 
     if (this.showSelectionJquery) {
-      Jquery('#table').find('tbody').on('click', 'tr', function (el) {
+      Jquery('#table').on('click', 'tr', function (el) {
         Jquery(el.currentTarget).closest('tbody').find('.td-data-table-row').removeClass('td-data-table-clicked');
         Jquery(el.currentTarget).addClass('td-data-table-clicked');
       });
@@ -51,20 +49,22 @@ export class TableComponent implements OnInit, AfterViewInit,OnChanges {
 
 
 
-  ngOnChanges(){
-     if(!this.data){
+  ngOnChanges(changes:SimpleChanges) {
+    this.filteredData = this.data;
+    console.log('atualiza filho');
+    if (!this.data) {
       return;
     }
-    let tem: any[] = this.data;    
+    let tem: any[] = this.data;
     tem = this._dataTableService.pageData(tem, this.paginaInicial, this.paginaAtual * this.paginaTotal);
     this.filteredData = tem;
   }
 
   ngOnInit() {
-    if(!this.data){
+    if (!this.data) {
       return;
     }
-    let tem: any[] = this.data;    
+    let tem: any[] = this.data;
     tem = this._dataTableService.pageData(tem, this.paginaInicial, this.paginaAtual * this.paginaTotal);
     this.filteredData = tem;
   }
@@ -72,11 +72,15 @@ export class TableComponent implements OnInit, AfterViewInit,OnChanges {
   sortTable(event) { }
 
   itemSelected(event) {
-    this.itemSelected2.emit(event);
+    this.itemCurrent = event;
   }
 
+  acoes(param,object) {
+    this.itemSelected2.emit({ acao: param, element: object || this.itemCurrent });
+  }
+
+
   page(pagingEvent: IPageChangeEvent): void {
-    debugger;
     this.paginaInicial = pagingEvent.fromRow;
     this.paginaAtual = pagingEvent.page;
     this.paginaTotal = pagingEvent.pageSize;

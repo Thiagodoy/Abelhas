@@ -1,16 +1,28 @@
 /* You can add global styles to this file, and also import other style files */
+
 @import '~@angular/material/core/theming/prebuilt/deeppurple-amber.css';
 @import '~@angular/material/core/theming/all-theme';
 @import '~@covalent/core/theming/all-theme';
-
-
 //table custom
-.md-selected{
-    background-color: #faf3d6;
+.md-selected {
+  background-color: #faf3d6;
 }
+
 // .td-data-table-row:hover{
 //     background-color: #fafafa;
 // }
-.td-data-table-clicked{
-    background-color: #faf3d6;
+.td-data-table-clicked {
+  background-color: #faf3d6;
+}
+
+.td-loading {
+  background: hsla(0, 0%, 100%, .8)!important;
+}
+
+.teste {
+  width: 100%;
+  height: 100%;
+  z-index: 1;
+  position: absolute;
+  top: 0;
 }

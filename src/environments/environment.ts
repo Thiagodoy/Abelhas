@@ -4,5 +4,14 @@
 // The list of which env maps to which file can be found in `angular-cli.json`.
 
 export const environment = {
-  production: false
+  production: true,
+
+  environments: [
+    {url:'https://parsedevabelhas.herokuapp.com/parse',appid:'myAppId'},
+    {url:'http://localhost:1337/parse', appid:'myAppDebug'}],
+
+    getEnvironment(){
+      return this.production ? this.environments[0] : this.environments[1] 
+    }
+
 };

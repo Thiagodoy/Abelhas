@@ -24,6 +24,7 @@ import { DialogService } from './service/dialog.service';
 import { LeafletService } from './service/leaflet.service';
 import { ParseService } from './service/parse.service';
 import { GeocodingService } from './service/geocode.service';
+import { MomentService } from './service/moment.service';
 
 import { DataPickerCustomComponent } from './data-picker-custom/data-picker-custom.component';
 
@@ -68,10 +69,10 @@ import { EditUserComponent } from './edit-user/edit-user.component';
     MaterialModule.forRoot(),
     RouterModule.forRoot(route),
     CovalentCoreModule.forRoot(),
-    LayoutModule
+    //LayoutModule
 
   ],
-  providers: [DialogService, ParseService, LeafletService, GeocodingService],
+  providers: [DialogService, ParseService, LeafletService, GeocodingService,MomentService],
   bootstrap: [AppComponent],
   entryComponents: [MessageDialogComponent]
 })
