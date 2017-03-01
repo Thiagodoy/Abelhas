@@ -46,8 +46,9 @@ export class LeafletService {
   }
 
   putLocations(locations: any) {        
-        for(let i; i < locations.length; i++ ){
-          this.map.panTo([location[i].latitude, location[i].longitude])
+        for(let location of locations){
+          this.map.panTo([location.latitude, location.longitude])
+          this.core.marker([location.latitude, location.longitude]).bindPopup('Teste').addTo(this.map);
         }
   }
 

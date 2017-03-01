@@ -53,10 +53,8 @@ export class AppComponent implements OnDestroy {
 
       if (res) {
         this.loadingService.register();
-      } else {
-        setTimeout(() => {
-          this.loadingService.resolve();
-        }, 1500);
+      } else {       
+          this.loadingService.resolve();    
       }
     });
 

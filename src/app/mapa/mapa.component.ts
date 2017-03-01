@@ -1,4 +1,4 @@
-import { Component, OnInit, Input, OnDestroy } from '@angular/core';
+import { Component, OnInit, Input, OnDestroy, OnChanges, SimpleChanges } from '@angular/core';
 import { LeafletService } from '../service/leaflet.service';
 import * as L from 'leaflet';
 
@@ -7,13 +7,13 @@ import * as L from 'leaflet';
   templateUrl: './mapa.component.html',
   styleUrls: ['./mapa.component.scss']
 })
-export class MapaComponent implements OnInit,OnDestroy {
+export class MapaComponent implements OnInit, OnDestroy, OnChanges {
 
   @Input() locations: any = [];
   @Input() width: string = '100';
   @Input() heigth: string = '100';
   @Input() currentPosition: boolean = false;
-  map:L.Map = undefined;
+  map: L.Map = undefined;
 
   constructor(private leafletService: LeafletService) { }
 
@@ -30,11 +30,19 @@ export class MapaComponent implements OnInit,OnDestroy {
     }
   }
 
-  ngOnDestroy(){
-    debugger;
+  ngOnChanges(changes: SimpleChanges) {
+    if (changes['locations']) {
+    
+      this.locations = changes['locations']['currentValue'];
+      this.leafletService.putLocations(this.locations);
+    }
+  }
+
+  ngOnDestroy() {
+    
     this.map.off();
     this.map.remove();
   }
-  
+
 
 }

@@ -6,6 +6,8 @@ import { Apiario } from '../models/apiario';
 import { Apicultor } from '../models/apicultor';
 import { EspecieAbelha } from '../models/especie-abelha';
 import { Cultura } from '../models/cultura';
+import { Propriedade } from '../models/propriedade';
+import { Mortandade } from '../models/mortandade';
 
 @Injectable()
 export class ParseService {
@@ -24,6 +26,8 @@ export class ParseService {
     this.core.Object.registerSubclass('Apicultor', Apicultor);
     this.core.Object.registerSubclass('EspecieAbelha', EspecieAbelha);
     this.core.Object.registerSubclass('Cultura', Cultura);
+    this.core.Object.registerSubclass('Propriedade', Propriedade);
+    this.core.Object.registerSubclass('Mortandade', Mortandade);
   }
 
   /**
@@ -101,6 +105,16 @@ export class ParseService {
    */
   destroy(object: Parse.Object) {
     return object.destroy();
+  }
+
+  loadPhoto(url:string):parse.Promise<parse.Cloud.HttpResponse>{
+    return this.core.Cloud.httpRequest({url:url})
+    .done((success)=>{
+      return success;
+    })
+    .fail((error)=>{
+      return error;
+    });
   }
 
   private toogleLoading(param) {

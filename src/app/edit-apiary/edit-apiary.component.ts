@@ -14,25 +14,16 @@ let Jquery = require('jquery');
 })
 export class EditApiaryComponent implements OnInit, OnDestroy {
 
-  // MOCK
-  apicultores: any[] = [{ nome: 'Valdir Correa Nogueira', value: 1 }];
-  propriedades: any[] = [{ nome: 'Sítio do Catelan - sto augustinho', value: 1 }];
-  culturas: any[] = [{ nome: 'Soja' }, { nome: 'Pinus' }, { nome: 'Pasto' }, { nome: 'Milho' }, { nome: 'Melão' }, { nome: 'Maracujá' }, { nome: 'Melão' }, { nome: 'Maracujá' },
-  { nome: 'Soja' }, { nome: 'Pinus' }, { nome: 'Pasto' }, { nome: 'Milho' }, { nome: 'Melão' }, { nome: 'Maracujá' }];
-  especies: any[] = [{ name: 'Melipona' }, { name: 'Mandaçaia ' }, { name: 'Tetragonisca angustul' }];
-  motivoMortandade: any[] = [{ name: 'Agroquimicos' }];
-
-
   apiario: Apiario = undefined;
+  locations: any[] = [];
   static pop: EventEmitter<Object> = new EventEmitter();
 
   constructor(private route: ActivatedRoute, private parseService: ParseService, private zone: NgZone) { }
 
   ngOnInit() {
-
-
+    // implementar com resolver
     this.route.queryParams.subscribe((res: any) => {
-     this.loadApiario(res.apiario);
+      this.loadApiario(res.apiario);
     });
     this.activeJquery();
 
@@ -54,15 +45,20 @@ export class EditApiaryComponent implements OnInit, OnDestroy {
 
     this.parseService.executeQuery(query).then((result) => {
       this.zone.run(() => {
-         debugger;
-         this.setApiario(result[0]);
+        this.setApiario(result[0]);
+        //this.loadPhoto(result[0].attributes.fotos[0]._url);
       });
-
     });
   }
 
   setApiario(tem: Apiario) {
-    this.apiario = tem;
+    this.apiario = tem;    
+    if (tem.attributes.location)
+      this.locations = new Array({ latitude: tem.attributes.location.latitude, longitude: tem.attributes.location.longitude })
+  }
+
+  loadPhoto(url) {
+    this.parseService.loadPhoto(url);
   }
 
   activeJquery() {

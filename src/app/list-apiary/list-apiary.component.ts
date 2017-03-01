@@ -75,10 +75,13 @@ export class ListApiaryComponent implements OnInit {
     if (this.filter.status) { }
 
 
-    this.serviceParse.executeQuery(this.queryApiario).then(result => {
+    this.serviceParse.executeQuery(this.queryApiario).done(result => {
       this.zone.run(() => {
         this.atualiza(result);
       });
+    }).fail((fail)=>{
+      console.log('Erro');
+      console.log(fail);
     });
 
   }
