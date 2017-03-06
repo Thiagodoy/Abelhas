@@ -56,27 +56,22 @@ export class ListApiaryComponent implements OnInit {
   confirmarExclusao(apiario: Apiario) { }
 
   listarApiario() {
-
-
+    
     if (this.filter.apicultor) {
       let queryApicultor = this.serviceParse.createQuery(Apicultor);
-      queryApicultor.contains('nome', 'Genesio');
+      queryApicultor.contains('nome', this.filter.apicultor);
       this.queryApiario.matchesQuery('apicultor', queryApicultor);
     }
 
-    if (this.filter.apicultor) {
-      let querydateGreater = this.serviceParse.createQuery(Apiario);
-      let querydateLess = this.serviceParse.createQuery(Apiario);
-
-      querydateGreater.greaterThanOrEqualTo('createdAt', this.filter.startDate);
-      querydateLess.lessThanOrEqualTo('createdAt', this.filter.endDate);
-      let queryMerge = this.serviceParse.or(querydateGreater, querydateLess);
-      this.queryApiario.matchesQuery('createdAt', queryMerge);
-
+    if (this.filter.startDate && this.filter.endDate) {
+      this.queryApiario.greaterThanOrEqualTo('createdAt', this.filter.startDate);
+      this.queryApiario.lessThanOrEqualTo('createdAt', this.filter.endDate);
     }
 
-    if (this.filter.status) { }
-
+    if (this.filter.status && this.filter.status == 'validados' && this.filter.status == 'nok') {
+      let status = this.filter.status == 'validados';
+      this.queryApiario.equalTo('', status);
+    }
 
     this.serviceParse.executeQuery(this.queryApiario).done(result => {
       this.zone.run(() => {
@@ -104,10 +99,10 @@ export class ListApiaryComponent implements OnInit {
     // this.serviceParse.destroy(apiario)
     // .done(()=>{})
     // .fail(()=>{});
-     let menssagem = '';
-        this.dialogService.confirm('Exclusão realizada com sucesso', menssagem, 'SUCCESS', this.viewContainerRef).subscribe((value) => {
-         //
-        });
+    let menssagem = '';
+    this.dialogService.confirm('Exclusão realizada com sucesso', menssagem, 'SUCCESS', this.viewContainerRef).subscribe((value) => {
+      //
+    });
   }
 
   validar(apiario: Apiario) {

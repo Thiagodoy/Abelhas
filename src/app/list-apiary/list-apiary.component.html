@@ -9,7 +9,7 @@
               <h3>Filtros</h3>
             </div>
             <div flex>
-              <md-radio-group>
+              <md-radio-group [(ngModel)]="filter.status">
                 <md-radio-button name="filtro" value="todos">Todos</md-radio-button>
                 <md-radio-button name="filtro" value="validados">Validados</md-radio-button>
                 <md-radio-button name="filtro" value="nok">Não Validados</md-radio-button>
@@ -23,13 +23,13 @@
             <div flex style="display: inline-flex; flex-wrap: wrap">
               <div>
                 <md-icon class="date-picker-icon">date_range</md-icon>
-                <app-data-picker-custom [fontFamily]="font" [dateFormat]="'DD-MM-YYYY'" [placeholder]="'DD/MM/YYYY'" [disabled]="false" class="date-picker-custom date-picker-input">
+                <app-data-picker-custom (onSelect)="selectDate('startDate',$event)" [fontFamily]="font" [dateFormat]="'DD-MM-YYYY'" [placeholder]="'DD/MM/YYYY'" [disabled]="false" class="date-picker-custom date-picker-input">
                 </app-data-picker-custom>
               </div>
               <span class="between-generic"> à </span>
               <div>
                 <md-icon class="date-picker-icon">date_range</md-icon>
-                <app-data-picker-custom [fontFamily]="font" [dateFormat]="'DD-MM-YYYY'" [placeholder]="'DD/MM/YYYY'" class="date-picker-custom date-picker-input">
+                <app-data-picker-custom (onSelect)="selectDate('endDate',$event)" [fontFamily]="font" [dateFormat]="'DD-MM-YYYY'" [placeholder]="'DD/MM/YYYY'" class="date-picker-custom date-picker-input">
                 </app-data-picker-custom>
               </div>
             </div>
@@ -40,7 +40,7 @@
             </div>
             <div flex="">
               <md-input-container style="width: 100% !important;">
-                <input mdInput placeholder="Nome" value="Marcelo">
+                <input mdInput [(ngModel)]="filter.apicultor" value="Marcelo">
               </md-input-container>
             </div>
           </div>

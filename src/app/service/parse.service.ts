@@ -1,4 +1,5 @@
 import { Injectable, EventEmitter, Output, NgZone, } from '@angular/core';
+import { Router } from '@angular/router';
 import { Http, RequestOptionsArgs, ResponseContentType, Response } from '@angular/http';
 import { Observable, } from 'rxjs/Rx'
 import { TdLoadingService } from '@covalent/core';
@@ -10,16 +11,18 @@ import { EspecieAbelha } from '../models/especie-abelha';
 import { Cultura } from '../models/cultura';
 import { Propriedade } from '../models/propriedade';
 import { Mortandade } from '../models/mortandade';
+import { UserWeb } from '../models/user-web';
 import { DialogService } from './dialog.service';
 
 @Injectable()
 export class ParseService {
   core = parse;
-  //showToolbar: EventEmitter<boolean> = new EventEmitter<boolean>()
+  @Output() usuarioLogadoEvent: EventEmitter<boolean> = new EventEmitter<boolean>()
   @Output() loaderEvent: EventEmitter<Boolean> = new EventEmitter();
-  //usuarioLogado: Login;  
+  usuarioLogado: UserWeb;
 
-  constructor(private loadingService: TdLoadingService, private zone: NgZone, private http: Http, private dialogService: DialogService) {
+  constructor(private loadingService: TdLoadingService, private zone: NgZone, private http: Http, private dialogService: DialogService, private route: Router) {
+    //Define o banco a ser acessado
     let env = environment.getEnvironment();
     this.core.initialize(env.appid);
     this.core.serverURL = env.url;
@@ -31,6 +34,7 @@ export class ParseService {
     this.core.Object.registerSubclass('Cultura', Cultura);
     this.core.Object.registerSubclass('Propriedade', Propriedade);
     this.core.Object.registerSubclass('Mortandade', Mortandade);
+    this.core.Object.registerSubclass('User', UserWeb);
   }
 
   /**
@@ -40,7 +44,7 @@ export class ParseService {
   findAll<T extends parse.Object>(paramClass: { new (): T }): parse.Promise<T[]> {
     this.toogleLoading(true);
     let query = new this.core.Query(new paramClass());
-    return query.find().done(result=>{      
+    return query.find().done(result => {
       return result;
     }).fail(erro => {
       this.toogleLoading(false);
@@ -102,9 +106,18 @@ export class ParseService {
    * @returns Promise<>
    */
   login(user: Parse.User) {
-    user.logIn().then(res => {
-
-    });
+    this.toogleLoading(true);
+    user.logIn().then(
+      (res: UserWeb) => {
+        this.usuarioLogado = res;
+        this.route.navigate(['']);
+        this.toogleLoading(false);
+        this.usuarioLogadoEvent.emit(true);
+      },
+      (erro) => {
+        this.toogleLoading(false);
+        this.showErrorPopUp(erro);
+      });
   }
 
   /**
@@ -137,7 +150,7 @@ export class ParseService {
     console.log(erro);
   }
 
-  forceCloseLoading(){
+  forceCloseLoading() {
     this.toogleLoading(false);
   }
 }
