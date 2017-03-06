@@ -12,12 +12,20 @@ import {  ListPropertyComponent } from '../list-property/list-property.component
 import {  DataDeactivationComponent } from '../data-deactivation/data-deactivation.component'
 
 import { EditUserComponent } from '../edit-user/edit-user.component';
+import { ApiaryDetailResolver } from '../guards/apiary-detail.resolver';
+import { ListMortandadeResolver } from '../guards/list-mortandade.resolve';
+import { ListCulturasResolver } from '../guards/list-cultura.resolver';
+
 
 
 
 export const route: Routes = [
     { path: '', component: ListApiaryComponent },
-    { path: 'editar/apiario', component: EditApiaryComponent},
+    { path: 'editar/apiario', component: EditApiaryComponent,resolve:{
+        apiario: ApiaryDetailResolver,
+        listMortandade: ListMortandadeResolver,
+        listCulturas: ListCulturasResolver      
+    }},
     { path: 'edicao/multipla', component: EditMultipleApiaryComponent},
     { path: 'usuarios', component: ListUserComponent},
     { path: 'editar/associação', component: EditAssociationComponent},

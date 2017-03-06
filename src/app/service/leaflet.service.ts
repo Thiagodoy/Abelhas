@@ -1,6 +1,7 @@
 import { Injectable } from '@angular/core';
 import * as L from 'leaflet'
 import { GeocodingService } from './geocode.service';
+import{Location} from '../models/location';
 
 @Injectable()
 export class LeafletService {
@@ -45,10 +46,10 @@ export class LeafletService {
     return this.map;
   }
 
-  putLocations(locations: any) {        
+  putLocations(locations: Location[]) {        
         for(let location of locations){
           this.map.panTo([location.latitude, location.longitude])
-          this.core.marker([location.latitude, location.longitude]).bindPopup('Teste').addTo(this.map);
+          this.core.marker([location.latitude, location.longitude]).bindPopup(location.getPopUp()).addTo(this.map).openPopup();
         }
   }
 

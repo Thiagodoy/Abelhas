@@ -1,4 +1,4 @@
-import { Component, OnInit, ViewChild, ContentChild, AfterContentInit, NgZone } from '@angular/core';
+import { Component, OnInit, ViewChild, ContentChild, AfterContentInit, NgZone, ViewContainerRef } from '@angular/core';
 import { Router } from '@angular/router'
 import { ITdDataTableColumn } from '@covalent/core';
 import { ParseService } from '../service/parse.service';
@@ -6,6 +6,7 @@ import { MomentService } from '../service/moment.service';
 import { Apiario } from '../models/apiario';
 import { Apicultor } from '../models/apicultor';
 import { TableComponent } from '../table/table.component';
+import { DialogService } from '../service/dialog.service';
 
 
 
@@ -37,7 +38,9 @@ export class ListApiaryComponent implements OnInit {
     private serviceParse: ParseService,
     private momentService: MomentService,
     private route: Router,
-    private zone: NgZone
+    private zone: NgZone,
+    private dialogService: DialogService,
+    private viewContainerRef: ViewContainerRef,
   ) { }
 
   ngOnInit() {
@@ -79,9 +82,6 @@ export class ListApiaryComponent implements OnInit {
       this.zone.run(() => {
         this.atualiza(result);
       });
-    }).fail((fail)=>{
-      console.log('Erro');
-      console.log(fail);
     });
 
   }
@@ -99,21 +99,45 @@ export class ListApiaryComponent implements OnInit {
 
   }
 
-  excluir(apiario:Apiario) {
-        // this.serviceParse.destroy(apiario)
-        // .done(()=>{})
-        // .fail(()=>{});
+  excluir(apiario: Apiario) {
+    // APos a remoção retirar o apiario da lista
+    // this.serviceParse.destroy(apiario)
+    // .done(()=>{})
+    // .fail(()=>{});
+     let menssagem = '';
+        this.dialogService.confirm('Exclusão realizada com sucesso', menssagem, 'SUCCESS', this.viewContainerRef).subscribe((value) => {
+         //
+        });
+  }
+
+  validar(apiario: Apiario) {
+    //TODO IMPLEMENTAR A ATUALIZAÇÂO
   }
 
   acoes(param) {
+    let menssagem = undefined;
     switch (param.acao) {
       case 'EDITAR':
         this.route.navigate(['editar/apiario'], { queryParams: { apiario: param.element.id } });
         break;
       case 'EXCLUIR':
-         this.excluir(param.element); 
+        menssagem = '<p> Deseja prosseguir com a exclusão do dado?</p>';
+        this.dialogService.confirm('Confirmar exclusão', menssagem, null, this.viewContainerRef).subscribe((value) => {
+          if (value) {
+            this.excluir(param.element);
+          }
+        });
         break;
       case 'HISTORICO':
+        // TODO SERÀ IMPLEMENTADO
+        break;
+      case 'VALIDAR':
+        menssagem = '<p>Tem certeza que deseja validar este dado?</p>' + '<p>Este procedimento não poderáser revertido!</p>';
+        this.dialogService.confirm('Confirmar validação', menssagem, null, this.viewContainerRef).subscribe((value) => {
+          if (value) {
+            this.validar(param.element);
+          }
+        });
         break;
     }
   }

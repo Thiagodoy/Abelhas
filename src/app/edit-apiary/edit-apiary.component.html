@@ -7,24 +7,38 @@
           <div layout="column">
             <div layout="column" layout-align="space-between start">
               <md-select [(ngModel)]="apiario?.attributes?.apicultor.objectId" placeholder="Apicultor" name="apicultor" style="width: 40%;margin-bottom: 20px;">
-                <md-option selected  [value]="apiario?.attributes.apicultor.objectId">
+                <md-option selected [value]="apiario?.attributes.apicultor.objectId">
                   {{apiario?.attributes.apicultor.attributes.nome}}
                 </md-option>
               </md-select>
               <md-select [(ngModel)]="apiario?.attributes.propriedade.objectId" placeholder="Propriedade" name="propriedade" style="width: 40%;margin-bottom: 20px;">
-                <md-option selected  [value]="apiario?.attributes.propriedade.objectId">
+                <md-option selected [value]="apiario?.attributes.propriedade.objectId">
                   {{apiario?.attributes.propriedade.attributes.nome}}
                 </md-option>
               </md-select>
             </div>
             <div layout="row" style="margin-bottom: 20px;">
-              <div layout="column">
+              <!--<div layout="column">
                 <h4>Culturas</h4>
-              </div>
-              <div layout="row" flex="50" style="flex-wrap: wrap;margin-top: 16px">
-                <md-radio-group [(ngModel)]="apiario?.attributes.culturas" flex="35" *ngFor="let cultura of apiario?.attributes.culturas">
-                    <md-checkbox [name]="cultura" [id]="cultura.objectId" [checked]="true" style="margin-left: 15px" >{{cultura.attributes.nome}}</md-checkbox>               
-                </md-radio-group>                
+              </div>-->
+              <div layout="row" flex="60" style="flex-wrap: wrap;margin-top: 16px">
+                <h4>Culturas</h4>
+                <md-radio-group flex="100">
+                  <div layout="row">
+                    <div flex="20">
+                      <md-checkbox *ngFor="let cultura of listCulturas.slice(0,5)" [(ngModel)]="culturas[cultura.attributes.nome]" (check)="culturas[culturas.attributes.nome]"
+                        [name]="cultura" [id]="cultura.objectId" style="margin-left: 15px">{{cultura.attributes.nome}}</md-checkbox>
+                    </div>
+                    <div flex="20">
+                      <md-checkbox *ngFor="let cultura of listCulturas.slice(5,10)" [(ngModel)]="culturas[cultura.attributes.nome]" (check)="culturas[culturas.attributes.nome]"
+                        [name]="cultura" [id]="cultura.objectId" style="margin-left: 15px">{{cultura.attributes.nome}}</md-checkbox>
+                    </div>
+                    <div flex="20">
+                      <md-checkbox *ngFor="let cultura of listCulturas.slice(10, listCulturas.length + 1)" [(ngModel)]="culturas[cultura.attributes.nome]"
+                        (check)="culturas[culturas.attributes.nome]" [name]="cultura" [id]="cultura.objectId" style="margin-left: 15px">{{cultura.attributes.nome}}</md-checkbox>
+                    </div>
+                  </div>
+                </md-radio-group>
               </div>
             </div>
             <div layout="row">
@@ -42,11 +56,12 @@
               <div layout="column" layout-align="space-between start" style="width: 100%">
                 <md-input-container class="example-full-width" style="width: 40%">
                   <input mdInput [(ngModel)]="apiario?.attributes.qtdCaixas" placeholder="Quantidade de caixas" value="{{apiario?.attributes.qtdCaixas}}">
-                   <span md-suffix>unidades.</span>
+                  <span md-suffix>unidades.</span>
                 </md-input-container>
                 <md-input-container class="example-full-width" style="width: 40%">
-                  <input mdInput [(ngModel)]="apiario?.attributes.distanciaDeslocamentoCaixas" placeholder="Distancia deslocamento de caixa"  value="{{apiario?.attributes.distanciaDeslocamentoCaixas}}">
-                   <span md-suffix>metros.</span>
+                  <input mdInput [(ngModel)]="apiario?.attributes.distanciaDeslocamentoCaixas" placeholder="Distancia deslocamento de caixa"
+                    value="{{apiario?.attributes.distanciaDeslocamentoCaixas}}">
+                  <span md-suffix>metros.</span>
                 </md-input-container>
               </div>
             </div>
@@ -68,12 +83,34 @@
                 </md-radio-group>
               </div>
             </div>
-            <div layout="row">
+            <!--<div layout="row">
               <md-select placeholder="Motivo mortandade" name="motivo" style="width: 40%;margin-bottom: 20px;margin-top: 27px">
-                <md-option selected *ngFor="let motivo of apiario?.attributes.motivoMortandade">
-                  {{motivo.atributes.nome}}
+                <md-option selected *ngFor="let motivo of listMortandade">
+                  {{motivo.attributes?.nome}}
                 </md-option>
               </md-select>
+            </div>-->
+            <div layout="row" style="margin-bottom: 20px;">
+              <div layout="row" flex="60" style="flex-wrap: wrap;margin-top: 16px">
+                <h4>Motivo mortandade</h4>
+                <md-radio-group flex="90">
+                  <div layout="row">
+                    <div flex="30">
+                      <md-checkbox (change)="mudou($event)" [(ngModel)]="motivosMortandade[motivo.attributes.nome]" (check)="motivosMortandade[motivo.attributes.nome]"
+                        *ngFor="let motivo of listMortandade.slice(0,5)" [name]="motivo.objectId" [id]="motivo.objectId" style="margin-left: 15px">{{motivo.attributes.nome}}</md-checkbox>
+                    </div>
+                    <div flex="30">
+                      <md-checkbox (change)="mudou($event)" [(ngModel)]="motivosMortandade[motivo.attributes.nome]" (check)="motivosMortandade[motivo.attributes.nome]"
+                        *ngFor="let motivo of listMortandade.slice(5,10)" [name]="motivo.objectId" [id]="motivo.objectId" style="margin-left: 15px">{{motivo.attributes.nome}}</md-checkbox>
+                    </div>
+                    <div flex="30">
+                      <md-checkbox (change)="mudou($event)" [(ngModel)]="motivosMortandade[motivo.attributes.nome]" (check)="motivosMortandade[motivo.attributes.nome]"
+                        *ngFor="let motivo of listMortandade.slice(10,listCulturas.length + 1)" [name]="motivo.objectId" [id]="motivo.objectId"
+                        style="margin-left: 15px">{{motivo.attributes.nome}}</md-checkbox>
+                    </div>
+                  </div>
+                </md-radio-group>
+              </div>
             </div>
             <div layout="row">
               <div layout="column">
@@ -91,18 +128,40 @@
                 <h4>Histórico mortandade?</h4>
               </div>
               <div layout="row" style="flex-wrap: wrap;margin-top: 16px">
-                <md-radio-group  [(ngModel)]="apiario?.attributes.historicoMortandade" class="example-radio-group" style="margin-left: 15px;">
+                <md-radio-group [(ngModel)]="apiario?.attributes.historicoMortandade" class="example-radio-group" style="margin-left: 15px;">
                   <md-radio-button name="historico_mortandade" [value]="true">Sim </md-radio-button>
                   <md-radio-button name="historico_mortandade" [value]="false">Não </md-radio-button>
                 </md-radio-group>
               </div>
             </div>
-            <div layout="row">
+            <!--<div layout="row">
               <md-select placeholder="Motivo Histórico mortandade" name="motivo" style="width: 40%;margin-bottom: 20px;">
                 <md-option selected *ngFor="let motivo of apiario?.attributes.motivoHistoricoMortandade">
-                   {{motivo.atributes.nome}}
+                  {{motivo.atributes?.nome}}
                 </md-option>
               </md-select>
+            </div>-->
+            <div layout="row" style="margin-bottom: 20px;">
+              <div layout="row" flex="60" style="flex-wrap: wrap;margin-top: 16px">
+                <h4>Motivo Histórico Mortandade</h4>
+                <md-radio-group flex="90">
+                  <div layout="row">
+                    <div flex="30">
+                      <md-checkbox [(ngModel)]="motivosHistoricoMortandade[motivo.attributes.nome]" (check)="motivosHistoricoMortandade[motivo.attributes.nome]"
+                        *ngFor="let motivo of listMortandade.slice(0,5)" [name]="motivo.objectId" [id]="motivo.objectId" style="margin-left: 15px">{{motivo.attributes.nome}}</md-checkbox>
+                    </div>
+                    <div flex="30">
+                      <md-checkbox [(ngModel)]="motivosHistoricoMortandade[motivo.attributes.nome]" (check)="motivosHistoricoMortandade[motivo.attributes.nome]"
+                        *ngFor="let motivo of listMortandade.slice(5,10)" [name]="motivo.objectId" [id]="motivo.objectId" style="margin-left: 15px">{{motivo.attributes.nome}}</md-checkbox>
+                    </div>
+                    <div flex="30">
+                      <md-checkbox [(ngModel)]="motivosHistoricoMortandade[motivo.attributes.nome]" (check)="motivosHistoricoMortandade[motivo.attributes.nome]"
+                        *ngFor="let motivo of listMortandade.slice(10,listCulturas.length + 1)" [name]="motivo.objectId" [id]="motivo.objectId"
+                        style="margin-left: 15px">{{motivo.attributes.nome}}</md-checkbox>
+                    </div>
+                  </div>
+                </md-radio-group>
+              </div>
             </div>
             <div layout="row" style="margin-bottom: 20px;">
               <div layout="column">
@@ -126,19 +185,18 @@
         </form>
       </div>
       <div layout="column" flex="40" layout-align="start start">
-        <div flex="">
-          <img id="myImg" src="assets/no_image.jpg" style="width: 50%;height: 50%; position: absolute;left: 660px; top: 155px;" alt="Modelo"
-         >
+        <div layout="column" flex="">
+          <img id="myImg" src="assets/no_image.jpg" style="width: 50%;height: 50%; position: absolute;left: 660px; top: 155px;" alt=""
+          />
         </div>
-        
       </div>
     </div>
   </md-card-content>
   <md-card-actions layout="row" layout-align="start center">
     <button md-raised-button color="primary">Validar</button>
     <button md-raised-button color="warn">Excluir</button>
-    <button md-raised-button color="acent">Salvar</button>
+    <button md-raised-button color="accent">Salvar</button>
+    <button md-raised-button color="acent">Voltar</button>
   </md-card-actions>
 </md-card>
-<app-mapa [locations] ="locations" style="margin-top: 10px;"></app-mapa> 
-
+<app-mapa [locations]="locations" style="margin-top: 10px;"></app-mapa>

@@ -1,4 +1,6 @@
-import { Injectable, EventEmitter, Output, NgZone } from '@angular/core';
+import { Injectable, EventEmitter, Output, NgZone, } from '@angular/core';
+import { Http, RequestOptionsArgs, ResponseContentType, Response } from '@angular/http';
+import { Observable, } from 'rxjs/Rx'
 import { TdLoadingService } from '@covalent/core';
 import * as parse from 'parse';
 import { environment } from '../../environments/environment';
@@ -8,6 +10,7 @@ import { EspecieAbelha } from '../models/especie-abelha';
 import { Cultura } from '../models/cultura';
 import { Propriedade } from '../models/propriedade';
 import { Mortandade } from '../models/mortandade';
+import { DialogService } from './dialog.service';
 
 @Injectable()
 export class ParseService {
@@ -16,7 +19,7 @@ export class ParseService {
   @Output() loaderEvent: EventEmitter<Boolean> = new EventEmitter();
   //usuarioLogado: Login;  
 
-  constructor(private loadingService: TdLoadingService, private zone: NgZone) {
+  constructor(private loadingService: TdLoadingService, private zone: NgZone, private http: Http, private dialogService: DialogService) {
     let env = environment.getEnvironment();
     this.core.initialize(env.appid);
     this.core.serverURL = env.url;
@@ -35,10 +38,16 @@ export class ParseService {
    * @param Classe extende Parse.Object 
    */
   findAll<T extends parse.Object>(paramClass: { new (): T }): parse.Promise<T[]> {
+    this.toogleLoading(true);
     let query = new this.core.Query(new paramClass());
-    return query.find();
+    return query.find().done(result=>{      
+      return result;
+    }).fail(erro => {
+      this.toogleLoading(false);
+      this.showErrorPopUp(erro);
+    });
   }
-  
+
   /**
    * Recupera um objeto de acordo com o id e classe
    * @param Classe extende Parse.Object 
@@ -46,12 +55,12 @@ export class ParseService {
   get<T extends parse.Object>(id: string, paramClass: { new (): T }): parse.Promise<any> {
     this.toogleLoading(true);
     let query = new this.core.Query(new paramClass());
-    return query.get(id).done((result)=>{
+    return query.get(id).done((result) => {
       this.toogleLoading(false);
       return result;
-    }).fail((error)=>{
+    }).fail((erro) => {
       this.toogleLoading(false);
-      return error;
+      this.showErrorPopUp(erro);
     });
   }
 
@@ -83,7 +92,7 @@ export class ParseService {
       return result;
     }).fail(erro => {
       this.toogleLoading(false);
-      return erro;
+      this.showErrorPopUp(erro);
     });
   }
 
@@ -93,34 +102,42 @@ export class ParseService {
    * @returns Promise<>
    */
   login(user: Parse.User) {
-    user.logIn().then(res => {    
-      
+    user.logIn().then(res => {
+
     });
   }
 
   /**
    * Deleta um objeto
    * @param Objeto
-   *  @returns Promise<>
+   * @returns Promise<>
    */
   destroy(object: Parse.Object) {
-    return object.destroy();
+    this.toogleLoading(true);
+    return object.destroy().fail((erro) => {
+      this.toogleLoading(false);
+      this.showErrorPopUp(erro);
+    });
   }
 
-  loadPhoto(url:string):parse.Promise<parse.Cloud.HttpResponse>{
-    return this.core.Cloud.httpRequest({url:url})
-    .done((success)=>{
-      return success;
-    })
-    .fail((error)=>{
-      return error;
-    });
+  loadPhoto(url: string): Observable<Response> {
+    return this.http.get('', { responseType: ResponseContentType.ArrayBuffer });
+
   }
 
   private toogleLoading(param) {
     this.zone.run(() => {
       this.loaderEvent.emit(param);
     });
+  }
 
+  private showErrorPopUp(erro: any) {
+    let message = '<p>Não foi possivel processar solicitação!</p>' + '<p>' + erro.message + '</p>'
+    this.dialogService.confirm('Erro', message, 'ERRO', null);
+    console.log(erro);
+  }
+
+  forceCloseLoading(){
+    this.toogleLoading(false);
   }
 }

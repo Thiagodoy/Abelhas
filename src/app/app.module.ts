@@ -39,6 +39,9 @@ import { EditPropertyComponent } from './edit-property/edit-property.component';
 import { ListPropertyComponent } from './list-property/list-property.component';
 import { DataDeactivationComponent } from './data-deactivation/data-deactivation.component';
 import { EditUserComponent } from './edit-user/edit-user.component';
+import { ApiaryDetailResolver } from './guards/apiary-detail.resolver';
+import { ListMortandadeResolver } from './guards/list-mortandade.resolve';
+import { ListCulturasResolver } from './guards/list-cultura.resolver';
 
 
 
@@ -72,7 +75,7 @@ import { EditUserComponent } from './edit-user/edit-user.component';
     //LayoutModule
 
   ],
-  providers: [DialogService, ParseService, LeafletService, GeocodingService,MomentService],
+  providers: [DialogService, ParseService, LeafletService, GeocodingService,MomentService, ApiaryDetailResolver,ListMortandadeResolver,ListCulturasResolver],
   bootstrap: [AppComponent],
   entryComponents: [MessageDialogComponent]
 })

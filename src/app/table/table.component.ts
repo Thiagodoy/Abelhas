@@ -1,6 +1,7 @@
-import { Component, OnInit, Input, Output, EventEmitter, ViewContainerRef, ElementRef, AfterViewInit, OnChanges,SimpleChanges } from '@angular/core';
+import { Component, OnInit, Input, Output, EventEmitter, ViewContainerRef, ElementRef, AfterViewInit, OnChanges, SimpleChanges } from '@angular/core';
 import { ITdDataTableColumn, IPageChangeEvent, TdDataTableService } from '@covalent/core';
-import { DialogService } from '../service/dialog.service';
+
+import { ParseService } from '../service/parse.service';
 
 let Jquery = require('jquery');
 
@@ -28,13 +29,14 @@ export class TableComponent implements OnInit, AfterViewInit, OnChanges {
   paginaInicial: number = 1;
   paginaAtual: number = 1;
   paginaTotal: number = 5;
-  itemCurrent: any; 
+  itemCurrent: any;
 
   constructor(
     private _dataTableService: TdDataTableService,
-    private dialogService: DialogService,
-    private viewContainerRef: ViewContainerRef,
-    private elementRef: ElementRef) {
+    
+    
+    private elementRef: ElementRef,
+    private parseService: ParseService) {
   }
 
   ngAfterViewInit() {
@@ -49,7 +51,7 @@ export class TableComponent implements OnInit, AfterViewInit, OnChanges {
 
 
 
-  ngOnChanges(changes:SimpleChanges) {
+  ngOnChanges(changes: SimpleChanges) {
     this.filteredData = this.data;
     console.log('atualiza filho');
     if (!this.data) {
@@ -75,10 +77,9 @@ export class TableComponent implements OnInit, AfterViewInit, OnChanges {
     this.itemCurrent = event;
   }
 
-  acoes(param,object) {
+  acoes(param, object) {
     this.itemSelected2.emit({ acao: param, element: object || this.itemCurrent });
   }
-
 
   page(pagingEvent: IPageChangeEvent): void {
     this.paginaInicial = pagingEvent.fromRow;
@@ -88,15 +89,4 @@ export class TableComponent implements OnInit, AfterViewInit, OnChanges {
     temp = this._dataTableService.pageData(temp, this.paginaInicial, this.paginaAtual * this.paginaTotal);
     this.filteredData = temp;
   }
-
-  confirmarValidacao() {
-
-    let menssagem = '<p>Tem certeza que deseja validar este dado?</p>' +
-      '<p>Este procedimento não poderáser revertido!</p>';
-
-    this.dialogService.confirm('Confirmar validação', menssagem, null, this.viewContainerRef).subscribe((value) => {
-      //  TODO - IMPLEMENTAR A LOGICA QUE VALIDA OU NAO O APIARIO
-    });
-  }
-
 }
