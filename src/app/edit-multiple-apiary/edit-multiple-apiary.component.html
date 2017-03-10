@@ -4,11 +4,14 @@
     <div layout="column">
       <div layout="row">
         <md-icon style="margin-right: 10px;margin-top: 5px;">view_comfy</md-icon>
-        <md-select placeholder="Municipio" name="municipio" style="width: 20%;margin-bottom: 20px;">
-          <!--<md-option selected *ngFor="let apicultor of apicultores" [value]="apicultor.value">
-                  {{apicultor.nome}}
-                </md-option>-->
-        </md-select>
+        <md-input-container>
+          <input type="text" mdInput  [mdAutocomplete]="auto">
+        </md-input-container>
+        <md-autocomplete #auto="mdAutocomplete">
+          <md-option *ngFor="let municipio of listMunicipio" [value]="municipio.attributes.nome">
+            {{municipio.attributes.nome}}
+          </md-option>
+        </md-autocomplete>
       </div>
       <div layout="row">
         <md-icon style="margin-right: 10px;margin-top: 5px;">person</md-icon>
@@ -18,7 +21,7 @@
                 </md-option>-->
         </md-select>
       </div>
-      <div layout="row">        
+      <div layout="row">
         <md-icon class="md-20" md-list-avatar svgIcon="bee" style="margin-right: 10px;"></md-icon>
         <md-select placeholder="Espécie abelhas" name="especie" style="width: 20%;margin-bottom: 20px;">
           <!--<md-option selected *ngFor="let apicultor of apicultores" [value]="apicultor.value">
@@ -37,7 +40,8 @@
       </div>
     </div>
     <div layout="row">
-      <app-table style="width: 100%" [data]="data" [columns]="columns" [selectable]="true" [showPagination]="true" [multiple]="true" [showSelectionJquery]="false"></app-table>
+      <app-table style="width: 100%" [data]="data" [columns]="columns" [selectable]="true" [showPagination]="true" [multiple]="true"
+        [showSelectionJquery]="false"></app-table>
     </div>
     <div layout="column">
       <div layout="row">
@@ -63,4 +67,3 @@
   </md-card-content>
 </md-card>
 <app-mapa style="margin-top: 10px; "></app-mapa>
-

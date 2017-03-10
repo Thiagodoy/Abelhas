@@ -29,11 +29,12 @@ export class EditApiaryComponent implements OnInit, OnDestroy, AfterViewInit {
   static pop: EventEmitter<Object> = new EventEmitter();
 
 
+
   constructor(private route: ActivatedRoute, private parseService: ParseService, private zone: NgZone, private sanitizer: DomSanitizer, private loadingService: TdLoadingService) { }
 
   ngOnInit() {
     this.route.data.subscribe((res) => {
-
+      debugger;
       this.apiario = res.apiario;
       this.listMortandade = res.listMortandade;
       this.listCulturas = res.listCulturas;

@@ -1,3 +1,4 @@
+import { Municipio } from './../models/municipio';
 import { Injectable, EventEmitter, Output, NgZone, } from '@angular/core';
 import { Router } from '@angular/router';
 import { Http, RequestOptionsArgs, ResponseContentType, Response } from '@angular/http';
@@ -35,6 +36,7 @@ export class ParseService {
     this.core.Object.registerSubclass('Propriedade', Propriedade);
     this.core.Object.registerSubclass('Mortandade', Mortandade);
     this.core.Object.registerSubclass('User', UserWeb);
+    this.core.Object.registerSubclass('Municipio', Municipio);
   }
 
   /**
@@ -151,6 +153,8 @@ export class ParseService {
   }
 
   forceCloseLoading() {
-    this.toogleLoading(false);
+    this.zone.run(() => {
+      this.toogleLoading(false);
+    });
   }
 }

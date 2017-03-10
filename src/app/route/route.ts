@@ -1,3 +1,6 @@
+import { ListMunicipioResolver } from './../guards/list-municipio.resolver';
+
+import { ListPropriedadeResolver } from './../guards/list-propriedade.resolver';
 import { Routes } from '@angular/router';
 
 import { ListApiaryComponent } from '../list-apiary/list-apiary.component';
@@ -15,6 +18,8 @@ import { EditUserComponent } from '../edit-user/edit-user.component';
 import { ApiaryDetailResolver } from '../guards/apiary-detail.resolver';
 import { ListMortandadeResolver } from '../guards/list-mortandade.resolve';
 import { ListCulturasResolver } from '../guards/list-cultura.resolver';
+import { ListApicultorResolver } from '../guards/list-apicultor.resolver';
+import { ListEspecieAbelhaResolver } from '../guards/list-especie-abelha.resolver';
 
 
 
@@ -26,7 +31,12 @@ export const route: Routes = [
         listMortandade: ListMortandadeResolver,
         listCulturas: ListCulturasResolver      
     }},
-    { path: 'edicao/multipla', component: EditMultipleApiaryComponent},
+    { path: 'edicao/multipla', component: EditMultipleApiaryComponent,resolve:{
+           listApicultor:ListApicultorResolver,
+           listPropriedade:ListPropriedadeResolver,
+           ListEspecieAbelha:ListEspecieAbelhaResolver,
+           ListMunicipio:ListMunicipioResolver 
+    }},
     { path: 'usuarios', component: ListUserComponent},
     { path: 'editar/associação', component: EditAssociationComponent},
     { path: 'associações', component: ListAssociationComponent},

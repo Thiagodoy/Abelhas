@@ -1,3 +1,7 @@
+import { ListMunicipioResolver } from './guards/list-municipio.resolver';
+import { ListEspecieAbelhaResolver } from './guards/list-especie-abelha.resolver';
+import { ListPropriedadeResolver } from './guards/list-propriedade.resolver';
+import { ListApicultorResolver } from './guards/list-apicultor.resolver';
 import { BrowserModule } from '@angular/platform-browser';
 import { NgModule } from '@angular/core';
 import { FormsModule } from '@angular/forms';
@@ -75,7 +79,7 @@ import { ListCulturasResolver } from './guards/list-cultura.resolver';
     //LayoutModule
 
   ],
-  providers: [DialogService, ParseService, LeafletService, GeocodingService,MomentService, ApiaryDetailResolver,ListMortandadeResolver,ListCulturasResolver],
+  providers: [DialogService, ParseService, LeafletService, GeocodingService, MomentService, ApiaryDetailResolver, ListMortandadeResolver, ListCulturasResolver, ListApicultorResolver, ListPropriedadeResolver, ListEspecieAbelhaResolver, ListMunicipioResolver],
   bootstrap: [AppComponent],
   entryComponents: [MessageDialogComponent]
 })
