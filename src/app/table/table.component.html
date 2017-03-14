@@ -1,5 +1,5 @@
 <td-data-table [selectable]="selectable" [data]="filteredData" [columns]="columns" [multiple]="multiple" [sortable]="sortable"
-  [sortBy]="sortBy" [sortOrder]="sortOrder" (sortChange)="sortTable($event)" (rowSelect)="itemSelected($event)" id="table">
+  [sortBy]="sortBy" [sortOrder]="sortOrder" (sortChange)="sortTable($event)" (rowSelect)="itemSelected($event)" (selectAll)="itemAllSelected($event)" id="table">
   <!--Template Lista Apiario-->
   <template tdDataTableTemplate="attributes.ativo" let-value="value" let-row="row" let-column="column">
     <div layout="row">
@@ -69,4 +69,4 @@
     </div>
   </template>
 </td-data-table>
-<td-paging-bar2 *ngIf="showPagination" [pageSizes]="[5, 10, 15, 20]" [total]="data.length" (change)="page($event)"></td-paging-bar2>
+<td-paging-bar2 *ngIf="showPagination && data.length>0" [pageSizes]="[5, 10, 15, 20]" [total]="data.length" (change)="page($event)"></td-paging-bar2>

@@ -3,6 +3,9 @@ export class EspecieAbelha extends Object {
     constructor() {
         super('EspecieAbelha');
     }
+    getId():string{
+        return this.id;
+    }
     getNome(): string {
         return this.get('nome');
     }

@@ -4,6 +4,7 @@ export class Location {
     latitude: number;
     longitude: number;
     address: string;
+    key:string;
     viewBounds: LatLngBounds;
     popUp:string = undefined
 
@@ -12,5 +13,15 @@ export class Location {
     }
     getPopUp(){
         return this.popUp;
+    }
+
+    getLatitude():number{
+        return this.latitude;
+    }
+    getLongitude():number{
+        return this.longitude;
+    }
+    getKey(){
+        return this.key;
     }
 }

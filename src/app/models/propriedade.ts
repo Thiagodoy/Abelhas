@@ -3,6 +3,9 @@ export class Propriedade extends Object {
     constructor() {
         super('Propriedade');
     }
+    getId():string{
+        return this.id;
+    }
     getNome(): string {
         return this.get('nome');
     }

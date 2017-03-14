@@ -1,4 +1,6 @@
-import { Component, OnInit } from '@angular/core';
+import { UserWeb } from './../models/user-web';
+import { ParseService } from './../service/parse.service';
+import { Component, OnInit, NgZone } from '@angular/core';
 import { ITdDataTableColumn } from '@covalent/core';
 
 @Component({
@@ -17,19 +19,29 @@ export class ListUserComponent implements OnInit {
       {usuario:'Marcelo',nome_user:'Marcelo Trevisan',perfil:'Gestor',status:'Ativo',acoes_usuario:null},
       {usuario:'Gabriel',nome_user:'Gabriel Franschini',perfil:'Apicultor',status:'Desativado',acoes_usuario:null}   
 
-  ];
+  ]; 
 
   columns: ITdDataTableColumn[] = [
-    { name: 'usuario',  label: 'Usuario' },
+    { name: 'attributes.nome',  label: 'Usuario' },
     { name: 'nome_user', label: 'Nome' },
     { name: 'perfil', label: 'Perfil'},
     { name: 'status', label: 'Status'},
     { name: 'acoes_usuario', label: 'Ações'},
     ];
 
-  constructor() { }
+  listUser:UserWeb[] = [];
+
+  constructor(private parseService:ParseService,private zone:NgZone) { }
 
   ngOnInit() {
+    this.parseService.findAll(UserWeb).then(result=>{
+        this.zone.run(()=>{
+          debugger;
+          this.listUser = result;
+        });
+    });
+
+
   }
 
 }

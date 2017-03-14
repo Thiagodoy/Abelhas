@@ -11,4 +11,8 @@ export class Apicultor extends Object {
     setNome(param: string) {
         this.set('nome', param);
     }
+
+    getId():string{
+        return this.id;
+    }
 }

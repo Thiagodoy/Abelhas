@@ -23,6 +23,8 @@ export class TableComponent implements OnInit, AfterViewInit, OnChanges {
   @Input() showSelectionJquery: boolean = true;
 
   @Output('itemSelected2') itemSelected2 = new EventEmitter<Object>();
+  @Output('itemSelected3') itemSelected3 = new EventEmitter<Object>();
+  @Output('itemSelectedAll') itemSelectedAll = new EventEmitter<Object>();
 
   filteredData: any[] = this.data;
   filteredTotal: number = this.data.length;
@@ -75,6 +77,11 @@ export class TableComponent implements OnInit, AfterViewInit, OnChanges {
 
   itemSelected(event) {
     this.itemCurrent = event;
+    this.itemSelected3.emit(event);    
+  }
+
+  itemAllSelected(event){
+    this.itemSelectedAll.emit(event);
   }
 
   acoes(param, object) {

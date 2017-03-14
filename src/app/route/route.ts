@@ -1,3 +1,4 @@
+
 import { ListMunicipioResolver } from './../guards/list-municipio.resolver';
 
 import { ListPropriedadeResolver } from './../guards/list-propriedade.resolver';
@@ -20,6 +21,7 @@ import { ListMortandadeResolver } from '../guards/list-mortandade.resolve';
 import { ListCulturasResolver } from '../guards/list-cultura.resolver';
 import { ListApicultorResolver } from '../guards/list-apicultor.resolver';
 import { ListEspecieAbelhaResolver } from '../guards/list-especie-abelha.resolver';
+import { EditMultipleResolver } from '../guards/edit-multiple.resolver';
 
 
 
@@ -32,10 +34,7 @@ export const route: Routes = [
         listCulturas: ListCulturasResolver      
     }},
     { path: 'edicao/multipla', component: EditMultipleApiaryComponent,resolve:{
-           listApicultor:ListApicultorResolver,
-           listPropriedade:ListPropriedadeResolver,
-           ListEspecieAbelha:ListEspecieAbelhaResolver,
-           ListMunicipio:ListMunicipioResolver 
+          listData: EditMultipleResolver
     }},
     { path: 'usuarios', component: ListUserComponent},
     { path: 'editar/associação', component: EditAssociationComponent},

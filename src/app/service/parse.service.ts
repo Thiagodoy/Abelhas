@@ -43,13 +43,12 @@ export class ParseService {
    * Busca todos os objetos na base de acordo com a classe passada 
    * @param Classe extende Parse.Object 
    */
-  findAll<T extends parse.Object>(paramClass: { new (): T }): parse.Promise<T[]> {
-    this.toogleLoading(true);
+  findAll<T extends parse.Object>(paramClass: { new (): T }): parse.Promise<T[]> {   
     let query = new this.core.Query(new paramClass());
-    return query.find().done(result => {
+    query.limit(1000);
+    return query.find().done(result => {      
       return result;
-    }).fail(erro => {
-      this.toogleLoading(false);
+    }).fail(erro => {     
       this.showErrorPopUp(erro);
     });
   }
@@ -153,8 +152,8 @@ export class ParseService {
   }
 
   forceCloseLoading() {
-    this.zone.run(() => {
-      this.toogleLoading(false);
-    });
+     this.zone.run(() => {
+    this.toogleLoading(false);
+     });
   }
 }

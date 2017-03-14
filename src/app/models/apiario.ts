@@ -11,8 +11,8 @@ export class Apiario extends Object {
     constructor() {
         super('Apiario');
     }
-    getObjectId(): string {
-        return this.get('objectId');
+    getId(): string {
+        return this.id;
     }
     getQtdCaixas(): number {
         return this.get('qtdCaixas');
@@ -130,6 +130,8 @@ export class Apiario extends Object {
         let locationParse = this.get('location');
         location.latitude = locationParse.latitude;
         location.longitude = locationParse.longitude;
+        location.setPopUp(this.getApicultor().getNome(),this.getPropriedade().getNome(),this.getEspecieAbelha().getNome())
+        location.key = '' + location.getLatitude() + '' + location.getLongitude();
         return location;
     }
 }

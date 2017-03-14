@@ -72,7 +72,8 @@ export class ListApiaryComponent implements OnInit {
       let status = this.filter.status == 'validados';
       this.queryApiario.equalTo('', status);
     }
-
+    this.queryApiario.limit(1000);
+    
     this.serviceParse.executeQuery(this.queryApiario).done(result => {
       this.zone.run(() => {
         this.atualiza(result);

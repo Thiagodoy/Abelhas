@@ -1,3 +1,4 @@
+import { EditMultipleResolver } from './guards/edit-multiple.resolver';
 import { ListMunicipioResolver } from './guards/list-municipio.resolver';
 import { ListEspecieAbelhaResolver } from './guards/list-especie-abelha.resolver';
 import { ListPropriedadeResolver } from './guards/list-propriedade.resolver';
@@ -8,6 +9,7 @@ import { FormsModule } from '@angular/forms';
 import { HttpModule } from '@angular/http';
 import { MaterialModule } from '@angular/material';
 import { RouterModule } from '@angular/router';
+import { ReactiveFormsModule } from '@angular/forms'
 
 //Bibliotecas de terceiros
 import { CovalentCoreModule } from '@covalent/core';
@@ -76,10 +78,11 @@ import { ListCulturasResolver } from './guards/list-cultura.resolver';
     MaterialModule.forRoot(),
     RouterModule.forRoot(route),
     CovalentCoreModule.forRoot(),
+    ReactiveFormsModule
     //LayoutModule
 
   ],
-  providers: [DialogService, ParseService, LeafletService, GeocodingService, MomentService, ApiaryDetailResolver, ListMortandadeResolver, ListCulturasResolver, ListApicultorResolver, ListPropriedadeResolver, ListEspecieAbelhaResolver, ListMunicipioResolver],
+  providers: [DialogService, ParseService, LeafletService, GeocodingService, MomentService, ApiaryDetailResolver, ListMortandadeResolver, ListCulturasResolver, ListApicultorResolver, ListPropriedadeResolver, ListEspecieAbelhaResolver, ListMunicipioResolver,EditMultipleResolver],
   bootstrap: [AppComponent],
   entryComponents: [MessageDialogComponent]
 })
