@@ -1,3 +1,4 @@
+import { Estado } from './estado';
 import{ Object } from 'parse';
 export class Municipio extends Object {
     constructor(){
@@ -8,5 +9,9 @@ export class Municipio extends Object {
     }
     getNome(){
         return this.get('nome');
+    }
+
+    getEstado():Estado{
+        return this.get('estado');
     }
 }

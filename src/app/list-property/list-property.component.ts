@@ -13,7 +13,7 @@ export class ListPropertyComponent implements OnInit {
   private data: any[] = [
       {propriedade:'Propriedade',rota:'rota F',municipio:'São Carlos - SP',acoes_propriedade:null},
       {propriedade:'Propriedade',rota:'rota Y',municipio:'São Carlos - SP',acoes_propriedade:null},
-      {propriedade:'Propriedade',rota:'rota I',municipio:'São Carlos - SP',acoes_propriedade:null},
+      {propriedade:'Propriedade2',rota:'rota I',municipio:'São Carlos - SP',acoes_propriedade:null},
       {propriedade:'Propriedade',rota:'rota ',municipio:'São Carlos - SP',acoes_propriedade:null},
       {propriedade:'Propriedade',rota:'rota B',municipio:'São Carlos - SP',acoes_propriedade:null},
       {propriedade:'Propriedade',rota:'rota ',municipio:'São Carlos - SP',acoes_propriedade:null}   

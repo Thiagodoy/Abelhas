@@ -1,3 +1,7 @@
+import { UserResolver } from './guards/user.resolver';
+import { ListAssociacaoResolver } from './guards/list-associacao.resolver';
+import { ListEstadoResolver } from './guards/list-estado.resover';
+import { EditUserResolver } from './guards/edit-user.resolver';
 import { EditMultipleResolver } from './guards/edit-multiple.resolver';
 import { ListMunicipioResolver } from './guards/list-municipio.resolver';
 import { ListEspecieAbelhaResolver } from './guards/list-especie-abelha.resolver';
@@ -48,6 +52,7 @@ import { EditUserComponent } from './edit-user/edit-user.component';
 import { ApiaryDetailResolver } from './guards/apiary-detail.resolver';
 import { ListMortandadeResolver } from './guards/list-mortandade.resolve';
 import { ListCulturasResolver } from './guards/list-cultura.resolver';
+import { MaskDirective } from './directive/mask.directive';
 
 
 
@@ -69,7 +74,8 @@ import { ListCulturasResolver } from './guards/list-cultura.resolver';
     EditPropertyComponent,
     ListPropertyComponent,
     DataDeactivationComponent,
-    EditUserComponent
+    EditUserComponent,
+    MaskDirective
   ],
   imports: [
     BrowserModule,
@@ -82,7 +88,10 @@ import { ListCulturasResolver } from './guards/list-cultura.resolver';
     //LayoutModule
 
   ],
-  providers: [DialogService, ParseService, LeafletService, GeocodingService, MomentService, ApiaryDetailResolver, ListMortandadeResolver, ListCulturasResolver, ListApicultorResolver, ListPropriedadeResolver, ListEspecieAbelhaResolver, ListMunicipioResolver,EditMultipleResolver],
+  providers: [DialogService,
+   ParseService, LeafletService, GeocodingService, MomentService, ApiaryDetailResolver, ListMortandadeResolver, 
+   ListCulturasResolver, ListApicultorResolver, ListPropriedadeResolver, ListEspecieAbelhaResolver, ListMunicipioResolver,
+    EditUserResolver,ListEstadoResolver,ListAssociacaoResolver,UserResolver],
   bootstrap: [AppComponent],
   entryComponents: [MessageDialogComponent]
 })

@@ -20,14 +20,10 @@
     </div>
   </template>
   <!--Template Lista Apiario-->
-  <template tdDataTableTemplate="usuario" let-value="value" let-row="row" let-column="column">
-    <div layout="row">
-      <md-icon style="margin-right: 10px;">person</md-icon><span class="md-body-1">{{row[column]}}</span>
-    </div>
-  </template>
+
   <template tdDataTableTemplate="nome" let-value="value" let-row="row" let-column="column">
     <div layout="row">
-      <md-icon style="margin-right: 10px;">view_comfy</md-icon><span class="md-body-1">{{row[column]}}</span>
+      <md-icon style="margin-right: 10px;">view_comfy</md-icon><span class="md-body-1">{{value}}</span>
     </div>
   </template>
   <template tdDataTableTemplate="propriedade" let-value="value" let-row="row" let-column="column">
@@ -35,17 +31,29 @@
       <md-icon style="margin-right: 10px;">label</md-icon><span class="md-body-1">{{row[column]}}</span>
     </div>
   </template>
+  <!--Template List Usuário-->
+  <template tdDataTableTemplate="propriedade" let-value="value" let-row="row" let-column="column">
+    <div layout="row">
+      <md-icon style="margin-right: 10px;">person</md-icon><span class="md-body-1">{{row[column]}}</span>
+    </div>
+  </template>
+    <!--<template tdDataTableTemplate="attributes.username" let-value="value" let-row="row" let-column="column">
+    <div layout="row">
+      <md-icon style="margin-right: 10px;">person</md-icon><span class="md-body-1">{{row[column]}}</span>
+    </div>
+  </template>-->
   <template tdDataTableTemplate="acoes_usuario" let-value="value" let-row="row" let-column="column">
     <div layout="row">
       <button md-icon-button [mdMenuTriggerFor]="menuUser">
               <md-icon>menu</md-icon>
               </button>
       <md-menu #menuUser="mdMenu">
-        <button md-menu-item> <md-icon>mode_edit</md-icon>Editar </button>
-        <button md-menu-item> <md-icon>delete</md-icon> Excluir </button>
+        <button md-menu-item (click)="acoes('EDITAR',row)"> <md-icon>mode_edit</md-icon>Editar</button>
+        <button md-menu-item (click)="acoes('EXCLUIR',row)"> <md-icon>delete</md-icon> Excluir </button>
       </md-menu>
     </div>
   </template>
+  <!--Template List Usuário-->
   <template tdDataTableTemplate="acoes_associacao" let-value="value" let-row="row" let-column="column">
     <div layout="row">
       <button md-icon-button [mdMenuTriggerFor]="menuAssociacao">

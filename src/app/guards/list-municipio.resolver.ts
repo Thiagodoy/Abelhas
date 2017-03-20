@@ -12,6 +12,9 @@ export class ListMunicipioResolver implements Resolve<Municipio[]> {
         state: RouterStateSnapshot
     ): Observable<any> | Promise<any> | any {
             
+            
+            
+            
            return this.parseService.findAll(Municipio).then((result)=>{
                 return result;
             })

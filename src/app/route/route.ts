@@ -1,3 +1,7 @@
+import { UserResolver } from './../guards/user.resolver';
+import { ListAssociacaoResolver } from './../guards/list-associacao.resolver';
+import { ListEstadoResolver } from './../guards/list-estado.resover';
+import { EditUserResolver } from './../guards/edit-user.resolver';
 
 import { ListMunicipioResolver } from './../guards/list-municipio.resolver';
 
@@ -27,21 +31,29 @@ import { EditMultipleResolver } from '../guards/edit-multiple.resolver';
 
 
 export const route: Routes = [
-    { path: '', component: ListApiaryComponent },
+    { path: 'list', component: ListApiaryComponent },
     { path: 'editar/apiario', component: EditApiaryComponent,resolve:{
         apiario: ApiaryDetailResolver,
         listMortandade: ListMortandadeResolver,
         listCulturas: ListCulturasResolver      
     }},
-    { path: 'edicao/multipla', component: EditMultipleApiaryComponent,resolve:{
-          listData: EditMultipleResolver
-    }},
-    { path: 'usuarios', component: ListUserComponent},
+    { path: 'edicao/multipla', component: EditMultipleApiaryComponent
+    // ,resolve:{
+    //       listData: EditMultipleResolver
+    // }
+},
+    { path: '', component: ListUserComponent},
     { path: 'editar/associação', component: EditAssociationComponent},
     { path: 'associações', component: ListAssociationComponent},
     { path: 'editar/propriedade', component: EditPropertyComponent},
     { path: 'propriedades', component: ListPropertyComponent},
     { path: 'dados/desativação', component: DataDeactivationComponent},
-    { path: 'editar/usuario', component: EditUserComponent}
+    { path: 'editar/usuario', component: EditUserComponent}//,resolve:{result:EditUserResolver}
 
 ]    
+// resolve:{
+//         estado:ListEstadoResolver,
+//         municipio:ListMunicipioResolver,
+//         associacao: ListAssociacaoResolver,
+//         user: UserResolver        
+//     }

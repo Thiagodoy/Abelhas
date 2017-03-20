@@ -64,6 +64,7 @@
         <md-icon style="margin-right: 10px;margin-top: 5px;">person</md-icon>
          <md-input-container style="width: 20%">
           <input type="text" mdInput  [mdAutocomplete]="api1" [formControl]="controlApicultor2" placeholder="Apicultor">
+           <md-hint *ngIf="error?.apicultor2" [ngStyle]="{'color': 'red'}" align="start">*Campo obrigatório.</md-hint>
         </md-input-container>
         <md-autocomplete #api1="mdAutocomplete" [displayWith]="displayFn" style="width: 20%">
           <md-option *ngFor="let option of filteredOptionsApicultor2 | async" [value]="option">
@@ -74,7 +75,8 @@
       <div layout="row">
         <md-icon style="margin-right: 10px;margin-top: 5px;">view_comfy</md-icon>
          <md-input-container style="width: 20%">
-          <input type="text" mdInput  [mdAutocomplete]="propri1" [formControl]="controlPropriedade2" disabled placeholder="Propriedade">
+          <input type="text" mdInput  [mdAutocomplete]="propri1" [formControl]="controlPropriedade2"  placeholder="Propriedade">
+           <md-hint *ngIf="error?.propriedade2" [ngStyle]="{'color': 'red'}" align="start">*Campo obrigatório.</md-hint>
         </md-input-container>
         <md-autocomplete #propri1="mdAutocomplete" [displayWith]="displayFn" style="width: 20%">
           <md-option *ngFor="let option of filteredOptionsPropriedade2 | async" [value]="option">
@@ -83,7 +85,7 @@
         </md-autocomplete>
       </div>
       <div layout="row">
-        <button md-raised-button color="primary" style="margin-bottom: 25px;height: 35px;">Mover</button>
+        <button md-raised-button color="primary" style="margin-bottom: 25px;height: 35px;" (click)="mover()">Mover</button>
       </div>
     </div>
   </md-card-content>

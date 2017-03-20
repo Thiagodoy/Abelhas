@@ -16,7 +16,7 @@ export class EditMultipleResolver implements Resolve<any> {
     resolve(
         route: ActivatedRouteSnapshot,
         state: RouterStateSnapshot
-    ): Observable<any> | Promise<any> | any {     
+    ): Observable<any> | Promise<any> | any {
 
         let object = {};
          
@@ -34,7 +34,8 @@ export class EditMultipleResolver implements Resolve<any> {
                 return object
         }).then(resu=>{            
           
+
             return resu;
-        });      
+        });  
     }
 }

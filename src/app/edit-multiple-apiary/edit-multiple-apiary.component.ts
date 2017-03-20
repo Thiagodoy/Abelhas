@@ -12,16 +12,16 @@ import { ParseService } from './../service/parse.service';
 import { Component, OnInit, OnDestroy, NgZone } from '@angular/core';
 import { Subscription, Observable } from 'rxjs/Rx';
 import { FormControl, Validators, AbstractControl } from '@angular/forms';
-import { ITdDataTableColumn, TdLoadingService } from '@covalent/core';
+import { ITdDataTableColumn } from '@covalent/core';
 import * as parse from 'parse';
-const Jquery = require('jquery');
+
 
 @Component({
   selector: 'app-edit-multiple-apiary',
   templateUrl: './edit-multiple-apiary.component.html',
   styleUrls: ['./edit-multiple-apiary.component.sass']
 })
-export class EditMultipleApiaryComponent implements OnInit, OnDestroy {
+export class EditMultipleApiaryComponent implements OnInit {
 
   columns: ITdDataTableColumn[] = [
     { name: 'attributes.propriedade.attributes.nome', label: 'ProPriedade' },
@@ -38,10 +38,10 @@ export class EditMultipleApiaryComponent implements OnInit, OnDestroy {
   listApiarioSelected: Apiario[] = [];
   locations: Location[] = [];
 
-  controlMunicipio: FormControl = new FormControl('', Validators.required);
+  controlMunicipio: FormControl = new FormControl('', [Validators.required]);
   controlAbelha: FormControl = new FormControl('', Validators.required);
   controlPropriedade: FormControl = new FormControl('', Validators.required);
-  controlPropriedade2: FormControl = new FormControl({ value: '', disabled: true, });
+  controlPropriedade2: FormControl = new FormControl('',Validators.required);
   controlApicultor: FormControl = new FormControl('', Validators.required);
   controlApicultor2: FormControl = new FormControl('', Validators.required);
 
@@ -50,25 +50,33 @@ export class EditMultipleApiaryComponent implements OnInit, OnDestroy {
   filteredOptionsPropriedade: Observable<Propriedade[]>;
   filteredOptionsApicultor: Observable<Apicultor[]>;
   filteredOptionsPropriedade2: Observable<Propriedade[]>;
-  filteredOptionsApicultor2: Observable<Apicultor[]>;  
-  validateSubcriptionApicultor2: Subscription;
- 
-  subscription: Subscription;
+  filteredOptionsApicultor2: Observable<Apicultor[]>;
+  
   error: any = {};
 
-  constructor(private dialogService: DialogService, private parseService: ParseService, private loadingService: TdLoadingService, private route: ActivatedRoute, private momentService: MomentService, private zone: NgZone, private leaflet: LeafletService) { }
+  constructor(private dialogService: DialogService, private parseService: ParseService, private route: ActivatedRoute, private momentService: MomentService, private zone: NgZone, private leaflet: LeafletService) { }
 
   ngOnInit() {
-    this.subscription = this.route.data.subscribe((res) => {
-      let data = res.listData;
-      this.listApicultor = data.listApicultores;
-      this.listApicultor2 = data.listApicultores;
-      this.listPropriedade = data.listPropriedades;
-      this.listEspecieAbelha = data.listEspecieAbelha;
-      this.listMunicipio = data.listMunicipo;
+
+    this.parseService.findAll(Municipio).then(resul => {
       this.zone.run(() => {
-        this.loadingService.resolve();
+        this.listMunicipio = resul;
       })
+    });
+
+    let promise_1 = this.parseService.findAll(Propriedade);
+    let promise_2 = this.parseService.findAll(Apicultor)
+    let promise_3 = this.parseService.findAll(EspecieAbelha);
+    let promise_4 = this.parseService.findAll(Municipio);
+
+    parse.Promise.when(promise_1, promise_2, promise_3, promise_4).then((res_1, res_2, res_3, res_4) => {
+      this.zone.run(() => {
+        this.listPropriedade = res_1;
+        this.listApicultor = res_2;
+        this.listEspecieAbelha = res_3;
+        this.listMunicipio = res_4
+        this.listApicultor2 = res_2;
+      });
     });
 
     this.filteredOptionsMunicipio = this.controlMunicipio.valueChanges
@@ -84,14 +92,7 @@ export class EditMultipleApiaryComponent implements OnInit, OnDestroy {
     this.filteredOptionsApicultor2 = this.controlApicultor2.valueChanges
       .startWith(null)
       .map<string, string>(nome => nome ? nome : '')
-      .map<string, Apicultor[]>((nome => nome ? this.filterApicultor2(nome) : this.listApicultor2.slice()));
-
-    this.validateSubcriptionApicultor2 = this.controlApicultor2.statusChanges.subscribe(value => {
-      if (value == 'VALID' && typeof this.controlApicultor2.value == 'object') {
-        this.getPropriedade([this.controlApicultor2.value]);
-      }
-    })
-
+      .map<string, Apicultor[]>((nome => nome ? this.filterApicultor2(nome) : this.listApicultor2.slice()));    
 
     this.filteredOptionsEspecieAbelha = this.controlAbelha.valueChanges
       .startWith(null)
@@ -102,12 +103,15 @@ export class EditMultipleApiaryComponent implements OnInit, OnDestroy {
       .startWith(null)
       .map<string, string>(nome => nome ? nome : '')
       .map((nome => nome ? this.filterPropriedade(nome) : this.listPropriedade.slice()));
+    
+    this.filteredOptionsPropriedade2 = this.controlPropriedade.valueChanges
+      .startWith(null)
+      .map<string, string>(nome => nome ? nome : '')
+      .map((nome => nome ? this.filterPropriedade(nome) : this.listPropriedade.slice()));
+
   }
 
-
   getPropriedade(value: Apicultor[]): Apicultor[] {
-
-    console.log('Pssou')
 
     let query = this.parseService.createQuery(Apiario);
     query.include('propriedade');
@@ -131,58 +135,59 @@ export class EditMultipleApiaryComponent implements OnInit, OnDestroy {
       this.filteredOptionsPropriedade2 = Observable.of(propriedades).map(result => result);
     });
     return value;
-  }
-
-  ngOnDestroy() {
-    this.subscription.unsubscribe();  
-    this.validateSubcriptionApicultor2.unsubscribe();    
-  }
+  }  
 
   itensSelected(paran) {
-
 
     if (paran.selected) {
       if (paran.row) {
         this.listApiarioSelected.push(paran.row);
         let apiario: Apiario = paran.row;
-        this.locations.push(apiario.getLocation());        
+        this.locations.push(apiario.getLocation());
       } else {
         this.listApiarioSelected.concat(paran.rows);
         for (let apiario of paran.rows) {
           this.listApiarioSelected.push(apiario);
           this.locations.push(apiario.getLocation());
-        }        
+        }
       }
       this.leaflet.putLocations(this.locations);
     } else {
-      
-      if(paran.rows && paran.rows.length == 0 ){
+
+      if (paran.rows && paran.rows.length == 0) {
         this.listApiarioSelected = [];
         this.locations = [];
         this.leaflet.removeAll();
-      }else{
-        let apiario:Apiario = paran.row;
+      } else {
+        let apiario: Apiario = paran.row;
         this.leaflet.removeLocation(apiario.getLocation());
-        this.listApiarioSelected = this.listApiarioSelected.filter((value,index)=>{ return value.getId() != apiario.getId()});
-        this.locations= this.locations.filter((value,index)=>{return value.getKey() != apiario.getLocation().getKey()});
+        this.listApiarioSelected = this.listApiarioSelected.filter((value, index) => { return value.getId() != apiario.getId() });
+        this.locations = this.locations.filter((value, index) => { return value.getKey() != apiario.getLocation().getKey() });
       }
-
     }
   }
 
-  validar(): boolean {
+  validar(type): boolean {
 
     let controlAb: Map<string, AbstractControl> = new Map();
     let isvalid = true;
 
-    controlAb.set('municipio', this.controlMunicipio);
-    controlAb.set('abelha', this.controlAbelha);
-    controlAb.set('apicultor', this.controlApicultor);
-    controlAb.set('propriedade', this.controlPropriedade);
+    if (type == 'BUSCAR') {
+      controlAb.set('municipio', this.controlMunicipio);
+      controlAb.set('abelha', this.controlAbelha);
+      controlAb.set('apicultor', this.controlApicultor);
+      controlAb.set('propriedade', this.controlPropriedade);
+    } else {
+      controlAb.set('propriedade2', this.controlPropriedade2);
+      controlAb.set('apicultor2', this.controlApicultor2);
+    }
 
-    let option = ['municipio', 'abelha', 'apicultor', 'propriedade'];
+    let option = ['municipio', 'abelha', 'apicultor', 'propriedade', 'apicultor2', 'propriedade2'];
 
     for (let key of option) {
+
+      if (!controlAb.get(key))
+        continue;
 
       if (controlAb.get(key).status == 'INVALID' || typeof controlAb.get(key).value != 'object') {
 
@@ -197,9 +202,59 @@ export class EditMultipleApiaryComponent implements OnInit, OnDestroy {
     return isvalid;
   }
 
+  mover() {
+    if (this.validar('')) {
+      debugger
+      if (this.listApiarioSelected.length == 0) {
+        let message = '<p>Não existe nenhum apiário selecionado</p>'
+        this.dialogService.confirm('Erro', message, 'ERRO', null);
+        return false;
+      }
+
+      let apicultor: Apicultor = this.controlApicultor2.value
+      let propriedade: Propriedade = this.controlPropriedade2.value;
+
+      console.log(apicultor);
+      console.log(propriedade);
+
+      parse.Promise.as<any>(() => { }).then(()=>{
+          
+        let promises:parse.Promise<any>[] = []  
+        for (let apiario of this.listApiarioSelected) {
+          apiario.setApicultor(apicultor);
+          apiario.setPropriedade(propriedade);
+
+          let promise = this.parseService.save(apiario)
+          promises.push(promise);
+        }
+        return parse.Promise.when(promises).fail(()=>false).then((erro)=> erro);
+        
+      }).then(resul => {
+        if (resul) {          
+          this.dialogService.confirm('Sucesso', '<p>Movimentação realizada com sucesso!</p>', 'SUCCESS', null);
+        } else {          
+          this.dialogService.confirm('Erro', resul.message, 'ERRO', null);
+        }
+      });
+    } else {
+      let message = '<p>Campos obrigatórios não foram preenchidos!</p>'
+      this.dialogService.confirm('Erro', message, 'ERRO', null);
+    }
+  }
+
+  clear() {
+    this.controlMunicipio.reset('');
+    this.controlApicultor.reset('');
+    this.controlAbelha.reset('');
+    this.controlPropriedade.reset('');
+    this.controlApicultor.reset('');
+    this.controlPropriedade2.reset('');
+    this.listApiarios = [];
+  }
+
   pesquisar() {
 
-    if (this.validar()) {
+    if (this.validar('BUSCAR')) {
       let queryApiario = this.parseService.createQuery(Apiario);
 
       let queryApicultor = this.parseService.createQuery(Apicultor);
@@ -237,7 +292,6 @@ export class EditMultipleApiaryComponent implements OnInit, OnDestroy {
   }
 
   filterMunicipio(name: string): Municipio[] {
-    // this.validar('municipio',this.controlMunicipio.status);
     return this.listMunicipio.filter(option => {
       return new RegExp(name, 'gi').test(option.getNome())
     });
@@ -276,7 +330,4 @@ export class EditMultipleApiaryComponent implements OnInit, OnDestroy {
   displayFn(object: parse.Object): string {
     return object ? object.attributes.nome : '';
   }
-
-
-
 }
