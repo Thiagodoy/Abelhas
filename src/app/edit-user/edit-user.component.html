@@ -58,19 +58,19 @@
           <div *ngIf="selectedValue =='APICULTOR'" layout="row">
             <md-icon class="icon-position" [style.color]="formError?.celular ? 'red' :black">phone_android</md-icon>
             <md-input-container style="width: 60%">
-              <input mdInput placeholder="Celular 1" value="(99) 99999-9999" formControlName="celular">
+              <input mdInput placeholder="Celular 1" mask="(99) 9 9999-9999" formControlName="celular">
             </md-input-container>
           </div>
           <div *ngIf="selectedValue =='APICULTOR'" layout="row">
             <md-icon class="icon-position" [style.color]="formError?.celular2 ? 'red' :black">phone_android</md-icon>
             <md-input-container style="width: 60%">
-              <input mdInput placeholder="Celular 2" value="(99) 99999-9999" formControlName="celular2">
+              <input mdInput placeholder="Celular 2" mask="(99) 9 9999-9999" formControlName="celular2">
             </md-input-container>
           </div>
           <div *ngIf="selectedValue =='APICULTOR' || selectedValue == 'ASSOCIACAO'" layout="row">
             <md-icon class="icon-position" [style.color]="formError?.telefone ? 'red' :black">phone</md-icon>
             <md-input-container style="width: 60%">
-              <input mdInput placeholder="Telefone" value="(99) 9999-9999" formControlName="telefone">
+              <input mdInput placeholder="Telefone" mask="(99) 9999-9999" formControlName="telefone">
             </md-input-container>
           </div>
           <div *ngIf="selectedValue == 'ASSOCIACAO'" layout="row">
