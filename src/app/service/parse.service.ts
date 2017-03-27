@@ -16,6 +16,7 @@ import { Cultura } from '../models/cultura';
 import { Propriedade } from '../models/propriedade';
 import { Mortandade } from '../models/mortandade';
 import { DialogService } from './dialog.service';
+import Message from '../message-map';
 
 
 @Injectable()
@@ -44,7 +45,6 @@ export class ParseService {
     this.core.Object.registerSubclass('Municipio', Municipio);
     this.core.Object.registerSubclass('Estado', Estado);
     this.core.Object.registerSubclass('Associacao', Associacao);
-    this.instance = this;
   }
 
   /**
@@ -58,10 +58,10 @@ export class ParseService {
     i.toogleLoading(true);
 
     return query.find().done(result => {
-      
-        i.toogleLoading(false);
-        return result;
-      
+
+      i.toogleLoading(false);
+      return result;
+
     }).fail(erro => {
       i.showErrorPopUp(erro);
       i.toogleLoading(false);
@@ -212,7 +212,14 @@ export class ParseService {
   }
 
   private showErrorPopUp(erro: parse.Error) {
-    let message = '<p>Não foi possivel processar solicitação!</p>' + '<p>' + erro.message + '</p><p>Code: <strong>' + erro.code + '</strong></p>'
+    let s: string = '';
+    
+    if (Message.has(erro.code))
+      s = Message.get(erro.code)
+    else
+      s = erro.message;
+
+    let message = '<p>Não foi possivel processar solicitação!</p>' + '<p> descrição : ' + s + '</p><p>Code: <strong>' + erro.code + '</strong></p>'
     this.dialogService.confirm('Erro', message, 'ERRO', null);
     console.log(erro);
   }
