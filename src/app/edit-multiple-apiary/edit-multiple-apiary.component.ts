@@ -212,10 +212,7 @@ export class EditMultipleApiaryComponent implements OnInit {
       }
 
       let apicultor: Apicultor = this.controlApicultor2.value
-      let propriedade: Propriedade = this.controlPropriedade2.value;
-
-      console.log(apicultor);
-      console.log(propriedade);
+      let propriedade: Propriedade = this.controlPropriedade2.value;      
 
       parse.Promise.as<any>(() => { }).then(()=>{
           
@@ -232,6 +229,7 @@ export class EditMultipleApiaryComponent implements OnInit {
       }).then(resul => {
         if (resul) {          
           this.dialogService.confirm('Sucesso', '<p>Movimentação realizada com sucesso!</p>', 'SUCCESS', null);
+          this.clear();
         } else {          
           this.dialogService.confirm('Erro', resul.message, 'ERRO', null);
         }

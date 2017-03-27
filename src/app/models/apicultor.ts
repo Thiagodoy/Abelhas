@@ -23,7 +23,6 @@ export class Apicultor extends Object {
     setQtdCaixasFixas(caixas: number) {        
         this.set('qtdCaixasFixas', caixas);
     }
-
     setEndereco(endereco: string) {
         this.set('endereco', endereco);
     }
@@ -35,6 +34,9 @@ export class Apicultor extends Object {
     }
     setMunicipio(municipio: Municipio) {
         this.set('municipio', municipio);
+    }
+    getMunicipio():Municipio {
+        return this.get('municipio');
     }
     setCelular(param: string) {
         this.set('celular', param);
@@ -53,6 +55,6 @@ export class Apicultor extends Object {
     }
     setQtdCaixasMigratorias(caixa:Number){
         this.set('qtdCaixasMigratorias',caixa);
-    }
+    }  
 
 }

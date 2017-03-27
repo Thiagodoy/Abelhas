@@ -4,49 +4,70 @@
     <md-card style="width: 100%">
       <md-card-content>
         <div layout="row">
-          <div layout="column" flex="25">
+          <div layout="column" flex="10">
             <div flex>
-              <h3>Filtros</h3>
+              <h3>Status</h3>
             </div>
-            <div flex>
-              <md-radio-group [(ngModel)]="filter.status">
-                <md-radio-button name="filtro" value="todos">Todos</md-radio-button>
+            <div>
+              <md-radio-group layout="column"  [formControl]="controlStatus">
+                <md-radio-button name="filtro" [checked]="true" value="todos" >Todos</md-radio-button>
                 <md-radio-button name="filtro" value="validados">Validados</md-radio-button>
-                <md-radio-button name="filtro" value="nok">Não Validados</md-radio-button>
+                <md-radio-button name="filtro" value="nao_validado">Não Validados</md-radio-button>
               </md-radio-group>
             </div>
           </div>
-          <div layout="column" flex="30">
+          <div layout="column" flex="35">
             <div flex>
               <h3>Periodo</h3>
             </div>
             <div flex style="display: inline-flex; flex-wrap: wrap">
               <div>
-                <md-icon class="date-picker-icon">date_range</md-icon>
-                <app-data-picker-custom (onSelect)="selectDate('startDate',$event)" [fontFamily]="font" [dateFormat]="'DD-MM-YYYY'" [placeholder]="'DD/MM/YYYY'" [disabled]="false" class="date-picker-custom date-picker-input">
+                <span>De :</span>
+                <app-data-picker-custom    (onSelect)="selectDate('startDate',$event)" [fontFamily]="font" [dateFormat]="'DD-MM-YYYY'" [placeholder]="'DD/MM/YYYY'"
+                  [disabled]="false" class="date-picker-custom date-picker-input">
                 </app-data-picker-custom>
               </div>
-              <span class="between-generic"> à </span>
-              <div>
-                <md-icon class="date-picker-icon">date_range</md-icon>
-                <app-data-picker-custom (onSelect)="selectDate('endDate',$event)" [fontFamily]="font" [dateFormat]="'DD-MM-YYYY'" [placeholder]="'DD/MM/YYYY'" class="date-picker-custom date-picker-input">
+              <div style="margin-left: 10px">
+                <span>Ate :</span>
+                <app-data-picker-custom (onSelect)="selectDate('endDate',$event)" [fontFamily]="font" [dateFormat]="'DD-MM-YYYY'" [placeholder]="'DD/MM/YYYY'"
+                  class="date-picker-custom date-picker-input">
                 </app-data-picker-custom>
               </div>
             </div>
           </div>
-          <div layout="column" flex="15">
+          <div layout="column" flex="15" style="margin-left: 5px ">
             <div flex="">
               <h3 style="height: 5px">Apicultor</h3>
             </div>
             <div flex="">
-              <md-input-container style="width: 100% !important;">
-                <input mdInput [(ngModel)]="filter.apicultor" value="Marcelo">
+              <md-input-container style="width: 95%;position: relative;top:-12px;" [dividerColor]="accent">
+                <input type="text" mdInput [mdAutocomplete]="auto1" [formControl]="controlApicultor">
               </md-input-container>
+              <md-autocomplete #auto1="mdAutocomplete" [displayWith]="displayFn" style="width: 95%">
+                <md-option *ngFor="let option of filteredOptionsApicultor | async" [value]="option">
+                  {{ option.getNome() }}
+                </md-option>
+              </md-autocomplete>
             </div>
           </div>
-          <div layout="row" flex="20" layout-align="center end">
-            <div>
-              <button md-raised-button style="margin-bottom:10px;width: 152px" (click)="listarApiario()"><md-icon>search</md-icon></button>
+          <div layout="column" flex="15" style="margin-left: 15px;">
+            <div flex="">
+              <h3 style="height: 5px">Propriedade</h3>
+            </div>
+            <div flex="">
+              <md-input-container style="width: 95%;position: relative;top:-12px;" [dividerColor]="accent">
+                <input type="text" mdInput [mdAutocomplete]="auto" [formControl]="controlPropriedade">
+              </md-input-container>
+              <md-autocomplete #auto="mdAutocomplete" [displayWith]="displayFn" style="width: 95%">
+                <md-option *ngFor="let option of filteredOptionsPropriedade | async" [value]="option">
+                  {{ option.getNome() }}
+                </md-option>
+              </md-autocomplete>
+            </div>
+          </div>
+          <div layout="row" flex="20" layout-align="end center">
+            <div flex>
+              <button md-raised-button style="margin-bottom:-10px;width: 152px;margin-left: 10px" (click)="listarApiario()"><md-icon>search</md-icon></button>
             </div>
           </div>
         </div>

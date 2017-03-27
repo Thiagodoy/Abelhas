@@ -150,7 +150,7 @@ function validateCustomCpfOrCnpj(): ValidatorFn {
         let p = control.parent.get('tipo');
         let value: string = control.value;
 
-        if (p.value === constantes.APICULTOR || p.value === constantes.ASSOCIACAO) {
+        if (p.value === constantes.APICULTOR || p.value === constantes.ASSOCIACAO || p.value === constantes.GESTOR) {
             return value && value.length >= 0 ? null : { 'validateCustomCpfOrCnpj': { qtdCaixasFixas: 'invalido' } };
         } else {
             return null;

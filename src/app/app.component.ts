@@ -19,10 +19,9 @@ export class AppComponent implements OnDestroy {
 
 
   menus: any[] = [
-    { route: '', descricao: 'Listar apiarios' },
-    { route: 'editar/apiario', descricao: 'Editar Apiário' },
+    { route: 'lista/apiarios', descricao: 'Listar apiarios' },   
     { route: 'edicao/multipla', descricao: 'Edição Multipla' },
-    { route: 'usuarios', descricao: 'Listar usuários' },
+    { route: 'lista/apiarios', descricao: 'Listar usuários' },
     { route: 'editar/associação', descricao: 'Editar Associação' },
     { route: 'associações', descricao: 'Listar Associações' },
     { route: 'editar/propriedade', descricao: 'Editar Propriedade' },
@@ -30,6 +29,9 @@ export class AppComponent implements OnDestroy {
     { route: 'dados/desativação', descricao: 'Dados de desativação' },
     { route: 'editar/usuario', descricao: 'Editar Usuário' }
   ];
+
+
+  isLogado:boolean = false;
 
   constructor(mdIconRegistry: MdIconRegistry, sanitizer: DomSanitizer, private parseService: ParseService, private loadingService: TdLoadingService) {
     //Aplicação de icons customizados
@@ -58,10 +60,15 @@ export class AppComponent implements OnDestroy {
       }
     });
 
+    this.parseService.usuarioLogadoEvent.subscribe(isLogado=>{
+      this.isLogado = isLogado;
+    });
+
   }
 
   ngOnDestroy() {
     this.parseService.loaderEvent.unsubscribe();
+    this.parseService.usuarioLogadoEvent.unsubscribe();
   }
 
 }

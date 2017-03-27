@@ -30,7 +30,7 @@ export class Associacao extends Object{
     }
 
     setContatoPresidente(contato:string){
-        this.set('contatoPresidente',contato)
+        this.set('contatoPresidenteTelefone',contato)
     }
 
     setMunicipio(municipio:Municipio){
@@ -44,7 +44,7 @@ export class Associacao extends Object{
         return this.get('email');
     }
     getNome():string{
-        return this.get('email');
+        return this.get('nome');
     }
     
 }

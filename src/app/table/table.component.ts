@@ -1,5 +1,5 @@
-import { Component, OnInit, Input, Output, EventEmitter, ViewContainerRef, ElementRef, AfterViewInit, OnChanges, SimpleChanges } from '@angular/core';
-import { ITdDataTableColumn, IPageChangeEvent, TdDataTableService } from '@covalent/core';
+import { Component, OnInit, Input, Output, EventEmitter, ViewContainerRef, ElementRef, AfterViewInit, OnChanges, SimpleChanges, ViewChild } from '@angular/core';
+import { ITdDataTableColumn, IPageChangeEvent, TdDataTableService, TdDataTableComponent } from '@covalent/core';
 
 import { ParseService } from '../service/parse.service';
 
@@ -21,6 +21,7 @@ export class TableComponent implements OnInit, AfterViewInit, OnChanges {
   @Input() sortOrder: string;
   @Input() showPagination: boolean;
   @Input() showSelectionJquery: boolean = true;
+  @ViewChild('table') table: TdDataTableComponent
 
   @Output('itemSelected2') itemSelected2 = new EventEmitter<Object>();
   @Output('itemSelected3') itemSelected3 = new EventEmitter<Object>();
@@ -35,8 +36,8 @@ export class TableComponent implements OnInit, AfterViewInit, OnChanges {
 
   constructor(
     private _dataTableService: TdDataTableService,
-    
-    
+
+
     private elementRef: ElementRef,
     private parseService: ParseService) {
   }
@@ -51,17 +52,16 @@ export class TableComponent implements OnInit, AfterViewInit, OnChanges {
     }
   }
 
-
-
   ngOnChanges(changes: SimpleChanges) {
     this.filteredData = this.data;
-    console.log('atualiza filho');
     if (!this.data) {
       return;
     }
     let tem: any[] = this.data;
     tem = this._dataTableService.pageData(tem, this.paginaInicial, this.paginaAtual * this.paginaTotal);
     this.filteredData = tem;
+    if (this.table)
+      this.table.refresh();
   }
 
   ngOnInit() {
@@ -77,10 +77,10 @@ export class TableComponent implements OnInit, AfterViewInit, OnChanges {
 
   itemSelected(event) {
     this.itemCurrent = event;
-    this.itemSelected3.emit(event);    
+    this.itemSelected3.emit(event);
   }
 
-  itemAllSelected(event){
+  itemAllSelected(event) {
     this.itemSelectedAll.emit(event);
   }
 

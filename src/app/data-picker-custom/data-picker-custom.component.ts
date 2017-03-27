@@ -237,6 +237,11 @@ export class DataPickerCustomComponent implements OnInit, OnChanges {
     this.showCalendar = !this.showCalendar;
   }
 
+  clearDate(){
+    this.date = null;
+    this.onSelect.emit(null);
+  }
+
   // Listeners
   // ------------------------------------------------------------------------------------
   handleGlobalClick(event: MouseEvent): void {

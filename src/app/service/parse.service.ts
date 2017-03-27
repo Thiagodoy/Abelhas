@@ -1,3 +1,4 @@
+import { UserWeb } from './../models/user-web';
 import { Associacao } from './../models/associacao';
 import { Estado } from './../models/estado';
 import { Municipio } from './../models/municipio';
@@ -14,7 +15,6 @@ import { EspecieAbelha } from '../models/especie-abelha';
 import { Cultura } from '../models/cultura';
 import { Propriedade } from '../models/propriedade';
 import { Mortandade } from '../models/mortandade';
-import { UserWeb } from '../models/user-web';
 import { DialogService } from './dialog.service';
 
 
@@ -24,13 +24,14 @@ export class ParseService {
   @Output() usuarioLogadoEvent: EventEmitter<boolean> = new EventEmitter<boolean>()
   @Output() loaderEvent: EventEmitter<Boolean> = new EventEmitter();
   usuarioLogado: UserWeb;
-  private instance:ParseService=undefined;
+  private instance: ParseService = undefined;
 
   constructor(private loadingService: TdLoadingService, private zone: NgZone, private http: Http, private dialogService: DialogService, private route: Router) {
     //Define o banco a ser acessado
     let env = environment.getEnvironment();
     this.core.initialize(env.appid);
     this.core.serverURL = env.url;
+
 
     // Mapeia as classes que serão utilizadas no parse
     this.core.Object.registerSubclass('Apiario', Apiario);
@@ -53,14 +54,17 @@ export class ParseService {
   findAll<T extends parse.Object>(paramClass: { new (): T }): parse.Promise<T[]> {
     let query = new this.core.Query(new paramClass());
     query.limit(1000);
-    this.instance.toogleLoading(true);
-    return query.find().done(result => {
-      this.instance.toogleLoading(false);
-      return result;
+    let i = this;
+    i.toogleLoading(true);
 
+    return query.find().done(result => {
+      
+        i.toogleLoading(false);
+        return result;
+      
     }).fail(erro => {
-      this.showErrorPopUp(erro);
-      this.instance.toogleLoading(false);
+      i.showErrorPopUp(erro);
+      i.toogleLoading(false);
     });
   }
 
@@ -71,7 +75,7 @@ export class ParseService {
   get<T extends parse.Object>(id: string, paramClass: { new (): T }): parse.Promise<any> {
     this.instance.toogleLoading(true);
     let query = new this.core.Query(new paramClass());
-    
+
     return query.get(id).done((result) => {
       this.instance.toogleLoading(false);
       return result;
@@ -103,13 +107,14 @@ export class ParseService {
    * @param Classe do Objeto
    */
   executeQuery(query: parse.Query) {
-    this.instance.toogleLoading(true);
+    let i = this;
+    i.toogleLoading(true);
     return query.find().done((result) => {
-      this.instance.toogleLoading(false);
+      i.toogleLoading(false);
       return result;
     }).fail(erro => {
-      this.instance.toogleLoading(false);
-      this.showErrorPopUp(erro);
+      i.toogleLoading(false);
+      i.showErrorPopUp(erro);
     });
   }
 
@@ -119,40 +124,44 @@ export class ParseService {
    * @returns Promise<>
    */
   login(user: Parse.User) {
-    this.instance.toogleLoading(true);
-    user.logIn().then(
-      (res: UserWeb) => {
-        this.usuarioLogado = res;
-        // this.route.navigate(['']);
-        this.zone.run(() => {
-          this.instance.toogleLoading(false)
-          this.usuarioLogadoEvent.emit(true);;
+    let instance = this;
+    instance.toogleLoading(true);
+    this.zone.runOutsideAngular(() => {
+      user.logIn().then(
+        (res: UserWeb) => {
+          this.zone.run(() => {
+            this.usuarioLogado = res;
+            this.usuarioLogadoEvent.emit(true);
+            this.route.navigate(['/lista/apiarios']);
+            instance.toogleLoading(false)
+          });
+        },
+        (erro) => {
+          this.zone.run(() => {
+            instance.toogleLoading(false);
+            this.showErrorPopUp(erro);
+          })
         });
-      },
-      (erro) => {
-        this.zone.run(() => {
-          this.instance.toogleLoading(false);
-          this.showErrorPopUp(erro);
-        });
-      });
+    });
+
   }
   /**
       * Cadastra um novo usuario
       * @param Objeto extend Parse.User
       * @returns void
       */
-  signUp<T extends parse.User>(user: T):parse.Promise<T> {
+  signUp<T extends parse.User>(user: T): parse.Promise<T> {
     let instance = this;
     instance.toogleLoading(true);
     return user.signUp<T>(null, {
-      success: function (success) {  
+      success: function (success) {
         instance.toogleLoading(false);
       },
-      error: function (error) {        
-         instance.toogleLoading(false);
+      error: function (error) {
+        instance.toogleLoading(false);
       }
-    }).fail(result=>{
-       instance.showErrorPopUp(result);
+    }).fail(result => {
+      instance.showErrorPopUp(result);
     });
   }
 
@@ -164,16 +173,16 @@ export class ParseService {
   save<T extends parse.Object>(object: T): parse.Promise<T> {
     let instance = this;
     instance.toogleLoading(true);
-    
+
     return object.save(null, {
-      success: function (s) {  
-      instance.toogleLoading(false);
+      success: function (s) {
+        instance.toogleLoading(false);
         return s;
       },
-      error: function (e) {        
-      instance.toogleLoading(false);        
+      error: function (e) {
+        instance.toogleLoading(false);
       }
-    }).fail(resul=>{
+    }).fail(resul => {
       instance.showErrorPopUp(resul);
     });
   }
@@ -184,16 +193,16 @@ export class ParseService {
    * @returns Promise<>
    */
   destroy(object: Parse.Object) {
-    this.instance.toogleLoading(true);
+    let instance = this;
+    instance.toogleLoading(true);
     return object.destroy().fail((erro) => {
-      this.instance.toogleLoading(false);
-      this.instance.showErrorPopUp(erro);
+      instance.toogleLoading(false);
+      instance.showErrorPopUp(erro);
     });
   }
 
-  loadPhoto(url: string): Observable<Response> {
-    return this.http.get('', { responseType: ResponseContentType.ArrayBuffer });
-
+  getUsuarioLogado(): UserWeb {
+    return this.usuarioLogado;
   }
 
   public toogleLoading(param) {

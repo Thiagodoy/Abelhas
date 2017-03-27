@@ -1,0 +1,7 @@
+{
+  "/classes": {
+    "target": "https://parsedevabelhas.herokuapp.com/parse",
+    "secure": false,
+    "logLevel": "debug"
+  }
+}

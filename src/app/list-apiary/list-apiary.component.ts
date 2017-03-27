@@ -1,13 +1,16 @@
-import { Component, OnInit, ViewChild, ContentChild, AfterContentInit, NgZone, ViewContainerRef } from '@angular/core';
+import { FormControl } from '@angular/forms';
+import { Observable } from 'rxjs/Rx';
+import { Propriedade } from './../models/propriedade';
+import { Apicultor } from './../models/apicultor';
+import { Component, OnInit, ViewChild, ContentChild, AfterContentInit, NgZone, ViewContainerRef, AfterContentChecked, AfterViewInit,AfterViewChecked } from '@angular/core';
 import { Router } from '@angular/router'
 import { ITdDataTableColumn } from '@covalent/core';
 import { ParseService } from '../service/parse.service';
 import { MomentService } from '../service/moment.service';
 import { Apiario } from '../models/apiario';
-import { Apicultor } from '../models/apicultor';
 import { TableComponent } from '../table/table.component';
 import { DialogService } from '../service/dialog.service';
-
+import * as parse from 'parse';
 
 
 @Component({
@@ -21,14 +24,24 @@ export class ListApiaryComponent implements OnInit {
   listApiario: any[] = [];
   queryApiario: Parse.Query;
   filter: any = { status: undefined, startDate: undefined, endDate: undefined, apicultor: undefined };
+  listApicultor: Apicultor[] = [];
+  listProriedade: Propriedade[] = [];
+
+  controlApicultor: FormControl = new FormControl();
+  controlPropriedade: FormControl = new FormControl();
+  controlStatus: FormControl = new FormControl();
+
+  filteredOptionsApicultor: Observable<Apicultor[]>;
+  filteredOptionsPropriedade: Observable<Propriedade[]>;
 
 
   columns: ITdDataTableColumn[] = [
-    { name: 'attributes.ativo', label: 'Validado' },
-    { name: 'attributes.especieAbelha.attributes.nome', label: 'Espécie' },
-    { name: 'attributes.apicultor.attributes.nome', label: 'Apicultor' },
-    { name: 'attributes.status', label: 'Status' },
-    { name: 'createdAt', label: 'Data', format: (value) => { return this.momentService.core(value).format('DD/MM/YYYY HH:mm') } },
+    { name: 'valido', label: 'Validado' },
+    { name: 'especie', label: 'Espécie' },
+    { name: 'apicultor', label: 'Apicultor' },
+    { name: 'propriedadea', label: 'Propriedade' },
+    { name: 'status', label: 'Status' },
+    { name: 'data', label: 'Data', format: (value) => { return this.momentService.core(value).format('DD/MM/YYYY HH:mm') } },
     { name: 'acoes', label: 'Ações' }];
 
   dateFormat: string = 'DD-MM-YYYY';
@@ -38,46 +51,81 @@ export class ListApiaryComponent implements OnInit {
     private serviceParse: ParseService,
     private momentService: MomentService,
     private route: Router,
-    private zone: NgZone,
     private dialogService: DialogService,
     private viewContainerRef: ViewContainerRef,
   ) { }
-
+ 
   ngOnInit() {
+    let promiseApicultor = this.serviceParse.findAll(Apicultor);
+    let promisePropriedade = this.serviceParse.findAll(Propriedade);
+    parse.Promise.when([promiseApicultor, promisePropriedade]).then((res: any[]) => {
+      this.listApicultor = res[0];
+      this.listProriedade = res[1];
+    });
+
+    this.filteredOptionsApicultor = this.controlApicultor.valueChanges
+      .startWith(null)
+      .map<string, string>(nome => nome ? nome : '')
+      .map((nome => nome ? this.filterApicultor(nome) : this.listApicultor.slice()));
+
+    this.filteredOptionsPropriedade = this.controlPropriedade.valueChanges
+      .startWith(null)
+      .map<string, string>(nome => nome ? nome : '')
+      .map((nome => nome ? this.filterPropriedade(nome) : this.listProriedade.slice()));
+
+    this.controlStatus.setValue('todos');
+  }
+
+  listarApiario() {
+
 
     this.queryApiario = this.serviceParse.createQuery(Apiario);
     this.queryApiario.include('apicultor');
     this.queryApiario.include('especieAbelha');
-    this.queryApiario.select('apicultor', 'especieAbelha', 'ativo');
-  }
+    this.queryApiario.include('propriedade');
+    this.queryApiario.equalTo('ativo', true);
 
-  itemSelected(apiario: Apiario) { }
-  confirmarValidacao(apiario: Apiario) { }
-  confirmarExclusao(apiario: Apiario) { }
-
-  listarApiario() {
-    
-    if (this.filter.apicultor) {
+    if (this.controlApicultor.value != '' && this.controlApicultor.value != null) {
       let queryApicultor = this.serviceParse.createQuery(Apicultor);
-      queryApicultor.contains('nome', this.filter.apicultor);
+      queryApicultor.equalTo('objectId', this.controlApicultor.value.id);
       this.queryApiario.matchesQuery('apicultor', queryApicultor);
     }
 
-    if (this.filter.startDate && this.filter.endDate) {
-      this.queryApiario.greaterThanOrEqualTo('createdAt', this.filter.startDate);
-      this.queryApiario.lessThanOrEqualTo('createdAt', this.filter.endDate);
+    if (this.controlPropriedade.value != '' && this.controlPropriedade.value != null) {
+      let queryPropriedade = this.serviceParse.createQuery(Propriedade);
+      queryPropriedade.equalTo('objectId', this.controlPropriedade.value.id);
+      this.queryApiario.matchesQuery('propriedade', queryPropriedade);
     }
 
-    if (this.filter.status && this.filter.status == 'validados' && this.filter.status == 'nok') {
-      let status = this.filter.status == 'validados';
-      this.queryApiario.equalTo('', status);
+    if (this.filter.startDate)
+      this.queryApiario.greaterThanOrEqualTo('createdAt', this.filter.startDate);
+
+    if (this.filter.endDate)
+      this.queryApiario.lessThanOrEqualTo('createdAt', this.filter.endDate);
+
+    if (this.controlStatus.value != 'todos') {
+      if (this.controlStatus.value == 'validados')
+        this.queryApiario.equalTo('valido', true);
+      else
+        this.queryApiario.notEqualTo('valido', true);
     }
+
     this.queryApiario.limit(1000);
-    
     this.serviceParse.executeQuery(this.queryApiario).done(result => {
-      this.zone.run(() => {
-        this.atualiza(result);
+
+      let list = result.map((value) => {
+        let apiario: Apiario = value;
+        return {
+          id: apiario.id,
+          valido: apiario.isValido(),
+          especie: apiario.getEspecieAbelha().getNome(),
+          apicultor: apiario.getApicultor().getNome(),
+          propriedadea: apiario.getPropriedade().getNome(),
+          status: apiario.getStatus(),
+          data: apiario.createdAt
+        }
       });
+      this.atualiza(list);
     });
 
   }
@@ -92,22 +140,47 @@ export class ListApiaryComponent implements OnInit {
     } else {
       this.listApiario = [];
     }
-
   }
 
-  excluir(apiario: Apiario) {
-    // APos a remoção retirar o apiario da lista
-    // this.serviceParse.destroy(apiario)
-    // .done(()=>{})
-    // .fail(()=>{});
-    let menssagem = '';
-    this.dialogService.confirm('Exclusão realizada com sucesso', menssagem, 'SUCCESS', this.viewContainerRef).subscribe((value) => {
-      //
+  excluir(paran: any) {
+
+    let apiario = new Apiario()
+    apiario.id = paran.id;
+    apiario.setAtivo(false);
+    this.serviceParse.save(apiario).then(result => {
+      if (result) {
+        this.dialogService.confirm('Sucesso', 'Exclusão realizada com sucesso', 'SUCCESS', this.viewContainerRef);
+        this.listApiario = this.listApiario.filter((value) => {
+          return result.id != value.id;
+        });
+      }
     });
   }
 
-  validar(apiario: Apiario) {
-    //TODO IMPLEMENTAR A ATUALIZAÇÂO
+  validar(paran: any) {
+
+    let apiario = new Apiario()
+    apiario.id = paran.id;
+    apiario.setValido(true);
+    apiario.setValidadoPor(this.serviceParse.getUsuarioLogado());
+    this.serviceParse.save(apiario).then(result => {
+      if (result) {
+        this.dialogService.confirm('Sucesso', 'Apiario validado com sucesso!', 'SUCCESS', this.viewContainerRef);
+      }
+
+      if (this.controlStatus.value == 'nao_validado') {
+        this.listApiario = this.listApiario.filter((value) => {
+          return result.id != value.id;
+        });
+      } else {
+        let temp = this.listApiario.find(value => { return value.id == result.id });
+        let index = this.listApiario.indexOf(temp);
+        this.listApiario.slice(index, 1);
+        temp.valido = true;
+        this.listApiario.push(temp);
+      }
+
+    })
   }
 
   acoes(param) {
@@ -125,10 +198,10 @@ export class ListApiaryComponent implements OnInit {
         });
         break;
       case 'HISTORICO':
-        // TODO SERÀ IMPLEMENTADO
+        this.route.navigate(['historic'], { queryParams: { apiario: param.element.id } });
         break;
       case 'VALIDAR':
-        menssagem = '<p>Tem certeza que deseja validar este dado?</p>' + '<p>Este procedimento não poderáser revertido!</p>';
+        menssagem = '<p>Tem certeza que deseja validar este dado?</p>' + '<p>Este procedimento não poderá ser revertido!</p>';
         this.dialogService.confirm('Confirmar validação', menssagem, null, this.viewContainerRef).subscribe((value) => {
           if (value) {
             this.validar(param.element);
@@ -136,5 +209,21 @@ export class ListApiaryComponent implements OnInit {
         });
         break;
     }
+  }
+
+  filterApicultor(name: string): Apicultor[] {
+    return this.listApicultor.filter(option => {
+      return new RegExp(name, 'gi').test(option.getNome())
+    });
+  }
+
+  filterPropriedade(name: string): Propriedade[] {
+    return this.listProriedade.filter(option => {
+      return new RegExp(name, 'gi').test(option.getNome())
+    });
+  }
+
+  displayFn(object: parse.Object): string {
+    return object ? object.attributes.nome : '';
   }
 }

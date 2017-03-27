@@ -1,9 +1,9 @@
 <td-data-table [selectable]="selectable" [data]="filteredData" [columns]="columns" [multiple]="multiple" [sortable]="sortable"
   [sortBy]="sortBy" [sortOrder]="sortOrder" (sortChange)="sortTable($event)" (rowSelect)="itemSelected($event)" (selectAll)="itemAllSelected($event)" id="table">
   <!--Template Lista Apiario-->
-  <template tdDataTableTemplate="attributes.ativo" let-value="value" let-row="row" let-column="column">
+  <template tdDataTableTemplate="valido" let-value="value" let-row="row" let-column="column">
     <div layout="row">
-      <md-icon [style.color]="row[column] ? 'green' : row[column] ? 'red' : '#ffd740'">{{row[column] ? 'check_circle': row[column] ? 'report':'warning' }}</md-icon>
+      <md-icon [style.color]="row[column]  ? 'green' :  'red' ">{{row[column] ? 'check_circle': row[column] ? 'report':'warning' }}</md-icon>
     </div>
   </template>
   <template tdDataTableTemplate="acoes" let-value="value" let-row="row" let-column="column">
@@ -12,10 +12,10 @@
               <md-icon>menu</md-icon>
               </button>
       <md-menu #menu="mdMenu">
-        <button md-menu-item (click)="acoes('VALIDAR',row)"> <md-icon>check</md-icon> Validar </button>
+        <button md-menu-item [disabled]="row['valido']" (click)="acoes('VALIDAR',row)"> <md-icon>check</md-icon> Validar </button>
         <button md-menu-item (click)="acoes('EDITAR',row)"> <md-icon>mode_edit</md-icon>Editar </button>
         <button md-menu-item (click)="acoes('EXCLUIR',row)"> <md-icon>delete</md-icon> Excluir </button>
-        <button md-menu-item disabled (click)="acoes('HISTORICO',row)"> <md-icon>history</md-icon> Histórico </button>
+        <button md-menu-item  (click)="acoes('HISTORICO',row)"> <md-icon>history</md-icon> Histórico </button>
       </md-menu>
     </div>
   </template>

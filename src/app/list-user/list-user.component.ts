@@ -31,7 +31,8 @@ export class ListUserComponent implements OnInit {
 
     let queryUser = this.parseService.createQuery(UserWeb);
     queryUser.include('apicultor');
-    queryUser.include('associacao');    
+    queryUser.include('associacao');  
+    queryUser.addDescending('createdAt');  
 
     this.parseService.executeQuery(queryUser).then(result => {
       this.zone.run(() => {
@@ -60,7 +61,7 @@ export class ListUserComponent implements OnInit {
         user['nome'] = associacao.getNome();
       }else if(user.tipo == 'GESTOR'){
          user['email'] = us.attributes.email;
-        user['nome'] = us.attributes.username;
+        user['nome'] = us.attributes.nomeGestor;
       }
       user['status'] = 'Lorem'
       list.push(user);

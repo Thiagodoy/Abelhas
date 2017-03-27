@@ -1,3 +1,5 @@
+import { LoginComponent } from './../login/login.component';
+import { HistoricComponent } from './../historic/historic.component';
 import { UserResolver } from './../guards/user.resolver';
 import { ListAssociacaoResolver } from './../guards/list-associacao.resolver';
 import { ListEstadoResolver } from './../guards/list-estado.resover';
@@ -13,11 +15,11 @@ import { EditApiaryComponent } from '../edit-apiary/edit-apiary.component';
 
 import { EditMultipleApiaryComponent } from '../edit-multiple-apiary/edit-multiple-apiary.component';
 import { ListUserComponent } from '../list-user/list-user.component';
-import { EditAssociationComponent} from '../edit-association/edit-association.component';
+import { EditAssociationComponent } from '../edit-association/edit-association.component';
 import { ListAssociationComponent } from '../list-association/list-association.component';
 import { EditPropertyComponent } from '../edit-property/edit-property.component';
-import {  ListPropertyComponent } from '../list-property/list-property.component';
-import {  DataDeactivationComponent } from '../data-deactivation/data-deactivation.component'
+import { ListPropertyComponent } from '../list-property/list-property.component';
+import { DataDeactivationComponent } from '../data-deactivation/data-deactivation.component'
 
 import { EditUserComponent } from '../edit-user/edit-user.component';
 import { ApiaryDetailResolver } from '../guards/apiary-detail.resolver';
@@ -31,29 +33,17 @@ import { EditMultipleResolver } from '../guards/edit-multiple.resolver';
 
 
 export const route: Routes = [
-    { path: 'list', component: ListApiaryComponent },
-    { path: 'editar/apiario', component: EditApiaryComponent,resolve:{
-        apiario: ApiaryDetailResolver,
-        listMortandade: ListMortandadeResolver,
-        listCulturas: ListCulturasResolver      
-    }},
-    { path: 'edicao/multipla', component: EditMultipleApiaryComponent
-    // ,resolve:{
-    //       listData: EditMultipleResolver
-    // }
-},
-    { path: '', component: ListUserComponent},
-    { path: 'editar/associação', component: EditAssociationComponent},
-    { path: 'associações', component: ListAssociationComponent},
-    { path: 'editar/propriedade', component: EditPropertyComponent},
-    { path: 'propriedades', component: ListPropertyComponent},
-    { path: 'dados/desativação', component: DataDeactivationComponent},
-    { path: 'editar/usuario', component: EditUserComponent}//,resolve:{result:EditUserResolver}
+    { path: 'lista/apiarios', component: ListApiaryComponent },
+    { path: 'editar/apiario', component: EditApiaryComponent },
+    { path: 'edicao/multipla', component: EditMultipleApiaryComponent},
+    { path: 'lista/usuarios', component: ListUserComponent },
+    { path: '', component: LoginComponent },
+    { path: 'editar/associação', component: EditAssociationComponent },
+    { path: 'associações', component: ListAssociationComponent },
+    { path: 'editar/propriedade', component: EditPropertyComponent },
+    { path: 'propriedades', component: ListPropertyComponent },
+    { path: 'dados/desativação', component: DataDeactivationComponent },
+    { path: 'editar/usuario', component: EditUserComponent },
+    { path: 'historic', component: HistoricComponent }
 
-]    
-// resolve:{
-//         estado:ListEstadoResolver,
-//         municipio:ListMunicipioResolver,
-//         associacao: ListAssociacaoResolver,
-//         user: UserResolver        
-//     }
+]

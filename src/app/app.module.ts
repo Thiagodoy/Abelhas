@@ -53,6 +53,9 @@ import { ApiaryDetailResolver } from './guards/apiary-detail.resolver';
 import { ListMortandadeResolver } from './guards/list-mortandade.resolve';
 import { ListCulturasResolver } from './guards/list-cultura.resolver';
 import { MaskDirective } from './directive/mask.directive';
+import { HistoricComponent } from './historic/historic.component';
+import { TextMaskModule } from 'angular2-text-mask';
+
 
 
 
@@ -75,7 +78,8 @@ import { MaskDirective } from './directive/mask.directive';
     ListPropertyComponent,
     DataDeactivationComponent,
     EditUserComponent,
-    MaskDirective
+    MaskDirective,
+    HistoricComponent
   ],
   imports: [
     BrowserModule,
@@ -84,8 +88,8 @@ import { MaskDirective } from './directive/mask.directive';
     MaterialModule.forRoot(),
     RouterModule.forRoot(route),
     CovalentCoreModule.forRoot(),
-    ReactiveFormsModule
-    //LayoutModule
+    ReactiveFormsModule,
+    TextMaskModule
 
   ],
   providers: [DialogService,

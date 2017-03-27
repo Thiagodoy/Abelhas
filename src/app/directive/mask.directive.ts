@@ -35,9 +35,7 @@ export class MaskDirective implements ControlValueAccessor {
   onKeyup($event: any) {
     var valor = $event.target.value.replace(/\D/g, '');
     var pad = this.kzMask.replace(/\D/g, '').replace(/9/g, '_');
-    var valorMask = valor + pad.substring(0, pad.length - valor.length);
-
-    debugger;
+    var valorMask = valor + pad.substring(0, pad.length - valor.length);    
  
     // retorna caso pressionado backspace
     if ($event.keyCode === 8) {

@@ -1,3 +1,4 @@
+import { UserWeb } from './user-web';
 import { Object } from 'parse';
 import { Cultura } from './cultura';
 import { Propriedade } from './propriedade';
@@ -9,7 +10,7 @@ import { Location } from './location';
 
 export class Apiario extends Object {
     constructor() {
-        super('Apiario');
+        super('Apiario');        
     }
     getId(): string {
         return this.id;
@@ -44,11 +45,11 @@ export class Apiario extends Object {
     setDataColetaUpdate(param: Date) {
         this.set('dataColetaUpdate', param);
     }
-    setDistanciaDeslocamentoCaixa(parm: number) {
-        this.set('distanciaDeslocamentoCaixa', parm)
+    setDistanciaDeslocamentoCaixas(parm: number) {
+        this.set('distanciaDeslocamentoCaixas', parm)
     }
-    getDistanciaDeslocamentoCaixa(): number {
-        return this.get('distanciaDeslocamentoCaixa');
+    getDistanciaDeslocamentoCaixas(): number {
+        return this.get('distanciaDeslocamentoCaixas');
     }
     isDialogoVizinhos(): boolean {
         return this.get('dialogoVizinhos');
@@ -104,13 +105,13 @@ export class Apiario extends Object {
     getComprovadoPorAnalise(): boolean {
         return this.get('comprovadoPorAnalise');
     }
-    setMotivoMortandade(param: Mortandade) {
+    setMotivoMortandade(param: Mortandade[]) {
         this.set('motivoMortandade', param);
     }
     getMotivoMortandade(): Mortandade[] {
         return this.get('motivoMortandade');
     }
-    setMotivoHistoricoMortandade(param: Mortandade) {
+    setMotivoHistoricoMortandade(param: Mortandade[]) {
         this.set('motivoHistoricoMortandade', param);
     }
     getMotivoHistoricoMortandade(): Mortandade[] {
@@ -125,13 +126,47 @@ export class Apiario extends Object {
     getEspecieAbelha(): EspecieAbelha {
         return this.get('especieAbelha');
     }
-    getLocation():Location{
+    setEspecieAbelha(abelha: EspecieAbelha) {
+        this.set('especieAbelha', abelha);
+    }
+    getLocation(): Location {
         let location = new Location();
         let locationParse = this.get('location');
         location.latitude = locationParse.latitude;
         location.longitude = locationParse.longitude;
-        location.setPopUp(this.getApicultor().getNome(),this.getPropriedade().getNome(),this.getEspecieAbelha().getNome())
+        location.setPopUp(this.getApicultor().getNome(), this.getPropriedade().getNome(), this.getEspecieAbelha().getNome())
         location.key = '' + location.getLatitude() + '' + location.getLongitude();
         return location;
+    }
+    getExistenciaMortalidadeAbelha(): boolean {
+        return this.get('existenciaMortalidadeAbelha');
+    }
+    setExistenciaMortalidadeAbelha(param: boolean) {
+        this.set('existenciaMortalidadeAbelha', param);
+    }
+    isHistroricoMortandade(): boolean {
+        return this.get('historicoMortandade');
+    }
+    setHistroricoMortandade(param: boolean) {
+        this.set('historicoMortandade', param);
+    }
+
+    getObservacao(): string {
+        return this.get('observacao');
+    }
+    setObservacao(param: string) {
+        this.set('observacao', param);
+    }
+    isValido(): boolean {
+        return this.get('valido');
+    }
+    setValido(param: boolean) {
+        this.set('valido', param);
+    }
+    setValidadoPor(user:UserWeb){
+        this.set('validadoPor',user);
+    }
+    getStatus():string{
+        return this.get('status');
     }
 }

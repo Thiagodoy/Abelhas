@@ -1,3 +1,4 @@
+{{tele | json}}
 <div layout="row" layout-align="center center">
   <md-card style="width: 33%">
     <md-card-title *ngIf="selectedValue != undefined">{{selectedValue }}</md-card-title>
@@ -58,25 +59,25 @@
           <div *ngIf="selectedValue =='APICULTOR'" layout="row">
             <md-icon class="icon-position" [style.color]="formError?.celular ? 'red' :black">phone_android</md-icon>
             <md-input-container style="width: 60%">
-              <input mdInput placeholder="Celular 1" mask="(99) 9 9999-9999" formControlName="celular">
+              <input mdInput placeholder="Celular 1" [textMask]="{mask: maskCelular}" formControlName="celular">
             </md-input-container>
           </div>
           <div *ngIf="selectedValue =='APICULTOR'" layout="row">
             <md-icon class="icon-position" [style.color]="formError?.celular2 ? 'red' :black">phone_android</md-icon>
             <md-input-container style="width: 60%">
-              <input mdInput placeholder="Celular 2" mask="(99) 9 9999-9999" formControlName="celular2">
+              <input mdInput placeholder="Celular 2" [textMask]="{mask: maskCelular}" formControlName="celular2">
             </md-input-container>
           </div>
           <div *ngIf="selectedValue =='APICULTOR' || selectedValue == 'ASSOCIACAO'" layout="row">
             <md-icon class="icon-position" [style.color]="formError?.telefone ? 'red' :black">phone</md-icon>
             <md-input-container style="width: 60%">
-              <input mdInput placeholder="Telefone" mask="(99) 9999-9999" formControlName="telefone">
+              <input mdInput placeholder="Telefone" [textMask]="{mask: maskTelefone}" formControlName="telefone">
             </md-input-container>
           </div>
           <div *ngIf="selectedValue == 'ASSOCIACAO'" layout="row">
-            <md-icon class="icon-position" [style.color]="formError?.contatoPresidente ? 'red' :black">phone</md-icon>
+            <md-icon class="icon-position" [style.color]="formError?.contatoPresidenteTelefone ? 'red' :black">phone</md-icon>
             <md-input-container style="width: 60%">
-              <input mdInput placeholder="Contato Presidente" value="(99) 9999-9999" formControlName="contatoPresidente">
+              <input mdInput placeholder="Contato Presidente" [textMask]="{mask: maskTelefone}"  formControlName="contatoPresidenteTelefone">
             </md-input-container>
           </div>
           <div *ngIf="selectedValue =='APICULTOR'" layout="row">
@@ -105,10 +106,10 @@
               </md-option>
             </md-select>
           </div>
-          <div *ngIf="selectedValue =='APICULTOR' || selectedValue == 'ASSOCIACAO'" layout="row">
+          <div *ngIf="selectedValue =='APICULTOR' || selectedValue == 'ASSOCIACAO' || selectedValue == 'GESTOR'" layout="row">
             <md-icon class="md-24 icon-position" md-list-avatar svgIcon="cpf" [style.color]="formError?.cpf ? 'red' :black" ></md-icon>
             <md-input-container style="width: 60%">
-              <input mdInput placeholder="Cnpj/Cpf" mask="999.999.999-99"  formControlName="cpf">
+              <input mdInput placeholder="Cnpj/Cpf" [textMask]="{mask: selectedValue == 'ASSOCIACAO' ? cnpj : cpf }"  formControlName="cpf">
             </md-input-container>
           </div>
           <div *ngIf="selectedValue =='APICULTOR' || selectedValue == 'ASSOCIACAO' || selectedValue == 'GESTOR'" layout="row">
@@ -178,7 +179,7 @@
     </md-card-content>
     <md-card-actions layout="row" layout-align="start center">
       <button md-raised-button type="submit" [disabled]="!formUser.valid" color="primary" (click)="salvar()">{{typeAction == 'CREATE' ? 'Salvar' : 'Atualizar'}}</button>
-      <button md-raised-button color="warn" [routerLink]="['']">Cancelar</button>
+      <button md-raised-button color="warn" [routerLink]="['/lista/usuarios']">Cancelar</button>
     </md-card-actions>
   </md-card>
 </div>
