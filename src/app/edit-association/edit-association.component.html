@@ -2,82 +2,91 @@
   <md-card style="width: 33%">
     <md-card-title>Editar Associação</md-card-title>
     <md-card-content>
-      <form>
+      <form [formGroup]="formAssociacao">
         <div layout="column">
           <div layout="row">
             <md-icon class="icon-position">person</md-icon>
             <md-input-container style="width: 60%">
-              <input mdInput placeholder="Nome" value="Luis Roberto da Silva">
+              <input mdInput placeholder="Nome" formControlName="nome">
             </md-input-container>
           </div>
           <div layout="row">
             <md-icon class="icon-position">font_download</md-icon>
             <md-input-container style="width: 60%">
-              <input mdInput placeholder="Sigla" value="1APR_E">
+              <input mdInput placeholder="Sigla" formControlName="sigla">
             </md-input-container>
           </div>
           <div layout="row">
             <md-icon class="icon-position">home</md-icon>
             <md-input-container style="width: 60%">
-              <input mdInput placeholder="Endereço" value="Av. Sylvio Marcondes">
+              <input mdInput placeholder="Endereço" formControlName="endereco">
             </md-input-container>
           </div>
           <div layout="row">
             <md-icon class="icon-position">home</md-icon>
             <md-input-container style="width: 60%">
-              <input mdInput placeholder="Bairro" value="Adalberto Roxo">
+              <input mdInput placeholder="Bairro" formControlName="bairro">
             </md-input-container>
           </div>
           <div layout="row">
             <md-icon class="icon-position">phone</md-icon>
             <md-input-container style="width: 60%">
-              <input mdInput placeholder="Telefone" value="(99) 9999-9999">
+              <input mdInput placeholder="Telefone" formControlName="telefone">
             </md-input-container>
           </div>
-          <div layout="row" style="margin-top: 15px;">
+          <!--<div layout="row" style="margin-top: 15px;">
             <md-icon class="icon-position">view_comfy</md-icon>
-            <md-select placeholder="Estado" name="estado" style="width: 40%;">
-              <!--<md-option selected *ngFor="let apicultor of apicultores" [value]="apicultor.value">
-                  {{apicultor.nome}}
-                </md-option>-->
+            <md-select placeholder="Estado" name="estado" style="width: 40%;" formControlName="estato">
+          
             </md-select>
+          </div>-->
+          <div layout="row">
+            <md-icon style="margin-right: 10px;margin-top: 5px;" [style.color]="error?.apicultor ? 'red' :black">view_comfy</md-icon>
+            <md-input-container style="width: 20%">
+              <input type="text" mdInput [mdAutocomplete]="api" formControlName="estado" placeholder="Estado">             
+            </md-input-container>
+            <md-autocomplete #api="mdAutocomplete" [displayWith]="displayFn" style="width: 20%">
+              <md-option *ngFor="let estado of listEstadosFiltered | async" [value]="estado">
+                {{ option.getNome() }}
+              </md-option>
+            </md-autocomplete>
           </div>
           <div layout="row" style="margin-top: 15px; margin-bottom: 15px;">
             <md-icon class="icon-position">view_comfy</md-icon>
             <md-input-container style="width: 60%">
-              <input mdInput placeholder="Municipio" value="Limeira">
+              <input mdInput placeholder="Municipio" formControlName="municipio">
             </md-input-container>
           </div>
           <div layout="row">
             <md-icon class="icon-position">home</md-icon>
             <md-input-container style="width: 60%">
-              <input mdInput placeholder="Cep" value="4.806-005">
+              <input mdInput placeholder="Cep" formControlName="cep">
             </md-input-container>
           </div>
           <div layout="row">
             <md-icon class="icon-position">email</md-icon>
             <md-input-container style="width: 60%">
-              <input mdInput placeholder="Email" value="example@example.com.br">
+              <input mdInput placeholder="Email" formControlName="email">
             </md-input-container>
           </div>
           <h4>Presidente</h4>
           <div layout="row">
             <md-icon class="icon-position">person</md-icon>
             <md-input-container style="width: 60%">
-              <input mdInput placeholder="Nome" value="Luis Roberto da Silva">
+              <input mdInput placeholder="Nome" formControlName="contatoPresidenteNome">
             </md-input-container>
           </div>
           <div layout="row">
             <md-icon class="icon-position">phone</md-icon>
             <md-input-container style="width: 60%">
-              <input mdInput placeholder="Telefone" value="(99) 9999-9999">
+              <input mdInput placeholder="Telefone" formControlName="contatoPresidenteTelefone">
             </md-input-container>
           </div>
         </div>
       </form>
     </md-card-content>
     <md-card-actions layout="row" layout-align="start center">
-      <button md-raised-button color="primary">Salvar</button>
+      <button md-raised-button color="primary">{{associacao ? 'Atualizar' : 'Salvar'}}</button>
     </md-card-actions>
   </md-card>
 </div>

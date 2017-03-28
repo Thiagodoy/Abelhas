@@ -1,3 +1,7 @@
+import { Router } from '@angular/router';
+import { DialogService } from './../service/dialog.service';
+import { Associacao } from './../models/associacao';
+import { ParseService } from './../service/parse.service';
 import { Component, OnInit } from '@angular/core';
 import { ITdDataTableColumn } from '@covalent/core';
 
@@ -8,16 +12,8 @@ import { ITdDataTableColumn } from '@covalent/core';
 })
 export class ListAssociationComponent implements OnInit {
 
-   // MOCK
-  private data: any[] = [
-      {nome:'Associação',sigla:'AARRF',telefone:'(99) 9999-9999',email:'example@example.com',acoes_associacao:null},
-      {nome:'Associação',sigla:'JHGTY',telefone:'(99) 9999-9999',email:'example@example.com',acoes_associacao:null},
-      {nome:'Associação',sigla:'PPLOI',telefone:'(99) 9999-9999',email:'example@example.com',acoes_associacao:null},
-      {nome:'Associação',sigla:'KJUY',telefone:'(99) 9999-9999',email:'example@example.com',acoes_associacao:null},
-      {nome:'Associação',sigla:'KJHYB',telefone:'(99) 9999-9999',email:'example@example.com',acoes_associacao:null},
-      {nome:'Associação',sigla:'LLHY',telefone:'(99) 9999-9999',email:'example@example.com',acoes_associacao:null}   
-
-  ];
+   
+  private data: any[] = [];
 
   columns: ITdDataTableColumn[] = [
     { name: 'nome',  label: 'Nome' },
@@ -28,9 +24,40 @@ export class ListAssociationComponent implements OnInit {
     
     ];
 
-  constructor() { }
+  constructor(private parseService:ParseService, private dialogService:DialogService,private route:Router) { }
 
   ngOnInit() {
+    let query = this.parseService.createQuery(Associacao);
+    query.notEqualTo('objectId','ZlmHhZ4YHK');
+
+    this.parseService.executeQuery(query).then((response:Associacao[])=>{
+     this.data =  response.map(associacao=>{
+        return {
+          id: associacao.id,
+          nome: associacao.getNome(),
+          sigla: associacao.getSigla(),
+          telefone:associacao.getTelefone(),
+          email:associacao.getEmail()
+        }
+      });
+    });
   }
+   acoes(param) {
+    let menssagem = undefined;
+    switch (param.acao) {
+      case 'EDITAR':
+        this.route.navigate(['editar/associação'], { queryParams: { associacao: param.element.id } });
+        break;
+      case 'EXCLUIR':
+        menssagem = '<p> Deseja prosseguir com a exclusão do dado?</p>';
+        this.dialogService.confirm('Confirmar exclusão', menssagem, null, null).subscribe((value) => {
+          if (value) {
+            // this.excluir(param.element);
+          }
+        });
+        break;      
+    }
+  }
+
 
 }

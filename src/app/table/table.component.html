@@ -60,8 +60,8 @@
               <md-icon>menu</md-icon>
               </button>
       <md-menu #menuAssociacao="mdMenu">
-        <button md-menu-item> <md-icon>mode_edit</md-icon>Editar </button>
-        <button md-menu-item> <md-icon>delete</md-icon> Excluir </button>
+        <button md-menu-item (click)="acoes('EDITAR',row)"> <md-icon>mode_edit</md-icon>Editar </button>
+        <button md-menu-item (click)="acoes('EXCLUIR',row)"> <md-icon>delete</md-icon> Excluir </button>
       </md-menu>
     </div>
   </template>

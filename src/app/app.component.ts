@@ -21,7 +21,7 @@ export class AppComponent implements OnDestroy {
   menus: any[] = [
     { route: 'lista/apiarios', descricao: 'Listar apiarios' },   
     { route: 'edicao/multipla', descricao: 'Edição Multipla' },
-    { route: 'lista/apiarios', descricao: 'Listar usuários' },
+    { route: 'lista/usuarios', descricao: 'Listar usuários' },
     { route: 'editar/associação', descricao: 'Editar Associação' },
     { route: 'associações', descricao: 'Listar Associações' },
     { route: 'editar/propriedade', descricao: 'Editar Propriedade' },

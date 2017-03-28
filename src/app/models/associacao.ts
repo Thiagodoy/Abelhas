@@ -1,50 +1,81 @@
 import { Municipio } from './municipio';
-import{ Object } from 'parse';
-export class Associacao extends Object{
-    constructor(){
+import { Object } from 'parse';
+export class Associacao extends Object {
+    constructor() {
         super('Associacao');
     }
 
-    getMunicipio():Municipio{
+    getMunicipio(): Municipio {
         return this.get('municipio');
     }
 
-    setNome(nome:string){
-        this.set('nome',nome);
-    }
-    
-    setSigla(sigla:string){
-        this.set('sigla',sigla);
+    setNome(nome: string) {
+        this.set('nome', nome);
     }
 
-    setBairro(bairro:string){
-        this.set('bairro',bairro);
+    setSigla(sigla: string) {
+        this.set('sigla', sigla);
     }
-    
-    setEndereco(endereco:string){
-        this.set('endereco',endereco);
-    }
-
-    setTelefone(telefone:string){
-        this.set('telefone',telefone);
+    getSigla(): string {
+        return this.get('sigla');
     }
 
-    setContatoPresidente(contato:string){
-        this.set('contatoPresidenteTelefone',contato)
+    setBairro(bairro: string) {
+        this.set('bairro', bairro);
     }
 
-    setMunicipio(municipio:Municipio){
-        this.set('municipio',municipio);
+    setEndereco(endereco: string) {
+        this.set('endereco', endereco);
     }
 
-    setEmail(email:string){
-        this.set('email',email);
+    setTelefone(telefone: string) {
+        this.set('telefone', telefone);
     }
-    getEmail():string{
+    getTelefone(): string {
+        return this.get('telefone');
+    }
+
+    setContatoPresidente(contato: string) {
+        this.set('contatoPresidenteTelefone', contato)
+    }
+
+    setMunicipio(municipio: Municipio) {
+        this.set('municipio', municipio);
+    }
+
+    setEmail(email: string) {
+        this.set('email', email);
+    }
+    getEmail(): string {
         return this.get('email');
     }
-    getNome():string{
+    getNome(): string {
         return this.get('nome');
+    }
+
+    getBairro(): string {
+        return this.get('bairro');
+    }
+    getTipoRegistro(): string {
+        return this.get('tipoRegistro');
+    }
+    getContatoPresidenteNome(): string {
+        return this.get('contatoPresidenteNome');
+    }
+    getContatoPresidenteTelefone(): string {
+        return this.get('contatoPresidenteTelefone');
+    }
+    getEndereco(): string {
+        return this.get('endereco');
+    }
+    getCep(): string {
+        return this.get('cep');
+    }
+    getRegistro(): string {
+        return this.get('registro');
+    }
+    getNumeroSif(): string {
+        return this.get('numeroSif');
     }
     
 }
