@@ -2,7 +2,7 @@ import { Location } from './../models/location';
 
 import { Injectable } from '@angular/core';
 import * as L from 'leaflet'
-import { GeocodingService } from './geocode.service';
+import { GeocodeService } from './geocode.service';
 
 
 @Injectable()
@@ -15,7 +15,7 @@ export class LeafletService {
   markers: Map<string, L.Marker> = new Map();
 
 
-  constructor(private geocode: GeocodingService) {
+  constructor(private geocode: GeocodeService) {
 
     this.baseMaps = {
       Exemplo_1: L.tileLayer("http://{s}.tile.openstreetmap.fr/hot/{z}/{x}/{y}.png", {

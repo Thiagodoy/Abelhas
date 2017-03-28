@@ -33,7 +33,7 @@ import { MessageDialogComponent } from './message-dialog/message-dialog.componen
 import { DialogService } from './service/dialog.service';
 import { LeafletService } from './service/leaflet.service';
 import { ParseService } from './service/parse.service';
-import { GeocodingService } from './service/geocode.service';
+import { GeocodeService } from './service/geocode.service';
 import { MomentService } from './service/moment.service';
 
 import { DataPickerCustomComponent } from './data-picker-custom/data-picker-custom.component';
@@ -93,7 +93,7 @@ import { TextMaskModule } from 'angular2-text-mask';
 
   ],
   providers: [DialogService,
-   ParseService, LeafletService, GeocodingService, MomentService, ApiaryDetailResolver, ListMortandadeResolver, 
+   ParseService, LeafletService, GeocodeService, MomentService, ApiaryDetailResolver, ListMortandadeResolver, 
    ListCulturasResolver, ListApicultorResolver, ListPropriedadeResolver, ListEspecieAbelhaResolver, ListMunicipioResolver,
     EditUserResolver,ListEstadoResolver,ListAssociacaoResolver,UserResolver],
   bootstrap: [AppComponent],

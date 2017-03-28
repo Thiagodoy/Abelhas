@@ -6,7 +6,7 @@ import "rxjs/add/operator/map";
 import "rxjs/add/operator/mergeMap";
 
 @Injectable()
-export class GeocodingService {
+export class GeocodeService {
     http: Http;
 
     constructor(http: Http) {
