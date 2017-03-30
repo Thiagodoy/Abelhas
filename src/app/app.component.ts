@@ -1,9 +1,12 @@
+import { Router } from '@angular/router';
+import { route } from './route/route';
 import { Component, OnDestroy } from '@angular/core';
 import { MdIconRegistry } from '@angular/material';
 import { TdLoadingService } from '@covalent/core'
 import { DomSanitizer } from '@angular/platform-browser';
 import { EditApiaryComponent } from './edit-apiary/edit-apiary.component';
 import { ParseService } from './service/parse.service';
+import * as parse from 'parse';
 let Jquery = require('jquery');
 
 @Component({
@@ -33,7 +36,7 @@ export class AppComponent implements OnDestroy {
 
   isLogado:boolean = false;
 
-  constructor(mdIconRegistry: MdIconRegistry, sanitizer: DomSanitizer, private parseService: ParseService, private loadingService: TdLoadingService) {
+  constructor(mdIconRegistry: MdIconRegistry, sanitizer: DomSanitizer, private parseService: ParseService, private loadingService: TdLoadingService,private route:Router) {
     //Aplicação de icons customizados
     mdIconRegistry.addSvgIcon('bee', sanitizer.bypassSecurityTrustResourceUrl('assets/bee.svg'));
     mdIconRegistry.addSvgIcon('cpf', sanitizer.bypassSecurityTrustResourceUrl('assets/id-card.svg'));
@@ -63,7 +66,10 @@ export class AppComponent implements OnDestroy {
     this.parseService.usuarioLogadoEvent.subscribe(isLogado=>{
       this.isLogado = isLogado;
     });
-
+    
+    if(parse.User.current()){    
+    this.isLogado = true;}
+      
   }
 
   ngOnDestroy() {
