@@ -91,6 +91,11 @@ export class EditApiaryComponent implements OnInit, OnDestroy {
         this.showLocation();
         this.showPhoto()
 
+        // TESTE DA DISTANCIA DI APIARO
+
+
+
+
       });
     });
   }
@@ -109,7 +114,7 @@ export class EditApiaryComponent implements OnInit, OnDestroy {
 
   showLocation() {
 
-    if (this.apiario && this.apiario.getLocation()) {      
+    if (this.apiario && this.apiario.getLocation()) {
       let location = this.apiario.getLocation();
       let apicultorNome = this.apiario.getApicultor().getNome();
       let propriedade = this.apiario.getPropriedade().getNome();
@@ -160,8 +165,9 @@ export class EditApiaryComponent implements OnInit, OnDestroy {
 
     this.apiario.setValido(true)
     this.apiario.setValidadoPor(this.parseService.getUsuarioLogado());
+    this.apiario.setDataValidacao(new Date());
     this.parseService.save(this.apiario).then(res => {
-      if (res) {        
+      if (res) {
         this.dialog.confirm('Sucesso', 'Apiário validado com sucesso', 'SUCCESS', null).subscribe(value => {
         });
       }

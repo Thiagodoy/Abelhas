@@ -34,7 +34,7 @@
   <!--Template List Usuário-->
   <template tdDataTableTemplate="propriedade" let-value="value" let-row="row" let-column="column">
     <div layout="row">
-      <md-icon style="margin-right: 10px;">person</md-icon><span class="md-body-1">{{row[column]}}</span>
+      <md-icon style="margin-right: 10px;">room</md-icon><span class="md-body-1">{{row[column]}}</span>
     </div>
   </template>
     <!--<template tdDataTableTemplate="attributes.username" let-value="value" let-row="row" let-column="column">
@@ -54,6 +54,7 @@
     </div>
   </template>
   <!--Template List Usuário-->
+  <!--Template de gestão das associações-->
   <template tdDataTableTemplate="acoes_associacao" let-value="value" let-row="row" let-column="column">
     <div layout="row">
       <button md-icon-button [mdMenuTriggerFor]="menuAssociacao">
@@ -65,16 +66,20 @@
       </md-menu>
     </div>
   </template>
+  <!--Template de gestão das associações-->
+  <!--Template de gestão das propriedades-->
   <template tdDataTableTemplate="acoes_propriedade" let-value="value" let-row="row" let-column="column">
     <div layout="row">
       <button md-icon-button [mdMenuTriggerFor]="menuPropriedade">
               <md-icon>menu</md-icon>
               </button>
       <md-menu #menuPropriedade="mdMenu">
-        <button md-menu-item> <md-icon>mode_edit</md-icon>Editar </button>
-        <button md-menu-item> <md-icon>delete</md-icon> Excluir </button>
+        <button md-menu-item (click)="acoes('EDITAR',row)"> <md-icon>mode_edit</md-icon>Editar </button>
+        <button md-menu-item (click)="acoes('EXCLUIR',row)" > <md-icon>delete</md-icon> Excluir </button>
       </md-menu>
     </div>
   </template>
+  <!--Template de gestão das propriedades-->
 </td-data-table>
+
 <td-paging-bar2 *ngIf="showPagination && data.length>0" [pageSizes]="[5, 10, 15, 20]" [total]="data.length" (change)="page($event)"></td-paging-bar2>

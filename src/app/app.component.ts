@@ -25,7 +25,7 @@ export class AppComponent implements OnDestroy {
     { route: 'editar/associação', descricao: 'Editar Associação' },
     { route: 'associações', descricao: 'Listar Associações' },
     { route: 'editar/propriedade', descricao: 'Editar Propriedade' },
-    { route: 'propriedades', descricao: 'Listar propriedades' },
+    { route: 'lista/propriedade', descricao: 'Listar propriedades' },
     { route: 'dados/desativação', descricao: 'Dados de desativação' },
     { route: 'editar/usuario', descricao: 'Editar Usuário' }
   ];

@@ -33,11 +33,7 @@ export class Associacao extends Object {
     }
     getTelefone(): string {
         return this.get('telefone');
-    }
-
-    setContatoPresidente(contato: string) {
-        this.set('contatoPresidenteTelefone', contato)
-    }
+    } 
 
     setMunicipio(municipio: Municipio) {
         this.set('municipio', municipio);
@@ -65,11 +61,20 @@ export class Associacao extends Object {
     getContatoPresidenteTelefone(): string {
         return this.get('contatoPresidenteTelefone');
     }
+    setContatoPresidenteNome(param:string){
+        this.set('contatoPresidenteNome',param);
+    }
+    setContatoPresidenteTelefone(param:string){
+        this.set('contatoPresidenteTelefone',param);
+    }
     getEndereco(): string {
         return this.get('endereco');
     }
     getCep(): string {
         return this.get('cep');
+    }
+    setCep(param:string) {
+        this.set('cep',param);
     }
     getRegistro(): string {
         return this.get('registro');
@@ -77,5 +82,15 @@ export class Associacao extends Object {
     getNumeroSif(): string {
         return this.get('numeroSif');
     }
+    setNumeroSif(paran: string) {
+        this.set('numeroSif',paran);
+    }
+    setTipoRegistro(paran:number){
+        this.set('tipoRegistro',paran);
+    }
+    setRegistro(param:string){
+        this.set('registro',param);
+    }
+
     
 }

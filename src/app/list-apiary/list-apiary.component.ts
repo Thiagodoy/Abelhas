@@ -83,7 +83,7 @@ export class ListApiaryComponent implements OnInit {
     this.queryApiario.include('apicultor');
     this.queryApiario.include('especieAbelha');
     this.queryApiario.include('propriedade');
-    this.queryApiario.equalTo('ativo', true);
+   // this.queryApiario.equalTo('ativo', true);
 
     if (this.controlApicultor.value != '' && this.controlApicultor.value != null) {
       let queryApicultor = this.serviceParse.createQuery(Apicultor);
@@ -163,6 +163,7 @@ export class ListApiaryComponent implements OnInit {
     apiario.id = paran.id;
     apiario.setValido(true);
     apiario.setValidadoPor(this.serviceParse.getUsuarioLogado());
+    apiario.setDataValidacao(new Date());
     this.serviceParse.save(apiario).then(result => {
       if (result) {
         this.dialogService.confirm('Sucesso', 'Apiario validado com sucesso!', 'SUCCESS', this.viewContainerRef);

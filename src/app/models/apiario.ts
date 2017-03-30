@@ -169,4 +169,7 @@ export class Apiario extends Object {
     getStatus():string{
         return this.get('status');
     }
+    setDataValidacao(paran:Date){
+        this.set('dataValidacao',paran);
+    }
 }

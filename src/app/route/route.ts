@@ -1,3 +1,4 @@
+import { ListPropertyComponent } from './../list-property/list-property.component';
 import { LoginComponent } from './../login/login.component';
 import { HistoricComponent } from './../historic/historic.component';
 import { UserResolver } from './../guards/user.resolver';
@@ -18,7 +19,7 @@ import { ListUserComponent } from '../list-user/list-user.component';
 import { EditAssociationComponent } from '../edit-association/edit-association.component';
 import { ListAssociationComponent } from '../list-association/list-association.component';
 import { EditPropertyComponent } from '../edit-property/edit-property.component';
-import { ListPropertyComponent } from '../list-property/list-property.component';
+
 import { DataDeactivationComponent } from '../data-deactivation/data-deactivation.component'
 
 import { EditUserComponent } from '../edit-user/edit-user.component';
@@ -40,6 +41,7 @@ export const route: Routes = [
     { path: '', component: LoginComponent },
     { path: 'editar/associação', component: EditAssociationComponent },
     { path: 'associações', component: ListAssociationComponent },
+    { path: 'lista/propriedade', component: ListPropertyComponent },
     { path: 'editar/propriedade', component: EditPropertyComponent },
     { path: 'propriedades', component: ListPropertyComponent },
     { path: 'dados/desativação', component: DataDeactivationComponent },

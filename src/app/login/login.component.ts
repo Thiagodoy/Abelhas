@@ -37,7 +37,9 @@ export class LoginComponent implements OnInit {
   login() {
 
     let user = new UserWeb();
-    user.setUsername(this.formLogin.get('username').value);
+    let username:string = this.formLogin.get('username').value;
+    username = username.replace(/[^0-9]/gi,'');
+    user.setUsername(username);
     user.setPassword(this.formLogin.get('password').value);
     this.parseService.login(user);
     
