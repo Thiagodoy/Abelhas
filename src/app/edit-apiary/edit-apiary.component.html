@@ -195,10 +195,10 @@
     </div>
   </md-card-content>
   <md-card-actions layout="row" layout-align="start center">
-    <button md-raised-button color="primary" (click)="validar()">Validar</button>    
-    <button md-raised-button color="accent"(click)="salvar()">Salvar</button>
-    <button md-raised-button color="warn"(click)="excluir()">Excluir</button>
-    <button md-raised-button color="acent" [routerLink]="['/lista/apiarios']">Voltar</button>
+    <button md-raised-button color="primary" [disabled]="apiario" (click)="validar()">Validar</button>    
+    <button md-raised-button color="accent" [disabled]="apiario" (click)="salvar()">Salvar</button>
+    <button md-raised-button color="warn" [disabled]="apiario" (click)="excluir()">Excluir</button>
+    <button md-raised-button color="acent"  [routerLink]="['/lista/apiarios']">Voltar</button>
   </md-card-actions>
 </md-card>
 <app-mapa [locations]="locations" style="margin-top: 10px;"></app-mapa>

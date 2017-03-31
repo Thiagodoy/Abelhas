@@ -89,12 +89,7 @@ export class EditApiaryComponent implements OnInit, OnDestroy {
 
         this.populateForm();
         this.showLocation();
-        this.showPhoto()
-
-        // TESTE DA DISTANCIA DI APIARO
-
-
-
+        this.showPhoto();
 
       });
     });

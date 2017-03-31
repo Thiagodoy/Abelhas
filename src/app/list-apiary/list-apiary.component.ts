@@ -41,7 +41,7 @@ export class ListApiaryComponent implements OnInit {
     { name: 'apicultor', label: 'Apicultor' },
     { name: 'propriedadea', label: 'Propriedade' },
     { name: 'status', label: 'Status' },
-    { name: 'data', label: 'Data', format: (value) => { return this.momentService.core(value).format('DD/MM/YYYY HH:mm') } },
+    { name: 'data', label: 'Data'},
     { name: 'acoes', label: 'Ações' }];
 
   dateFormat: string = 'DD-MM-YYYY';
@@ -122,7 +122,7 @@ export class ListApiaryComponent implements OnInit {
           apicultor: apiario.getApicultor().getNome(),
           propriedadea: apiario.getPropriedade().getNome(),
           status: apiario.getStatus(),
-          data: apiario.createdAt
+          data: this.momentService.core( apiario.createdAt).format('DD/MM/YYYY HH:mm')
         }
       });
       this.atualiza(list);

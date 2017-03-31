@@ -10,7 +10,7 @@ import { FormControl, FormGroup, FormBuilder, Validators } from '@angular/forms'
 import { UserWeb } from './../models/user-web';
 import { Subscription } from 'rxjs/Rx';
 import { ActivatedRoute, Router } from '@angular/router';
-import { Component, OnInit, OnDestroy, NgZone } from '@angular/core';
+import { Component, OnInit, OnDestroy, NgZone, ViewContainerRef } from '@angular/core';
 import ValidatorCustom from './validator/validator-custom';
 import constantes from '../constantes';
 
@@ -45,7 +45,7 @@ export class EditUserComponent implements OnInit, OnDestroy {
 
 
 
-  constructor(private route: ActivatedRoute, private routeN: Router, private builder: FormBuilder, private parseService: ParseService, private zone: NgZone, private dialog: DialogService) { }
+  constructor(private route: ActivatedRoute, private routeN: Router, private builder: FormBuilder, private parseService: ParseService, private zone: NgZone, private dialog: DialogService, private view: ViewContainerRef) { }
 
   ngOnInit() {
 
@@ -183,16 +183,16 @@ export class EditUserComponent implements OnInit, OnDestroy {
 
       let municipio = associacao.getMunicipio();
       this.formUser.get('municipio').setValue(this.listMunicipios.filter(value => { return value.id == municipio.id })[0]);
-    }   
+    }
 
     // atributos da user comum a todos    
-    Object.keys(user.attributes).forEach(name => {          
+    Object.keys(user.attributes).forEach(name => {
       if (this.formUser.contains(name))
         this.formUser.get(name).setValue(user.attributes[name]);
     });
 
     if (user.attributes.tipo == 'GESTOR')
-      this.formUser.get('nome').setValue(user.attributes.nomeGestor);          
+      this.formUser.get('nome').setValue(user.attributes.nomeGestor);
 
     this.formUser.get('cpf').setValue(user.getUsername());
   }
@@ -212,20 +212,20 @@ export class EditUserComponent implements OnInit, OnDestroy {
           break;
       }
     } else {
-      this.dialog.confirm('Erro', 'Campos obrigatórios não foram preenchidos!', 'ERRO', null);
+      this.dialog.confirm('Erro', 'Campos obrigatórios não foram preenchidos!', 'ERRO', this.view);
     }
   }
 
   private salvarAssociacao() {
 
     let user = this.formUser.value;
-    let associacao = this.userCurrent ? this.userCurrent.attributes.associacao : new Associacao();
+    let associacao: Associacao = this.userCurrent ? this.userCurrent.attributes.associacao : new Associacao();
     associacao.setNome(user['nome'])
     associacao.setSigla(user['sigla']);
     associacao.setBairro(user['bairro']);
     associacao.setEndereco(user['endereco']);
     associacao.setTelefone(user['telefone']);
-    associacao.setContatoPresidente(user['contatoPresidenteTelefone']);
+    associacao.setContatoPresidenteTelefone(user['contatoPresidenteTelefone']);
     associacao.setMunicipio(user['municipio']);
     associacao.setEmail(user['email']);
 
@@ -240,7 +240,7 @@ export class EditUserComponent implements OnInit, OnDestroy {
         userNew.set('associacao', result);
 
         this.parseService.signUp(userNew).then(result => {
-          this.dialog.confirm('Sucesso', 'Associação Criada com sucesso!', 'SUCCESS', null).subscribe(resul => {
+          this.dialog.confirm('Sucesso', 'Associação Criada com sucesso!', 'SUCCESS', this.view).subscribe(resul => {
             this.routeN.navigate(['/lista/usuarios']);
           });
         });
@@ -256,7 +256,7 @@ export class EditUserComponent implements OnInit, OnDestroy {
 
       parse.Promise.when(promises).then(result => {
         if (result)
-          this.dialog.confirm('Sucesso', 'Associação atualizada com sucesso!', 'SUCCESS', null).subscribe(resul => {
+          this.dialog.confirm('Sucesso', 'Associação atualizada com sucesso!', 'SUCCESS', this.view).subscribe(resul => {
             this.routeN.navigate(['/lista/usuarios']);
           });
       });
@@ -294,7 +294,7 @@ export class EditUserComponent implements OnInit, OnDestroy {
         this.parseService.signUp(newUser).then(result => {
 
           if (result) {
-            this.dialog.confirm('Sucesso', 'Apicultor criado com sucesso!', 'SUCCESS', null).subscribe(resul => {
+            this.dialog.confirm('Sucesso', 'Apicultor criado com sucesso!', 'SUCCESS', this.view).subscribe(resul => {
               this.routeN.navigate(['/lista/usuarios']);
             });
           }
@@ -310,7 +310,7 @@ export class EditUserComponent implements OnInit, OnDestroy {
 
       parse.Promise.when(promises).then(result => {
         if (result)
-          this.dialog.confirm('Sucesso', 'Apicultor atualizado com sucesso!', 'SUCCESS', null).subscribe(resul => {
+          this.dialog.confirm('Sucesso', 'Apicultor atualizado com sucesso!', 'SUCCESS', this.view).subscribe(resul => {
             this.routeN.navigate(['/lista/usuarios']);
           });
       });
@@ -318,26 +318,31 @@ export class EditUserComponent implements OnInit, OnDestroy {
   }
 
   private salvarGestor() {
-    let user = this.formUser.value;
-    let userWeb = this.userCurrent || new UserWeb();
-    userWeb.setPassword(user['senha']);
-    userWeb.setUsername(user['cpf']);
-    userWeb.set('nomeGestor', user['nome']);
-    userWeb.set('tipo', user['tipo']);
-    userWeb.set('email', user['email']);
+
 
     if (!this.userCurrent) {
+      let user = this.formUser.value;
+      let userWeb = new UserWeb();
+      userWeb.setPassword(user['senha']);
+      let cpf = user['cpf'].replace(/[^0-9]/gi, '');
+      userWeb.setUsername(cpf);
+      userWeb.set('nomeGestor', user['nome']);
+      userWeb.set('tipo', user['tipo']);
+      userWeb.set('email', user['email']);
+
       this.parseService.signUp(userWeb).then(resul => {
-        this.dialog.confirm('Sucesso', 'Gestor criado com sucesso!', 'SUCCESS', null).subscribe(resul => {
+        this.dialog.confirm('Sucesso', 'Gestor criado com sucesso!', 'SUCCESS', this.view).subscribe(resul => {
           this.routeN.navigate(['/lista/usuarios']);
         });
       });
     } else {
       this.hasUpdateUser();
-      this.parseService.save(userWeb).then(result => {
-        this.dialog.confirm('Sucesso', 'Gestor atualizada com sucesso!', 'SUCCESS', null).subscribe(resul => {
-          this.routeN.navigate(['/lista/usuarios']);
-        });
+      this.parseService.save(this.userCurrent).then(result => {
+
+        if (result)
+          this.dialog.confirm('Sucesso', 'Gestor atualizada com sucesso!', 'SUCCESS', this.view).subscribe(resul => {
+            this.routeN.navigate(['/lista/usuarios']);
+          });
       });
     }
   }
@@ -345,7 +350,9 @@ export class EditUserComponent implements OnInit, OnDestroy {
   createUser(): UserWeb {
     let user = this.formUser.value;
     let newUser = new UserWeb();
-    newUser.setUsername(user['cpf']);
+    let cpf: string = user['cpf'];
+    cpf = cpf.replace(/[^0-9]/gi, '');
+    newUser.setUsername(cpf);
     newUser.setPassword(user['senha']);
     newUser.set('tipo', user['tipo']);
     return newUser;
@@ -354,8 +361,9 @@ export class EditUserComponent implements OnInit, OnDestroy {
   hasUpdateUser(): boolean {
     let user = this.formUser.value;
     let ret: boolean = false;
-    if (user['cpf'] != this.userCurrent.getUsername()) {
-      this.userCurrent.setUsername(user['cpf']);
+    let cpf: string = user['cpf'].replace(/[^0-9]/gi, '');
+    if (!(cpf.indexOf(this.userCurrent.getUsername()) >= 0)) {
+      this.userCurrent.setUsername(cpf);
       ret = true;
     }
 

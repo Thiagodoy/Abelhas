@@ -32,6 +32,7 @@ export class ParseService {
     let env = environment.getEnvironment();
     this.core.initialize(env.appid);
     this.core.serverURL = env.url;
+    this.core.masterKey = env.masterKey;
 
 
     // Mapeia as classes que serão utilizadas no parse

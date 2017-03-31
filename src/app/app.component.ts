@@ -75,6 +75,7 @@ export class AppComponent implements OnDestroy {
   ngOnDestroy() {
     this.parseService.loaderEvent.unsubscribe();
     this.parseService.usuarioLogadoEvent.unsubscribe();
+    parse.User.logOut();
   }
 
 }
