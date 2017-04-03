@@ -125,13 +125,15 @@ export class ParseService {
    * @returns Promise<>
    */
   logout() {
+    this.toogleLoading(true);
+    let i = this;
     parse.User.logOut().then(reult => {
-
+      this.route.navigate(['']);
       this.usuarioLogadoEvent.emit({
         isLogado: false
       });
 
-      this.route.navigate(['']);
+      i.toogleLoading(false);
 
     })
   }
