@@ -84,10 +84,11 @@
           </md-option>
         </md-autocomplete>
       </div>
-      <div layout="row">
+      <md-card-actions layout="row" layout-align="start center">  
         <button md-raised-button color="primary" style="margin-bottom: 25px;height: 35px;" (click)="mover()">Mover</button>
-      </div>
+        <button md-raised-button color="acent"  [routerLink]="['/home/lista/apiarios']">Voltar</button>
+      </md-card-actions>
     </div>
   </md-card-content>
 </md-card>
-<app-mapa style="margin-top: 10px; "></app-mapa>
+<app-mapa style="margin-top: 10px;" [locations]="locations"></app-mapa>

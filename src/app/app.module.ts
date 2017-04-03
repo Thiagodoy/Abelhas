@@ -1,3 +1,4 @@
+import { CanActivateUser } from './guards/can-active-user';
 import { UserResolver } from './guards/user.resolver';
 import { ListAssociacaoResolver } from './guards/list-associacao.resolver';
 import { ListEstadoResolver } from './guards/list-estado.resover';
@@ -93,9 +94,7 @@ import { TextMaskModule } from 'angular2-text-mask';
 
   ],
   providers: [DialogService,
-   ParseService, LeafletService, GeocodeService, MomentService, ApiaryDetailResolver, ListMortandadeResolver, 
-   ListCulturasResolver, ListApicultorResolver, ListPropriedadeResolver, ListEspecieAbelhaResolver, ListMunicipioResolver,
-    EditUserResolver,ListEstadoResolver,ListAssociacaoResolver,UserResolver],
+   ParseService, LeafletService, GeocodeService, MomentService, CanActivateUser],
   bootstrap: [AppComponent],
   entryComponents: [MessageDialogComponent]
 })

@@ -1,17 +1,20 @@
 import { Estado } from './estado';
-import{ Object } from 'parse';
+import { Object } from 'parse';
 export class Municipio extends Object {
-    constructor(){
+    constructor() {
         super('Municipio');
     }
-    getId():string{
+    getId(): string {
         return this.id;
     }
-    getNome(){
+    getNome() {
         return this.get('nome');
     }
+    setNome(paran: string) {
+        this.set('nome', paran);
+    }
 
-    getEstado():Estado{
+    getEstado(): Estado {
         return this.get('estado');
     }
 }

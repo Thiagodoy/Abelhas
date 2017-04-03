@@ -46,7 +46,7 @@ export class ListAssociationComponent implements OnInit {
     let menssagem = undefined;
     switch (param.acao) {
       case 'EDITAR':
-        this.route.navigate(['editar/associação'], { queryParams: { associacao: param.element.id } });
+        this.route.navigate(['home/editar/associação'], { queryParams: { associacao: param.element.id } });
         break;
       case 'EXCLUIR':
         menssagem = '<p> Deseja prosseguir com a exclusão do dado?</p>';

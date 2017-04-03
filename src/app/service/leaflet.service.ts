@@ -1,3 +1,4 @@
+import { DomSanitizer } from '@angular/platform-browser';
 import { Location } from './../models/location';
 
 import { Injectable } from '@angular/core';
@@ -15,7 +16,7 @@ export class LeafletService {
   markers: Map<string, L.Marker> = new Map();
 
 
-  constructor(private geocode: GeocodeService) {
+  constructor(private geocode: GeocodeService, sanitizer: DomSanitizer) {
 
     this.baseMaps = {
       Exemplo_1: L.tileLayer("http://{s}.tile.openstreetmap.fr/hot/{z}/{x}/{y}.png", {
@@ -28,70 +29,75 @@ export class LeafletService {
         attribution: ''
       })
     };
+}
+
+buildMap(map: string) {
+
+  this.map = this.core.map(map, {
+    zoomControl: false,
+    center: L.latLng(40.731253, -73.996139),
+    zoom: 8,
+    minZoom: 4,
+    maxZoom: 19,
+    layers: [this.baseMaps.Exemplo_1]
+  }).setView([51.505, -0.09], 13);
+
+
+  this.core.control.zoom({ position: "topright" }).addTo(this.map);
+  this.core.control.layers(this.baseMaps).addTo(this.map);
+  this.core.control.scale().addTo(this.map);
+
+  return this.map;
+}
+
+putLocations(locations: Location[]) {
+  
+  this.removeAll()  
+  for (let location of locations) {  
+
+    this.map.panTo([location.latitude, location.longitude]);
+    let marker = this.core.marker([location.latitude, location.longitude], {icon: location.getIcon()}).bindPopup(location.getPopUp()).addTo(this.map).openPopup();
+     this.markers.set(location.getKey(), marker);
   }
+ 
+}
 
-  buildMap(map: string) {
+putLocation(location:Location){
+   this.map.panTo([location.latitude, location.longitude]);
+    this.map.panTo([location.latitude, location.longitude]);
+    let marker = this.core.marker([location.latitude, location.longitude], {icon: location.getIcon()}).bindPopup(location.getPopUp()).addTo(this.map).openPopup();
+    this.markers.set(location.getKey(), marker);
+}
 
-    this.map = this.core.map(map, {
-      zoomControl: false,
-      center: L.latLng(40.731253, -73.996139),
-      zoom: 8,
-      minZoom: 4,
-      maxZoom: 19,
-      layers: [this.baseMaps.Exemplo_1]
-    }).setView([51.505, -0.09], 13);
+removeLocation(location: Location) {
 
-
-    this.core.control.zoom({ position: "topright" }).addTo(this.map);
-    this.core.control.layers(this.baseMaps).addTo(this.map);
-    this.core.control.scale().addTo(this.map);
-
-    return this.map;
+  let marker = this.markers.get(location.getKey());
+  if (marker) {
+    this.map.removeLayer(marker);
+    this.markers.delete(location.getKey());
   }
+}
 
-  putLocations(locations: Location[]) {
+removeAll() {  
 
-    let mapTemp = new Map();
+  this.markers.forEach((value, key) => {
+    this.map.removeLayer(value);    
+  }, this.markers);
 
-    for (let location of locations) {
-      this.removeLocation(location);
+  this.markers.clear();
+}
 
-      this.map.panTo([location.latitude, location.longitude]);
-      let marker = this.core.marker([location.latitude, location.longitude]).bindPopup(location.getPopUp()).addTo(this.map).openPopup();
-      mapTemp.set(location.getKey(), marker);
-    }
-    this.markers = mapTemp;
-  }
+putCurrentLocation() {
 
-  removeLocation(location: Location) {
-
-    let marker = this.markers.get(location.getKey());
-    if (marker) {
-      this.map.removeLayer(marker);
-      this.markers.delete(location.getKey());
-    }
-  }
-
-  removeAll() {  
-
-    this.markers.forEach((value, key)=> {
-       this.map.removeLayer(value);
-      this.markers.delete(key);
-    }, this.markers);
-
-  }
-
-  putCurrentLocation() {
-
-    this.geocode.getCurrentLocation()
-      .subscribe(
-      location => {
-        this.map.panTo([location.latitude, location.longitude])
-        this.core.marker([location.latitude, location.longitude]).addTo(this.map);
-      },
-      err => console.error(err)
-      );
-  }
+  this.geocode.getCurrentLocation()
+    .subscribe(
+    location => {
+      this.map.panTo([location.latitude, location.longitude])
+      this.core.marker([location.latitude, location.longitude]).addTo(this.map);
+    },
+    err => console.error(err)
+    );
+}
 
 
 }

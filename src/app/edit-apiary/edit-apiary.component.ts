@@ -1,3 +1,4 @@
+import { LeafletColorMarker } from './../table-pagination/leaflet-color-marker';
 import { UserWeb } from './../models/user-web';
 import { DialogService } from './../service/dialog.service';
 import { Apiario } from './../models/apiario';
@@ -102,7 +103,7 @@ export class EditApiaryComponent implements OnInit, OnDestroy {
 
   showPhoto() {
     let fotos = this.apiario.getFotos();
-    if (fotos && fotos.length > 0) {
+    if (fotos && fotos.length > 0) {  
       this.loadPhoto(fotos[0]._url)
     }
   }
@@ -110,12 +111,38 @@ export class EditApiaryComponent implements OnInit, OnDestroy {
   showLocation() {
 
     if (this.apiario && this.apiario.getLocation()) {
-      let location = this.apiario.getLocation();
-      let apicultorNome = this.apiario.getApicultor().getNome();
-      let propriedade = this.apiario.getPropriedade().getNome();
-      let especieAbelha = this.apiario.getEspecieAbelha().getNome()
-      location.setPopUp(apicultorNome, propriedade, especieAbelha);
-      this.locations = new Array(location);
+
+      let query = this.parseService.createQuery(Apiario);
+      let locationApiario: parse.GeoPoint = this.apiario.attributes.location;
+      query.withinKilometers('location', locationApiario, 5);
+      let l = [];
+      let lt = undefined;
+      this.parseService.executeQuery(query).then((result: Apiario[]) => {
+
+        for (let i = 0; i < result.length; i++) {          
+          let location = result[i].getLocation();
+          let apicultorNome = this.apiario.getApicultor().getNome();
+          let propriedade = this.apiario.getPropriedade().getNome();
+          let especieAbelha = this.apiario.getEspecieAbelha().getNome()
+          location.setPopUp(apicultorNome, propriedade, especieAbelha);
+
+          if (location.key.indexOf(this.apiario.getLocation().key) >= 0){
+            location.setIcon(LeafletColorMarker.greenIcon);
+            lt = location;
+            continue;
+          }
+          else
+            location.setIcon(LeafletColorMarker.blueIcon);
+
+          l.push(location);
+        }
+        l.push(lt);
+        this.locations = l;
+        console.log("LOCATIONS");
+        console.log(this.locations.length);
+      });
+      
+
     }
   }
 
@@ -126,8 +153,13 @@ export class EditApiaryComponent implements OnInit, OnDestroy {
     this.formApiario.get('qtdCaixas').setValue(this.apiario.getQtdCaixas());
     this.formApiario.get('distanciaDeslocamentoCaixas').setValue(this.apiario.getDistanciaDeslocamentoCaixas());
     this.apiario.getCulturas().forEach((cultura) => { this.formApiario.get('culturas').get(cultura.id).setValue(true); });
-    this.apiario.getMotivoMortandade().forEach((motivo) => { this.formApiario.get('motivoMortandade').get(motivo.id).setValue(true); });
-    this.apiario.getMotivoHistoricoMortandade().forEach((motivo) => { this.formApiario.get('motivoHistoricoMortandade').get(motivo.id).setValue(true); });
+
+    if (this.apiario.getMotivoMortandade())
+      this.apiario.getMotivoMortandade().forEach((motivo) => { this.formApiario.get('motivoMortandade').get(motivo.id).setValue(true); });
+
+    if (this.apiario.getMotivoHistoricoMortandade())
+      this.apiario.getMotivoHistoricoMortandade().forEach((motivo) => { this.formApiario.get('motivoHistoricoMortandade').get(motivo.id).setValue(true); });
+
     this.formApiario.get('observacao').setValue(this.apiario.getObservacao());
     this.formApiario.get('migratorio').setValue(this.apiario.isMigratorio());
     this.formApiario.get('existenciaMortalidadeAbelha').setValue(this.apiario.getExistenciaMortalidadeAbelha());

@@ -8,7 +8,7 @@ export const environment = {
 
   environments: [
     {url:'https://parsedevabelhas.herokuapp.com/parse',appid:'myAppId',masterKey:'myMasterKey'},
-    {url:'http://localhost:1337/parse', appid:'myAppDebug'}],
+    {url:'http://localhost:1337/parse', appid:'myAppDebug',masterKey:'myMasterKey'}],
 
     getEnvironment(){
       return this.production ? this.environments[0] : this.environments[1] 

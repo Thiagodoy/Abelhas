@@ -49,7 +49,7 @@ export class ListPropertyComponent implements OnInit {
     let menssagem = undefined;
     switch (param.acao) {
       case 'EDITAR':
-        this.route.navigate(['editar/propriedade'], { queryParams: { propriedade: param.element.id } });
+        this.route.navigate(['home/editar/propriedade'], { queryParams: { propriedade: param.element.id } });
         break;
       case 'EXCLUIR':
         menssagem = '<p> Deseja prosseguir com a exclusão do dado?</p>';

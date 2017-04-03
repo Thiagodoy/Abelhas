@@ -1,4 +1,5 @@
-import {LatLngBounds} from "leaflet";
+import {LatLngBounds,Icon} from "leaflet";
+import * as L  from "leaflet";
 
 export class Location {
     latitude: number;
@@ -6,7 +7,8 @@ export class Location {
     address: string;
     key:string;
     viewBounds: LatLngBounds;
-    popUp:string = undefined
+    popUp:string = undefined;
+    icon:Icon = undefined;
 
     setPopUp(apicultor:string, propriedade:string, especie:string){
         this.popUp = `<h4>Apicultor: ${apicultor}</h4><p>propriedade: ${propriedade}</p><p>espécie: ${especie}</p>`; 	        
@@ -23,5 +25,11 @@ export class Location {
     }
     getKey(){
         return this.key;
+    }
+    setIcon(icon:L.Icon){
+        this.icon = icon;
+    }
+    getIcon():L.Icon{
+        return this.icon;
     }
 }

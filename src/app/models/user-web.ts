@@ -15,8 +15,5 @@ export class UserWeb extends User {
     getTipo():string{
         return this.get('tipo');
     }
-
-    setAssociacao(ass:Associacao){
-        this.set('associacao',ass);
-    }
+    
 }

@@ -179,7 +179,7 @@
     </md-card-content>
     <md-card-actions layout="row" layout-align="start center">
       <button md-raised-button type="submit" [disabled]="!formUser.valid" color="primary" (click)="salvar()">{{typeAction == 'CREATE' ? 'Salvar' : 'Atualizar'}}</button>
-      <button md-raised-button color="warn" [routerLink]="['/lista/usuarios']">Cancelar</button>
+      <button md-raised-button color="warn" [routerLink]="['/home/lista/usuarios']">Cancelar</button>
     </md-card-actions>
   </md-card>
 </div>

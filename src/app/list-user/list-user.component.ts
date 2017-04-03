@@ -74,7 +74,7 @@ export class ListUserComponent implements OnInit {
     let user: any = param.element;
     switch (param.acao) {
       case 'EDITAR':
-        this.route.navigate(['editar/usuario'], { queryParams: { user: user.id, type: user.tipo } });
+        this.route.navigate(['home/editar/usuario'], { queryParams: { user: user.id, type: user.tipo } });
         break;
         case 'EXCLUIR':
         

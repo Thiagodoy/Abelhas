@@ -188,7 +188,7 @@ export class ListApiaryComponent implements OnInit {
     let menssagem = undefined;
     switch (param.acao) {
       case 'EDITAR':
-        this.route.navigate(['editar/apiario'], { queryParams: { apiario: param.element.id } });
+        this.route.navigate(['home/editar/apiario'], { queryParams: { apiario: param.element.id } });
         break;
       case 'EXCLUIR':
         menssagem = '<p> Deseja prosseguir com a exclusão do dado?</p>';
@@ -199,7 +199,7 @@ export class ListApiaryComponent implements OnInit {
         });
         break;
       case 'HISTORICO':
-        this.route.navigate(['historic'], { queryParams: { apiario: param.element.id } });
+        this.route.navigate(['home/historic'], { queryParams: { apiario: param.element.id } });
         break;
       case 'VALIDAR':
         menssagem = '<p>Tem certeza que deseja validar este dado?</p>' + '<p>Este procedimento não poderá ser revertido!</p>';

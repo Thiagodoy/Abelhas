@@ -22,7 +22,7 @@ import Message from '../message-map';
 @Injectable()
 export class ParseService {
   core = parse;
-  @Output() usuarioLogadoEvent: EventEmitter<boolean> = new EventEmitter<boolean>()
+  @Output() usuarioLogadoEvent: EventEmitter<any> = new EventEmitter<any>()
   @Output() loaderEvent: EventEmitter<Boolean> = new EventEmitter();
   usuarioLogado: UserWeb;
   private instance: ParseService = undefined;
@@ -32,7 +32,7 @@ export class ParseService {
     let env = environment.getEnvironment();
     this.core.initialize(env.appid);
     this.core.serverURL = env.url;
-    this.core.masterKey = env.masterKey;
+    this.core.masterKey = env.masterKey || '';
 
 
     // Mapeia as classes que serão utilizadas no parse
@@ -124,6 +124,17 @@ export class ParseService {
    * @param Usuario que extende Parse.User
    * @returns Promise<>
    */
+  logout() {
+    parse.User.logOut().then(reult => {
+
+      this.usuarioLogadoEvent.emit({
+        isLogado: false
+      });
+
+      this.route.navigate(['']);
+
+    })
+  }
   login(user: Parse.User) {
     let instance = this;
     instance.toogleLoading(true);
@@ -132,8 +143,26 @@ export class ParseService {
         (res: UserWeb) => {
           this.zone.run(() => {
             this.usuarioLogado = res;
-            this.usuarioLogadoEvent.emit(true);
-            this.route.navigate(['/lista/apiarios']);
+            let nome = ''
+            if (res.attributes.tipo == 'GESTOR')
+              nome = res.attributes.nomeGestor;
+            if (res.attributes.tipo == 'APICULTOR') {
+              let apicultor: Apicultor = res.attributes.apicultor;
+              nome = apicultor.getNome();
+            }
+            if (res.attributes.tipo == 'ASSOCIACAO') {
+              let associacao: Associacao = res.attributes.associacao;
+              nome = associacao.getNome();
+            }
+
+            this.usuarioLogadoEvent.emit({
+              isLogado: true,
+              perfil: res.attributes.tipo,
+              nome: nome
+            });
+
+            this.route.navigate(['home/lista/apiarios']);
+
             instance.toogleLoading(false)
           });
         },
@@ -206,6 +235,7 @@ export class ParseService {
     return this.usuarioLogado;
   }
 
+
   public toogleLoading(param) {
     this.zone.run(() => {
       this.loaderEvent.emit(param);
@@ -214,7 +244,7 @@ export class ParseService {
 
   private showErrorPopUp(erro: parse.Error) {
     let s: string = '';
-    
+
     if (Message.has(erro.code))
       s = Message.get(erro.code)
     else

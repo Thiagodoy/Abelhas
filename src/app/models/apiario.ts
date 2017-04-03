@@ -1,3 +1,4 @@
+import { LeafletColorMarker } from './../table-pagination/leaflet-color-marker';
 import { UserWeb } from './user-web';
 import { Object } from 'parse';
 import { Cultura } from './cultura';
@@ -136,6 +137,7 @@ export class Apiario extends Object {
         location.longitude = locationParse.longitude;
         location.setPopUp(this.getApicultor().getNome(), this.getPropriedade().getNome(), this.getEspecieAbelha().getNome())
         location.key = '' + location.getLatitude() + '' + location.getLongitude();
+        location.icon = LeafletColorMarker.blueIcon;
         return location;
     }
     getExistenciaMortalidadeAbelha(): boolean {

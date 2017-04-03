@@ -88,7 +88,7 @@ export class EditPropertyComponent implements OnInit {
       else
         this.dialogService.confirm('Sucesso', 'Propriedade atualizada com sucesso!', 'SUCCESS', this.view);
       
-      this.route.navigate(['lista/propriedade']);
+      this.route.navigate(['home/lista/propriedade']);
     });
 
   }

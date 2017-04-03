@@ -1,20 +1,24 @@
 <md-card>
-  <md-card-title> 
+  <md-card-title>
     <div layout="row">
-      Edição do Apiário <md-chip-list><md-chip *ngIf="apiario"  [style.color]="apiario?.isValido() ? 'white' : 'black'" [style.background-color]="apiario?.isValido() ? 'green' : 'red'" style="margin-left: 20px;font-weight: bold;">{{apiario?.isValido() ? 'Validado' : 'Pendente' }}</md-chip></md-chip-list> 
+      Edição do Apiário
+      <md-chip-list>
+        <md-chip *ngIf="apiario" [style.color]="apiario?.isValido() ? 'white' : 'black'" [style.background-color]="apiario?.isValido() ? 'green' : 'red'"
+          style="margin-left: 20px;font-weight: bold;">{{apiario?.isValido() ? 'Validado' : 'Pendente' }}</md-chip>
+      </md-chip-list>
     </div>
-    </md-card-title>
+  </md-card-title>
   <md-card-content>
     <div layout="row" layout-align="center center">
       <div layout="column" flex="60">
         <form [formGroup]="formApiario">
           <div layout="column">
             <div layout="column" layout-align="space-between start">
-               <md-input-container class="example-full-width"  style="margin-bottom: 20px;width: 40%">
-                  <input mdInput  placeholder="Apicultor" formControlName="apicultor">                  
-                </md-input-container>
-              <md-select  placeholder="Propriedade" name="propriedade" style="width: 40%;margin-bottom: 20px;" formControlName="propriedade">
-                <md-option *ngFor="let propri of listPropriedades" [value]="propri" >
+              <md-input-container class="example-full-width" style="margin-bottom: 20px;width: 40%">
+                <input mdInput placeholder="Apicultor" formControlName="apicultor">
+              </md-input-container>
+              <md-select placeholder="Propriedade" name="propriedade" style="width: 40%;margin-bottom: 20px;" formControlName="propriedade">
+                <md-option *ngFor="let propri of listPropriedades" [value]="propri">
                   {{propri.getNome()}}
                 </md-option>
               </md-select>
@@ -28,16 +32,22 @@
                 <md-radio-group flex="100">
                   <div layout="row" [formGroup]="cultura">
                     <div flex="20">
-                      <md-checkbox *ngFor="let cultura of listCulturas.slice(0,5)"  
-                        [name]="cultura" [id]="cultura.objectId" style="margin-left: 15px" formControlName="{{cultura.id}}">{{cultura.attributes.nome}}   </md-checkbox>
+                      <div layout="column">
+                        <md-checkbox *ngFor="let cultura of listCulturas.slice(0,5)" [name]="cultura" [id]="cultura.objectId" style="margin-left: 15px"
+                          formControlName="{{cultura.id}}">{{cultura.attributes.nome}} </md-checkbox>
+                      </div>
                     </div>
                     <div flex="20">
-                      <md-checkbox *ngFor="let cultura of listCulturas.slice(5,10)" 
-                        [name]="cultura" [id]="cultura.objectId" style="margin-left: 15px" formControlName="{{cultura.id}}" >{{cultura.attributes.nome}}</md-checkbox>
+                      <div layout="column">
+                        <md-checkbox *ngFor="let cultura of listCulturas.slice(5,10)" [name]="cultura" [id]="cultura.objectId" style="margin-left: 15px"
+                          formControlName="{{cultura.id}}">{{cultura.attributes.nome}}</md-checkbox>
+                      </div>
                     </div>
                     <div flex="20">
-                      <md-checkbox *ngFor="let cultura of listCulturas.slice(10, listCulturas.length + 1)" 
-                        [name]="cultura" [id]="cultura.objectId" formControlName="{{cultura.id}}" style="margin-left: 15px">{{cultura.attributes.nome}}</md-checkbox>
+                      <div layout="column">
+                        <md-checkbox *ngFor="let cultura of listCulturas.slice(10, listCulturas.length + 1)" [name]="cultura" [id]="cultura.objectId"
+                          formControlName="{{cultura.id}}" style="margin-left: 15px">{{cultura.attributes.nome}}</md-checkbox>
+                      </div>
                     </div>
                   </div>
                 </md-radio-group>
@@ -47,29 +57,28 @@
               <div layout="column">
                 <h4>Migratório</h4>
               </div>
-              <div layout="row" style="flex-wrap: wrap;margin-top: 14px" >
-                <md-radio-group  class="example-radio-group" style="margin-left: 15px;" formControlName="migratorio"  >
-                  <md-radio-button name="migratorio" [value]="true"   >Sim </md-radio-button>
-                  <md-radio-button name="migratorio" [value]="false"  >Não </md-radio-button>
+              <div layout="row" style="flex-wrap: wrap;margin-top: 14px">
+                <md-radio-group class="example-radio-group" style="margin-left: 15px;" formControlName="migratorio">
+                  <md-radio-button name="migratorio" [value]="true">Sim </md-radio-button>
+                  <md-radio-button name="migratorio" [value]="false">Não </md-radio-button>
                 </md-radio-group>
               </div>
             </div>
             <div layout="row">
               <div layout="column" layout-align="space-between start" style="width: 100%">
                 <md-input-container class="example-full-width" style="width: 40%">
-                  <input mdInput  placeholder="Quantidade de caixas" type="number" formControlName="qtdCaixas">
+                  <input mdInput placeholder="Quantidade de caixas" type="number" formControlName="qtdCaixas">
                   <span md-suffix>unidades.</span>
                 </md-input-container>
-
                 <md-input-container class="example-full-width" style="width: 40%">
-                  <input mdInput  placeholder="Distancia deslocamento de caixa" type="number" formControlName="distanciaDeslocamentoCaixas"                    >
+                  <input mdInput placeholder="Distancia deslocamento de caixa" type="number" formControlName="distanciaDeslocamentoCaixas">
                   <span md-suffix>metros.</span>
                 </md-input-container>
               </div>
             </div>
             <div layout="row">
-              <md-select  placeholder="Espécie de abelhas" name="especie" style="width: 40%;margin-bottom: 20px;margin-top: 16px;" formControlName="especieAbelha">
-                <md-option *ngFor="let abelha of listEspecieAbelha" [value]="abelha" >
+              <md-select placeholder="Espécie de abelhas" name="especie" style="width: 40%;margin-bottom: 20px;margin-top: 16px;" formControlName="especieAbelha">
+                <md-option *ngFor="let abelha of listEspecieAbelha" [value]="abelha">
                   {{abelha.getNome()}}
                 </md-option>
               </md-select>
@@ -79,7 +88,7 @@
                 <h3>Exitência de mortalidade de abelha (últimos 30 dias)</h3>
               </div>
               <div flex="">
-                <md-radio-group  class="example-radio-group" style="margin-left: 15px;" formControlName="existenciaMortalidadeAbelha"  >
+                <md-radio-group class="example-radio-group" style="margin-left: 15px;" formControlName="existenciaMortalidadeAbelha">
                   <md-radio-button name="mortalidade" [value]="true">Sim </md-radio-button>
                   <md-radio-button name="mortalidade" [value]="false">Não </md-radio-button>
                 </md-radio-group>
@@ -98,17 +107,22 @@
                 <md-radio-group flex="90">
                   <div layout="row" [formGroup]="motivoMortandade">
                     <div flex="30">
-                      <md-checkbox   
-                        *ngFor="let motivo of listMortandade.slice(0,5)" [name]="motivo.objectId" [id]="motivo.objectId" style="margin-left: 15px" formControlName="{{motivo.id}}">{{motivo.attributes.nome}}</md-checkbox>
+                      <div layout="column">
+                        <md-checkbox *ngFor="let motivo of listMortandade.slice(0,5)" [name]="motivo.objectId" [id]="motivo.objectId" style="margin-left: 15px"
+                          formControlName="{{motivo.id}}">{{motivo.attributes.nome}}</md-checkbox>
+                      </div>
                     </div>
                     <div flex="30">
-                      <md-checkbox   
-                        *ngFor="let motivo of listMortandade.slice(5,10)" [name]="motivo.objectId" [id]="motivo.objectId" formControlName="{{motivo.id}}" style="margin-left: 15px">{{motivo.attributes.nome}}</md-checkbox>
+                      <div layout="column">
+                        <md-checkbox *ngFor="let motivo of listMortandade.slice(5,10)" [name]="motivo.objectId" [id]="motivo.objectId" formControlName="{{motivo.id}}"
+                          style="margin-left: 15px">{{motivo.attributes.nome}}</md-checkbox>
+                      </div>
                     </div>
                     <div flex="30">
-                      <md-checkbox   
-                        *ngFor="let motivo of listMortandade.slice(10,listCulturas.length + 1)" formControlName="{{motivo.id}}" [name]="motivo.objectId" [id]="motivo.objectId"
-                        style="margin-left: 15px">{{motivo.attributes.nome}}</md-checkbox>
+                      <div layout="column">
+                        <md-checkbox *ngFor="let motivo of listMortandade.slice(10,listCulturas.length + 1)" formControlName="{{motivo.id}}" [name]="motivo.objectId"
+                          [id]="motivo.objectId" style="margin-left: 15px">{{motivo.attributes.nome}}</md-checkbox>
+                      </div>
                     </div>
                   </div>
                 </md-radio-group>
@@ -118,10 +132,10 @@
               <div layout="column">
                 <h4>Tem comprovação por análise?</h4>
               </div>
-              <div layout="row" style="flex-wrap: wrap;margin-top: 16px" >
-                <md-radio-group  class="example-radio-group" style="margin-left: 15px;" formControlName="comprovadoPorAnalise" >
-                  <md-radio-button name="comprovacao" [value]="true"  >Sim </md-radio-button>
-                  <md-radio-button name="comprovacao" [value]="false" >Não </md-radio-button>
+              <div layout="row" style="flex-wrap: wrap;margin-top: 16px">
+                <md-radio-group class="example-radio-group" style="margin-left: 15px;" formControlName="comprovadoPorAnalise">
+                  <md-radio-button name="comprovacao" [value]="true">Sim </md-radio-button>
+                  <md-radio-button name="comprovacao" [value]="false">Não </md-radio-button>
                 </md-radio-group>
               </div>
             </div>
@@ -130,9 +144,9 @@
                 <h4>Histórico mortandade?</h4>
               </div>
               <div layout="row" style="flex-wrap: wrap;margin-top: 16px">
-                <md-radio-group  class="example-radio-group" style="margin-left: 15px;" formControlName="historicoMortandade">
-                  <md-radio-button  [value]="true">Sim </md-radio-button>
-                  <md-radio-button  [value]="false">Não </md-radio-button>
+                <md-radio-group class="example-radio-group" style="margin-left: 15px;" formControlName="historicoMortandade">
+                  <md-radio-button [value]="true">Sim </md-radio-button>
+                  <md-radio-button [value]="false">Não </md-radio-button>
                 </md-radio-group>
               </div>
             </div>
@@ -146,20 +160,25 @@
             <div layout="row" style="margin-bottom: 20px;">
               <div layout="row" flex="60" style="flex-wrap: wrap;margin-top: 16px">
                 <h4>Motivo Histórico Mortandade</h4>
-                <md-radio-group flex="90" >
+                <md-radio-group flex="90">
                   <div layout="row" [formGroup]="motivoHistoricoMortandade">
                     <div flex="30">
-                      <md-checkbox 
-                        *ngFor="let motivo of listMortandade.slice(0,5)" [name]="motivo.objectId" [id]="motivo.objectId" style="margin-left: 15px" formControlName="{{motivo.id}}">{{motivo.attributes.nome}}</md-checkbox>
+                      <div layout="column">
+                        <md-checkbox *ngFor="let motivo of listMortandade.slice(0,5)" [name]="motivo.objectId" [id]="motivo.objectId" style="margin-left: 15px"
+                          formControlName="{{motivo.id}}">{{motivo.attributes.nome}}</md-checkbox>
+                      </div>
                     </div>
                     <div flex="30">
-                      <md-checkbox 
-                        *ngFor="let motivo of listMortandade.slice(5,10)" [name]="motivo.objectId" [id]="motivo.objectId" formControlName="{{motivo.id}}" style="margin-left: 15px">{{motivo.attributes.nome}}</md-checkbox>
+                      <div layout="column">
+                        <md-checkbox *ngFor="let motivo of listMortandade.slice(5,10)" [name]="motivo.objectId" [id]="motivo.objectId" formControlName="{{motivo.id}}"
+                          style="margin-left: 15px">{{motivo.attributes.nome}}</md-checkbox>
+                      </div>
                     </div>
                     <div flex="30">
-                      <md-checkbox 
-                        *ngFor="let motivo of listMortandade.slice(10,listCulturas.length + 1)" formControlName="{{motivo.id}}" [name]="motivo.objectId" [id]="motivo.objectId"
-                        style="margin-left: 15px">{{motivo.attributes.nome}}</md-checkbox>
+                      <div layout="column">
+                        <md-checkbox *ngFor="let motivo of listMortandade.slice(10,listCulturas.length + 1)" formControlName="{{motivo.id}}" [name]="motivo.objectId"
+                          [id]="motivo.objectId" style="margin-left: 15px">{{motivo.attributes.nome}}</md-checkbox>
+                      </div>
                     </div>
                   </div>
                 </md-radio-group>
@@ -170,7 +189,7 @@
                 <h4>Histórico teve comprovação por análise?</h4>
               </div>
               <div layout="row" style="flex-wrap: wrap;margin-top: 16px">
-                <md-radio-group  class="example-radio-group" style="margin-left: 15px;" formControlName="historicoComprovadoPorAnalise">
+                <md-radio-group class="example-radio-group" style="margin-left: 15px;" formControlName="historicoComprovadoPorAnalise">
                   <md-radio-button name="comprovacao_analise" [value]="true">Sim </md-radio-button>
                   <md-radio-button name="comprovacao_analise" [value]="false">Não </md-radio-button>
                 </md-radio-group>
@@ -179,7 +198,7 @@
             <div layout="column">
               <div flex="">
                 <md-input-container style="width: 40%">
-                  <textarea mdInput  placeholder="Observação" formControlName="observacao"></textarea>
+                  <textarea mdInput placeholder="Observação" formControlName="observacao"></textarea>
                 </md-input-container>
               </div>
             </div>
@@ -195,10 +214,10 @@
     </div>
   </md-card-content>
   <md-card-actions layout="row" layout-align="start center">
-    <button md-raised-button color="primary" [disabled]="apiario" (click)="validar()">Validar</button>    
-    <button md-raised-button color="accent" [disabled]="apiario" (click)="salvar()">Salvar</button>
-    <button md-raised-button color="warn" [disabled]="apiario" (click)="excluir()">Excluir</button>
-    <button md-raised-button color="acent"  [routerLink]="['/lista/apiarios']">Voltar</button>
+    <button md-raised-button color="primary" [disabled]="apiario?.isValido()" (click)="validar()">Validar</button>
+    <button md-raised-button color="accent" [disabled]="apiario?.isValido()" (click)="salvar()">Salvar</button>
+    <button md-raised-button color="warn" [disabled]="apiario?.isValido()" (click)="excluir()">Excluir</button>
+    <button md-raised-button color="acent" [routerLink]="['/home/lista/apiarios']">Voltar</button>
   </md-card-actions>
 </md-card>
 <app-mapa [locations]="locations" style="margin-top: 10px;"></app-mapa>
