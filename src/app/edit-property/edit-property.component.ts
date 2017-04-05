@@ -5,7 +5,7 @@ import { Municipio } from './../models/municipio';
 import { Propriedade } from './../models/propriedade';
 import { ParseService } from './../service/parse.service';
 import { ActivatedRoute, Router } from '@angular/router';
-import { Component, OnInit, ViewContainerRef } from '@angular/core';
+import { Component, OnInit, ViewContainerRef, NgZone } from '@angular/core';
 import * as parse from 'parse';
 
 
@@ -17,7 +17,7 @@ import * as parse from 'parse';
 })
 export class EditPropertyComponent implements OnInit {
 
-  constructor(private router: ActivatedRoute, private parseService: ParseService, private fb: FormBuilder, private dialogService: DialogService, private route:Router, private view:ViewContainerRef) { }
+  constructor(private zone: NgZone, private router: ActivatedRoute, private parseService: ParseService, private fb: FormBuilder, private dialogService: DialogService, private route: Router, private view: ViewContainerRef) { }
   propriedade: Propriedade;
   listMunicipios: Municipio[] = [];
   ListfilteredMunicipio: Observable<Municipio[]>;
@@ -40,7 +40,7 @@ export class EditPropertyComponent implements OnInit {
       }
 
       parse.Promise.when(promises).then((resul) => {
-        
+
         this.listMunicipios = resul[0]
         if (resul.length == 2) {
           this.propriedade = resul[1][0];
@@ -83,12 +83,18 @@ export class EditPropertyComponent implements OnInit {
     let pro = this.createPropriedade();
 
     this.parseService.save(pro).then(result => {
-      if (result && !this.propriedade)
-        this.dialogService.confirm('Sucesso', 'Propriedade criada com sucesso!', 'SUCCESS', this.view);
-      else
-        this.dialogService.confirm('Sucesso', 'Propriedade atualizada com sucesso!', 'SUCCESS', this.view);
-      
-      this.route.navigate(['home/lista/propriedade']);
+
+      this.zone.run(() => {
+        if (result && !this.propriedade)
+          this.dialogService.confirm('Sucesso', 'Propriedade criada com sucesso!', 'SUCCESS', this.view).subscribe(result => {
+            this.route.navigate(['home/lista/propriedade']);
+          });
+        else
+          this.dialogService.confirm('Sucesso', 'Propriedade atualizada com sucesso!', 'SUCCESS', this.view).subscribe(result => {
+            this.route.navigate(['home/lista/propriedade']);
+          });
+      });
+
     });
 
   }

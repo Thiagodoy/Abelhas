@@ -76,7 +76,7 @@
   </div>
   <md-card-content>
     <div layout="row">
-      <app-table style="width: 100%" [data]="listApiario" [columns]="columns" [selectable]="false" [showPagination]="'true'" (itemSelected2)="acoes($event)"></app-table>
+      <app-table #table style="width: 100%" [data]="listApiario" [columns]="columns" [selectable]="false" [showPagination]="'true'" (itemSelected2)="acoes($event)"></app-table>
     </div>
   </md-card-content>
 </md-card>

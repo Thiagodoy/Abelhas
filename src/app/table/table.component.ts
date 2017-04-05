@@ -20,7 +20,7 @@ export class TableComponent implements OnInit, AfterViewInit, OnChanges {
   @Input() sortBy: string;  
   @Input() showPagination: boolean;
   @Input() showSelectionJquery: boolean = true;
-  @ViewChild('table') table: TdDataTableComponent
+  @ViewChild('table') table: TdDataTableComponent;
 
   @Output('itemSelected2') itemSelected2 = new EventEmitter<Object>();
   @Output('itemSelected3') itemSelected3 = new EventEmitter<Object>();
@@ -39,8 +39,6 @@ export class TableComponent implements OnInit, AfterViewInit, OnChanges {
 
   constructor(
     private _dataTableService: TdDataTableService,
-
-
     private elementRef: ElementRef,
     private parseService: ParseService) {
   }
@@ -64,6 +62,7 @@ export class TableComponent implements OnInit, AfterViewInit, OnChanges {
     tem = this._dataTableService.pageData(tem, this.paginaInicial, this.paginaAtual * this.paginaTotal);
     this.filteredData = tem;
     this.totalRecords = this.data.length;
+    
     if (this.table)
       this.table.refresh();
   }
@@ -74,8 +73,11 @@ export class TableComponent implements OnInit, AfterViewInit, OnChanges {
     }
     let tem: any[] = this.data;
     tem = this._dataTableService.pageData(tem, this.paginaInicial, this.paginaAtual * this.paginaTotal);
-    this.filteredData = tem;
-    
+    this.filteredData = tem;    
+  }
+
+  refresh(){    
+    this.table.refresh();
   }
 
   sortTable(event) { }

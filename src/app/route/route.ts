@@ -36,7 +36,6 @@ import { EditMultipleResolver } from '../guards/edit-multiple.resolver';
 
 export const route: Routes = [
 
-
     { path: '', component: LoginComponent },
     {
         path: 'home', canActivate: [CanActivateUser], children: [

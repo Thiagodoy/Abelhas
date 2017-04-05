@@ -8,6 +8,7 @@ import { Mortandade } from './mortandade';
 import { Apicultor } from './apicultor';
 import { EspecieAbelha } from './especie-abelha';
 import { Location } from './location';
+import * as parse from 'parse';
 
 export class Apiario extends Object {
     constructor() {
@@ -165,7 +166,7 @@ export class Apiario extends Object {
     setValido(param: boolean) {
         this.set('valido', param);
     }
-    setValidadoPor(user:UserWeb){
+    setValidadoPor(user:parse.User){
         this.set('validadoPor',user);
     }
     getStatus():string{
@@ -173,5 +174,8 @@ export class Apiario extends Object {
     }
     setDataValidacao(paran:Date){
         this.set('dataValidacao',paran);
+    }
+    setExcluded(paran:boolean){
+        this.set('excluded',paran);
     }
 }

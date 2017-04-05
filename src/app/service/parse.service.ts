@@ -73,16 +73,17 @@ export class ParseService {
    * Recupera um objeto de acordo com o id e classe
    * @param Classe extende Parse.Object 
    */
-  get<T extends parse.Object>(id: string, paramClass: { new (): T }): parse.Promise<any> {
-    this.instance.toogleLoading(true);
-    let query = new this.core.Query(new paramClass());
+  get<T extends parse.Object>(id: string, paramClass: { new (): T }): parse.Promise<T> {
 
+    this.toogleLoading(true);
+    let i = this;
+    let query = new this.core.Query(new paramClass());
     return query.get(id).done((result) => {
-      this.instance.toogleLoading(false);
+      i.toogleLoading(false);
       return result;
     }).fail((erro) => {
-      this.instance.toogleLoading(false);
-      this.instance.showErrorPopUp(erro);
+      i.toogleLoading(false);
+      i.showErrorPopUp(erro);
     });
   }
 
@@ -197,6 +198,28 @@ export class ParseService {
     });
   }
 
+  become(session: string): parse.Promise<any> {
+    this.toogleLoading(true);
+    let i = this;
+    return parse.User.become(session).fail(erro => {
+      i.toogleLoading(false)
+      i.showErrorPopUp(erro);
+    }).done(done => {
+      i.toogleLoading(false)
+    });
+  }
+
+  runCloud(script: string, paran: any) {
+    this.toogleLoading(true);
+    let i = this;
+    return parse.Cloud.run(script, paran).fail(erro => {
+      i.showErrorPopUp(erro);
+      i.toogleLoading(false);
+    }).done(done => {
+      i.toogleLoading(false);
+    });
+  }
+
   /**
      * Salva o objeto no banco
      * @param Objeto extend Parse.Object
@@ -232,11 +255,6 @@ export class ParseService {
       instance.showErrorPopUp(erro);
     });
   }
-
-  getUsuarioLogado(): UserWeb {
-    return this.usuarioLogado;
-  }
-
 
   public toogleLoading(param) {
     this.zone.run(() => {

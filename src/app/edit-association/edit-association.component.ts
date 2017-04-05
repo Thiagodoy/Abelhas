@@ -6,10 +6,11 @@ import { Estado } from './../models/estado';
 import { FormGroup, FormBuilder } from '@angular/forms';
 import { ParseService } from './../service/parse.service';
 import { Associacao } from './../models/associacao';
-import { ActivatedRoute } from '@angular/router';
-import { Component, OnInit, OnDestroy } from '@angular/core';
+import { ActivatedRoute, Router } from '@angular/router';
+import { Component, OnInit, OnDestroy, ViewContainerRef, NgZone } from '@angular/core';
 import * as parse from 'parse';
 import ValidaCustom from '../edit-user/validator/validator-custom';
+import constantes from '../constantes'
 
 @Component({
   selector: 'app-edit-association',
@@ -20,6 +21,7 @@ export class EditAssociationComponent implements OnInit, OnDestroy {
 
 
   associacao: Associacao;
+  user: UserWeb;
   formAssociacao: FormGroup;
   listEstados: Estado[] = [];
   listMunicipio: Municipio[] = [];
@@ -29,48 +31,48 @@ export class EditAssociationComponent implements OnInit, OnDestroy {
   formError: any = {};
   cnpj = [/\d/, /\d/, '.', /\d/, /\d/, /\d/, '.', /\d/, /\d/, /\d/, '/', /\d/, /\d/, /\d/, /\d/, '-', /\d/, /\d/,];;
   maskTelefone = ['(', /\d/, /\d/, ')', ' ', /\d/, /\d/, /\d/, /\d/, '-', /\d/, /\d/, /\d/, /\d/];
-  cep = [ /\d/, /\d/,'.', /\d/, /\d/,/\d/, '-', /\d/, /\d/, /\d/];
-  constructor(private routerA: ActivatedRoute, private parseService: ParseService, private fb: FormBuilder, private dialogService: DialogService) { }
+  cep = [/\d/, /\d/, '.', /\d/, /\d/, /\d/, '-', /\d/, /\d/, /\d/];
+  constructor(private route: Router, private zone: NgZone, private view: ViewContainerRef, private routerA: ActivatedRoute, private parseService: ParseService, private fb: FormBuilder, private dialogService: DialogService) { }
 
   ngOnInit() {
-    this.createForm();
 
+    this.createForm(null);
     this.routerA.queryParams.subscribe(res => {
 
-      if (res.associacao) {
-        let query = this.parseService.createQuery(Associacao);
-        query.equalTo('objectId', res.associacao);
+      let promiseEstado = this.parseService.findAll(Estado);
+      let promiseMunicipio = this.parseService.findAll(Municipio);
 
+      parse.Promise.when([promiseEstado, promiseMunicipio]).then(response => {
+        this.listEstados = response[0];
+        this.listMunicipio = response[1];
+        if (res.associacao) {
+          let query = this.parseService.createQuery(Associacao);
+          query.equalTo('objectId', res.associacao);
 
-        this.parseService.executeQuery(query).then((response: Associacao[]) => {
-          this.associacao = response[0];
-          this.populateForm();
-        });
-      }
+          let queryUser = this.parseService.createQuery(UserWeb);
+          queryUser.matchesQuery('associacao', query);
+          queryUser.include('associacao');
+          this.parseService.executeQuery(queryUser).then((result: UserWeb[]) => {
+            this.zone.run(() => {
 
-    });
+              if (!result || result.length == 0) {
+                this.dialogService.confirm('Erro', 'Associacao sem usuario cadastrado!', 'ERRO', this.view);
+                return false;
+              }
 
-    let promiseEstado = this.parseService.findAll(Estado);
-    let promiseMunicipio = this.parseService.findAll(Municipio);
+              this.user = result[0];
+              this.associacao = this.user.attributes.associacao;
+              this.createForm(this.user ? constantes.CHANGE : constantes.CREATE);
+              if (this.user && this.associacao)
+                this.populateForm();
 
-    parse.Promise.when([promiseEstado, promiseMunicipio]).then(response => {
-      this.listEstados = response[0];
-      this.listMunicipio = response[1];
-    });
+            });
 
-    this.listEstadosFiltered = this.formAssociacao.get('estado').valueChanges
-      .startWith(null)
-      .map<string, string>(nome => nome ? nome : '')
-      .map(nome => nome ? this.filterEstado(nome) : this.listEstados.slice());
-
-    this.listMunicipioFiltered = this.formAssociacao.get('municipio').valueChanges
-      .startWith(null)
-      .map<string, string>(nome => nome ? nome : '')
-      .map(nome => nome ? this.filterMunicipio(nome) : this.listMunicipio.slice());
-
-    // Detecta mudancas no Formulario
-    this.subscriptionForm = this.formAssociacao.valueChanges.subscribe(values => {
-      this.changeForm(values);
+          });
+        } else {
+          this.createForm(constantes.CREATE);
+        }
+      });
     });
 
   }
@@ -104,19 +106,14 @@ export class EditAssociationComponent implements OnInit, OnDestroy {
     this.formAssociacao.get('contatoPresidenteNome').setValue(associacao.getContatoPresidenteNome());
     this.formAssociacao.get('endereco').setValue(associacao.getEndereco());
     this.formAssociacao.get('telefone').setValue(associacao.getTelefone());
-    this.formAssociacao.get('municipio').setValue(this.listMunicipio.filter(municipio=>{return municipio.id == associacao.getMunicipio().id})[0]);
-    this.formAssociacao.get('estado').setValue(this.listEstados.filter(estado=>{return estado.id == associacao.getMunicipio().getEstado().id})[0]);
+    this.formAssociacao.get('municipio').setValue(this.listMunicipio.filter(municipio => { return municipio.id == associacao.getMunicipio().id })[0]);
+    this.formAssociacao.get('estado').setValue(this.listEstados.filter(estado => { return estado.id == associacao.getMunicipio().getEstado().id })[0]);
     this.formAssociacao.get('cep').setValue(associacao.getCep());
     this.formAssociacao.get('registro').setValue(associacao.getRegistro());
     this.formAssociacao.get('numeroSif').setValue(associacao.getNumeroSif());
     this.formAssociacao.get('contatoPresidenteTelefone').setValue(associacao.getContatoPresidenteTelefone());
     this.formAssociacao.get('email').setValue(associacao.getEmail());
-
-    // if (this.user)
-    //   this.formAssociacao.get('cpf').reset({ value: this.user.getUsername(), disabled: true });
-    // else
-    //   this.formAssociacao.get('cpf').setValue(this.user.getUsername());
-
+    this.formAssociacao.get('cpf').setValue(this.user.getUsername());
 
   }
   populateAssociacao(): Associacao {
@@ -137,6 +134,8 @@ export class EditAssociationComponent implements OnInit, OnDestroy {
     associacao.setContatoPresidenteTelefone(this.formAssociacao.get('contatoPresidenteTelefone').value);
     associacao.setEmail(this.formAssociacao.get('email').value);
 
+    associacao.setTipoRegistro(1);
+
     return associacao;
 
   }
@@ -146,33 +145,76 @@ export class EditAssociationComponent implements OnInit, OnDestroy {
     if (this.formAssociacao.valid) {
       let associacao = this.populateAssociacao();
       let user = undefined;
-      let password: string = this.formAssociacao.get('cpf').value;
+      let cnpj: string = this.formAssociacao.get('cpf').value;
 
       if (!this.associacao) {
-        password = password.replace(/[^0-9]/gi, '');
+        cnpj = cnpj.replace(/[^0-9]/gi, '');
         user = new UserWeb();
-        user.setPassword(password);
-        user.setUsername(password);
+        user.setUsername(cnpj);
+        user.setPassword(this.formAssociacao.get('senha').value);
 
         this.parseService.save(associacao).then(result => {
           if (!result)
             return false;
 
           user.set('associacao', associacao);
+          let session = parse.User.current().attributes.sessionToken;
           this.parseService.signUp(user).then(result => {
-            if (result)
-              this.dialogService.confirm('Sucesso', 'Associacao criada com sucesso!', 'SUCCESS', null);
+            if (result) {
+              this.dialogService.confirm('Sucesso', 'Associacao criada com sucesso!', 'SUCCESS', this.view).subscribe(() => {
+                this.route.navigate(['home/associações']);
+              });
+              // Restaura o usuario que estava logado
+              this.parseService.become(session)
+            }
           });
         });
       } else {
 
 
-        this.parseService.save(associacao).then(result => {
+        let promise = []
+        if (this.userHasUpdate()) {
+          let request = {
+            objectId: this.user.id,
+            password: this.formAssociacao.get('senha').value,
+            username: this.user.getUsername()
+          }
+          promise.push(this.parseService.runCloud('updateUserPass', request));
+        }
+
+        promise.push(this.parseService.save(associacao));
+
+        parse.Promise.when(promise).then(result => {
           if (result)
-            this.dialogService.confirm('Sucesso', 'Associacao atualizada  com sucesso!', 'SUCCESS', null);
+            this.dialogService.confirm('Sucesso', 'Associacao atualizada  com sucesso!', 'SUCCESS', this.view).subscribe(() => {
+              this.route.navigate(['home/associações']);
+            });;
         });
       }
     }
+  }
+
+  userHasUpdate(): boolean {
+
+    if (!this.user)
+      return null;
+
+    let cnpj: string = this.formAssociacao.get('cpf').value;
+    cnpj = cnpj.replace(/[^0-9]/gi, '');
+    let cnpjOld: string = this.user.getUsername();
+    let change: boolean = false;
+    let password: string = this.formAssociacao.get('senha').value;
+
+    if (!(cnpjOld.indexOf(cnpj) > -1)) {
+      this.user.setUsername(cnpj);
+      change = true;
+    }
+
+    if (password && password.length > 0) {
+      change = true;
+    }
+
+    return change;
   }
 
   changeForm(data: any) {
@@ -185,9 +227,12 @@ export class EditAssociationComponent implements OnInit, OnDestroy {
       if (control && !control.valid) {
         this.formError[field] = control.errors;
       }
-    }
   }
-  createForm() {
+    
+  }
+  createForm(type: string) {
+
+
     this.formAssociacao = this.fb.group({
       nome: [null, ValidaCustom.validateCustomNome()],
       sigla: [null],
@@ -203,13 +248,26 @@ export class EditAssociationComponent implements OnInit, OnDestroy {
       numeroSif: [],
       contatoPresidenteTelefone: [null,],
       email: [],
+      confirmar_senha: ['', ValidaCustom.validateCustomSenhaConf(type)],
+      senha: ['', ValidaCustom.validateCustomSenha(type)],
       cpf: [null, ValidaCustom.validateCustomCpfOrCnpj()],
       tipo: ['ASSOCIACAO']
     });
 
+    this.listEstadosFiltered = this.formAssociacao.get('estado').valueChanges
+      .startWith(null)
+      .map<string, string>(nome => nome ? nome : '')
+      .map(nome => nome ? this.filterEstado(nome) : this.listEstados.slice());
+
+    this.listMunicipioFiltered = this.formAssociacao.get('municipio').valueChanges
+      .startWith(null)
+      .map<string, string>(nome => nome ? nome : '')
+      .map(nome => nome ? this.filterMunicipio(nome) : this.listMunicipio.slice());
+
+    // Detecta mudancas no Formulario
+    this.subscriptionForm = this.formAssociacao.valueChanges.subscribe(values => {
+      this.changeForm(values);
+    });
+
   }
-
-
-
-
 }

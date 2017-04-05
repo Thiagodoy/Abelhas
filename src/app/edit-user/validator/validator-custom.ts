@@ -166,9 +166,9 @@ function validateCustomqtdCaixasMigratorias() {
 
         let p = control.parent.get('tipo');
         let value = control.value;
-       
+
         if (p.value === constantes.APICULTOR)
-            if (isNaN(value) || value == '' || value == null || value == 0){                
+            if (isNaN(value) || value == '' || value == null || value == 0) {
                 return { 'qtdCaixasMigratorias': { require: 'Insira um valor válido' } };
             }
 
@@ -190,7 +190,17 @@ function validateCustomSenha(param: string) {
 
         if (param === constantes.CREATE) {
             if (!controlSenha.value || (controlSenha.value && controlSenha.value.length == 0))
-                return { 'senha': { require: 'Insira uma senha valida' } };           
+                return { 'senha': { require: 'Insira uma senha valida' } };
+
+        }
+
+        if (param === constantes.CHANGE) {
+            if (controlSenha.value && controlSenha.value.length == 0 && controlSenhaConf.value.length > 0)
+                return { 'senha': { require: 'Insira uma senha valida' } };
+
+            if (controlSenha.value && controlSenha.value.length > 0 && controlSenhaConf.value.length == 0) {
+                controlSenhaConf.setErrors({confirmar_senha:{no_match:'*Prencher este campo!'}});
+            }
         }
 
         return null;
@@ -213,6 +223,11 @@ function validateCustomSenhaConf(param: string) {
 
             if (controlSenhaConf.value != controlSenha.value)
                 return { 'confirmar_senha': { no_match: '*Senha não confere!' } };
+        }
+
+        if (param === constantes.CHANGE) {
+            if (controlSenhaConf.value != controlSenha.value)
+                return { 'confirmar_senha': { no_match: '*Senha não confere!' } };                
         }
 
         return null;

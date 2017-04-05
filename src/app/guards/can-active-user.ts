@@ -10,12 +10,9 @@ export class CanActivateUser implements CanActivate {
     canActivate(
         route: ActivatedRouteSnapshot,
         state: RouterStateSnapshot
-    ): Observable<boolean> | Promise<boolean> | boolean {
+    ): Observable<boolean> | Promise<boolean> | boolean {      
 
-        console.log('CANACTIVE');
-        console.log(this.parseService.getUsuarioLogado());
-
-        if (this.parseService.getUsuarioLogado() || this.parseService.core.User.current())                
+        if (this.parseService.core.User.current())                
             return true;
         else{
             this.router.navigate(['']);

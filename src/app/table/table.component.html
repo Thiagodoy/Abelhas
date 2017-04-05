@@ -1,12 +1,12 @@
 <div layout="row" layout-align="start center" class="pad-left-sm pad-right-sm">
- <td-search-box *ngIf="filteredData.length > 0" #searchBox backIcon="arrow_back" class="push-right-sm" placeholder="Pesquisar aqui" (searchDebounce)="search($event)" flex>
+ <td-search-box *ngIf="filteredData.length > 0 || searchTerm" #searchBox backIcon="arrow_back" class="push-right-sm" placeholder="Pesquisar aqui" (searchDebounce)="search($event)" flex>
   </td-search-box>
 </div>
 
 <md-divider *ngIf="filteredData.length > 0" ></md-divider>
 
 <td-data-table [selectable]="selectable" [data]="filteredData" [columns]="columns" [multiple]="multiple" [sortable]="sortable"
-  [sortBy]="sortBy" [sortOrder]="sortOrder" (sortChange)="sortTable($event)" (rowSelect)="itemSelected($event)" (selectAll)="itemAllSelected($event)" id="table">
+  [sortBy]="sortBy" [sortOrder]="sortOrder" (sortChange)="sortTable($event)" (rowSelect)="itemSelected($event)" (selectAll)="itemAllSelected($event)" #table>
   <!--Template Lista Apiario-->
   <template tdDataTableTemplate="valido" let-value="value" let-row="row" let-column="column">
     <div layout="row">
@@ -88,9 +88,9 @@
   </template>
   <!--Template de gestão das propriedades-->
 </td-data-table>
-<td-paging-bar *ngIf="showPagination && data.length>0" #pagingBar [pageSizes]="[5, 10, 15, 20]" [total]="totalRecords" (change)="page($event)">
+<td-paging-bar *ngIf="showPagination && data.length>0" #pagingBar [pageSizes]="[5, 10, 15, 20]" [total]="totalRecords" [pageSize]="paginaTotal" (change)="page($event)">
   <span td-paging-bar-label hide-xs>Linhas por pagina:</span>
-  {{pagingBar.range}} <span hide-xs>de {{pagingBar.total}}</span>
+  {{paginaTotal}} <span hide-xs>de {{filteredTotal}}</span>
 </td-paging-bar>
 <!--
 <td-paging-bar2 *ngIf="showPagination && data.length>0" [pageSizes]="[5, 10, 15, 20]" [total]="totalRecords" (change)="page($event)"></td-paging-bar2>-->

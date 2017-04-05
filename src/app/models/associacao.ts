@@ -92,5 +92,7 @@ export class Associacao extends Object {
         this.set('registro',param);
     }
 
-    
+    setExcluded(param:boolean){
+        this.set('excluded',param);
+    }
 }

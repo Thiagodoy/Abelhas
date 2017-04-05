@@ -1,17 +1,16 @@
+import { TableComponent } from './../table/table.component';
+import { Apiario } from './../models/apiario';
 import { FormControl } from '@angular/forms';
 import { Observable } from 'rxjs/Rx';
 import { Propriedade } from './../models/propriedade';
 import { Apicultor } from './../models/apicultor';
-import { Component, OnInit, ViewChild, ContentChild, AfterContentInit, NgZone, ViewContainerRef, AfterContentChecked, AfterViewInit,AfterViewChecked } from '@angular/core';
+import { Component, OnInit, ViewChild, ContentChild, AfterContentInit, NgZone, ViewContainerRef, AfterContentChecked, AfterViewInit, AfterViewChecked } from '@angular/core';
 import { Router } from '@angular/router'
 import { ITdDataTableColumn } from '@covalent/core';
 import { ParseService } from '../service/parse.service';
 import { MomentService } from '../service/moment.service';
-import { Apiario } from '../models/apiario';
-import { TableComponent } from '../table/table.component';
 import { DialogService } from '../service/dialog.service';
 import * as parse from 'parse';
-
 
 @Component({
   selector: 'app-list-apiary',
@@ -34,6 +33,8 @@ export class ListApiaryComponent implements OnInit {
   filteredOptionsApicultor: Observable<Apicultor[]>;
   filteredOptionsPropriedade: Observable<Propriedade[]>;
 
+  @ViewChild('table')table:TableComponent;
+
 
   columns: ITdDataTableColumn[] = [
     { name: 'valido', label: 'Validado' },
@@ -41,20 +42,21 @@ export class ListApiaryComponent implements OnInit {
     { name: 'apicultor', label: 'Apicultor' },
     { name: 'propriedadea', label: 'Propriedade' },
     { name: 'status', label: 'Status' },
-    { name: 'data', label: 'Data'},
+    { name: 'data', label: 'Data' },
     { name: 'acoes', label: 'Ações' }];
 
   dateFormat: string = 'DD-MM-YYYY';
   font: string = 'Roboto,"Helvetica Neue",sans-serif';
 
   constructor(
+    private zone: NgZone,
     private serviceParse: ParseService,
     private momentService: MomentService,
     private route: Router,
     private dialogService: DialogService,
     private viewContainerRef: ViewContainerRef,
   ) { }
- 
+
   ngOnInit() {
     let promiseApicultor = this.serviceParse.findAll(Apicultor);
     let promisePropriedade = this.serviceParse.findAll(Propriedade);
@@ -83,7 +85,7 @@ export class ListApiaryComponent implements OnInit {
     this.queryApiario.include('apicultor');
     this.queryApiario.include('especieAbelha');
     this.queryApiario.include('propriedade');
-   // this.queryApiario.equalTo('ativo', true);
+    this.queryApiario.notEqualTo('excluded', true);
 
     if (this.controlApicultor.value != '' && this.controlApicultor.value != null) {
       let queryApicultor = this.serviceParse.createQuery(Apicultor);
@@ -122,7 +124,7 @@ export class ListApiaryComponent implements OnInit {
           apicultor: apiario.getApicultor().getNome(),
           propriedadea: apiario.getPropriedade().getNome(),
           status: apiario.getStatus(),
-          data: this.momentService.core( apiario.createdAt).format('DD/MM/YYYY HH:mm')
+          data: this.momentService.core(apiario.createdAt).format('DD/MM/YYYY HH:mm')
         }
       });
       this.atualiza(list);
@@ -142,48 +144,6 @@ export class ListApiaryComponent implements OnInit {
     }
   }
 
-  excluir(paran: any) {
-
-    let apiario = new Apiario()
-    apiario.id = paran.id;
-    apiario.setAtivo(false);
-    this.serviceParse.save(apiario).then(result => {
-      if (result) {
-        this.dialogService.confirm('Sucesso', 'Exclusão realizada com sucesso', 'SUCCESS', this.viewContainerRef);
-        this.listApiario = this.listApiario.filter((value) => {
-          return result.id != value.id;
-        });
-      }
-    });
-  }
-
-  validar(paran: any) {
-
-    let apiario = new Apiario()
-    apiario.id = paran.id;
-    apiario.setValido(true);
-    apiario.setValidadoPor(this.serviceParse.getUsuarioLogado());
-    apiario.setDataValidacao(new Date());
-    this.serviceParse.save(apiario).then(result => {
-      if (result) {
-        this.dialogService.confirm('Sucesso', 'Apiario validado com sucesso!', 'SUCCESS', this.viewContainerRef);
-      }
-
-      if (this.controlStatus.value == 'nao_validado') {
-        this.listApiario = this.listApiario.filter((value) => {
-          return result.id != value.id;
-        });
-      } else {
-        let temp = this.listApiario.find(value => { return value.id == result.id });
-        let index = this.listApiario.indexOf(temp);
-        this.listApiario.slice(index, 1);
-        temp.valido = true;
-        this.listApiario.push(temp);
-      }
-
-    })
-  }
-
   acoes(param) {
     let menssagem = undefined;
     switch (param.acao) {
@@ -194,7 +154,19 @@ export class ListApiaryComponent implements OnInit {
         menssagem = '<p> Deseja prosseguir com a exclusão do dado?</p>';
         this.dialogService.confirm('Confirmar exclusão', menssagem, null, this.viewContainerRef).subscribe((value) => {
           if (value) {
-            this.excluir(param.element);
+            this.serviceParse.get(param.element.id, Apiario).then(result => {
+              result.setExcluded(true);
+              this.serviceParse.save(result).then(result1 => {
+                if (result1)
+                  this.zone.run(() => {
+                    this.dialogService.confirm('Sucesso', 'Exclusão realizada com sucesso', 'SUCCESS', this.viewContainerRef).subscribe(() => {
+                      this.listApiario = this.listApiario.filter((value) => {
+                        return result.id != value.id;
+                      });
+                    });
+                  });
+              });
+            });
           }
         });
         break;
@@ -205,7 +177,29 @@ export class ListApiaryComponent implements OnInit {
         menssagem = '<p>Tem certeza que deseja validar este dado?</p>' + '<p>Este procedimento não poderá ser revertido!</p>';
         this.dialogService.confirm('Confirmar validação', menssagem, null, this.viewContainerRef).subscribe((value) => {
           if (value) {
-            this.validar(param.element);
+            this.serviceParse.get(param.element.id, Apiario).then(result => {
+              result.setValidadoPor(parse.User.current());
+              result.setValido(true);
+              result.setDataValidacao(new Date());
+              this.serviceParse.save(result).then(result1 => {
+                if (result1)
+                  this.zone.run(() => {
+                    this.dialogService.confirm('Sucesso', 'Apiario validado com sucesso!', 'SUCCESS', this.viewContainerRef).subscribe(() => {
+                      if (this.controlStatus.value == 'nao_validado') {
+                        this.listApiario = this.listApiario.filter((value) => { return result1.id != value.id; });
+                      } else {
+                        debugger;
+                        let temp = this.listApiario.find(value => { return value.id == result1.id });
+                        let index = this.listApiario.indexOf(temp);
+                        this.listApiario.slice(index, 1);
+                        temp.valido = true;
+                        this.listApiario.push(temp);
+                        this.table.refresh();
+                      }
+                    });
+                  });
+              });
+            });
           }
         });
         break;

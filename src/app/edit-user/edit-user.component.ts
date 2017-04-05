@@ -191,6 +191,8 @@ export class EditUserComponent implements OnInit, OnDestroy {
         this.formUser.get(name).setValue(user.attributes[name]);
     });
 
+    console.log( Object.keys(user.attributes))
+
     if (user.attributes.tipo == 'GESTOR')
       this.formUser.get('nome').setValue(user.attributes.nomeGestor);
 
@@ -238,11 +240,12 @@ export class EditUserComponent implements OnInit, OnDestroy {
 
         let userNew = this.createUser();
         userNew.set('associacao', result);
-
+        let session = parse.User.current().getSessionToken();
         this.parseService.signUp(userNew).then(result => {
           this.dialog.confirm('Sucesso', 'Associação Criada com sucesso!', 'SUCCESS', this.view).subscribe(resul => {
-            this.routeN.navigate(['/lista/usuarios']);
+            this.routeN.navigate(['home/lista/usuarios']);
           });
+          this.parseService.become(session);
         });
       });
 
@@ -251,13 +254,21 @@ export class EditUserComponent implements OnInit, OnDestroy {
       let promises = [];
       promises.push(this.parseService.save(associacao));
 
-      if (this.hasUpdateUser())
-        promises.push(this.parseService.save(this.userCurrent));
+      if (this.hasUpdateUser()) {
+        let request = {
+          objectId: this.user.id,
+          password: this.formUser.get('senha').value,
+          username: this.user.getUsername()
+        }
+
+        promises.push(this.parseService.runCloud('updateUserPass', request));
+
+      }
 
       parse.Promise.when(promises).then(result => {
         if (result)
           this.dialog.confirm('Sucesso', 'Associação atualizada com sucesso!', 'SUCCESS', this.view).subscribe(resul => {
-            this.routeN.navigate(['/lista/usuarios']);
+            this.routeN.navigate(['home/lista/usuarios']);
           });
       });
     }
@@ -290,13 +301,14 @@ export class EditUserComponent implements OnInit, OnDestroy {
 
         let newUser = this.createUser();
         newUser.set('apicultor', result);
-
+        let session = parse.User.current().getSessionToken();
         this.parseService.signUp(newUser).then(result => {
 
           if (result) {
             this.dialog.confirm('Sucesso', 'Apicultor criado com sucesso!', 'SUCCESS', this.view).subscribe(resul => {
-              this.routeN.navigate(['/lista/usuarios']);
+              this.routeN.navigate(['home/lista/usuarios']);
             });
+            this.parseService.become(session);
           }
         });
       });
@@ -305,13 +317,21 @@ export class EditUserComponent implements OnInit, OnDestroy {
       let promises = [];
       promises.push(this.parseService.save(apicultor));
 
-      if (this.hasUpdateUser())
-        promises.push(this.parseService.save(this.userCurrent));
+      if (this.hasUpdateUser()) {
+        let request = {
+          objectId: this.user.id,
+          password: this.formUser.get('senha').value,
+          username: this.user.getUsername()
+        }
+
+        promises.push(this.parseService.runCloud('updateUserPass', request));
+
+      }
 
       parse.Promise.when(promises).then(result => {
         if (result)
           this.dialog.confirm('Sucesso', 'Apicultor atualizado com sucesso!', 'SUCCESS', this.view).subscribe(resul => {
-            this.routeN.navigate(['/lista/usuarios']);
+            this.routeN.navigate(['home/lista/usuarios']);
           });
       });
     }
@@ -329,21 +349,29 @@ export class EditUserComponent implements OnInit, OnDestroy {
       userWeb.set('nomeGestor', user['nome']);
       userWeb.set('tipo', user['tipo']);
       userWeb.set('email', user['email']);
-
+       let session = parse.User.current().getSessionToken();
       this.parseService.signUp(userWeb).then(resul => {
         this.dialog.confirm('Sucesso', 'Gestor criado com sucesso!', 'SUCCESS', this.view).subscribe(resul => {
-          this.routeN.navigate(['/lista/usuarios']);
+          this.routeN.navigate(['home/lista/usuarios']);
         });
+        this.parseService.become(session);
       });
     } else {
-      this.hasUpdateUser();
-      this.parseService.save(this.userCurrent).then(result => {
 
-        if (result)
-          this.dialog.confirm('Sucesso', 'Gestor atualizada com sucesso!', 'SUCCESS', this.view).subscribe(resul => {
-            this.routeN.navigate(['/lista/usuarios']);
-          });
-      });
+      if (this.hasUpdateUser()) {
+        let request = {
+          objectId: this.user.id,
+          password: this.formUser.get('senha').value,
+          username: this.user.getUsername()
+        }
+        this.parseService.runCloud('updateUserPass', request).then(result => {
+
+          if (result){}
+            this.dialog.confirm('Sucesso', 'Gestor atualizada com sucesso!', 'SUCCESS', this.view).subscribe(resul => {
+              this.routeN.navigate(['home/lista/usuarios']);
+            });
+        });
+      }      
     }
   }
 

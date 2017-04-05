@@ -10,7 +10,7 @@
               <input mdInput placeholder="Nome" formControlName="nome">
             </md-input-container>            
           </div>
-          <div layout="row" *ngIf="!associacao" >
+          <div layout="row">
             <md-icon class="md-24 icon-position" md-list-avatar svgIcon="cpf" [style.color]="formError?.cpf ? 'red' :black"></md-icon>
             <md-input-container style="width: 40%" >
               <input mdInput placeholder="Cnpj"  [textMask]="{mask: cnpj }"  formControlName="cpf">
