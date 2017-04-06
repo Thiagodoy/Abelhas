@@ -1,3 +1,4 @@
+import { Apicultor } from './../models/apicultor';
 import { LeafletColorMarker } from './../table-pagination/leaflet-color-marker';
 import { UserWeb } from './../models/user-web';
 import { DialogService } from './../service/dialog.service';
@@ -103,7 +104,7 @@ export class EditApiaryComponent implements OnInit, OnDestroy {
 
   showPhoto() {
     let fotos = this.apiario.getFotos();
-    if (fotos && fotos.length > 0) {  
+    if (fotos && fotos.length > 0) {
       this.loadPhoto(fotos[0]._url)
     }
   }
@@ -119,14 +120,14 @@ export class EditApiaryComponent implements OnInit, OnDestroy {
       let lt = undefined;
       this.parseService.executeQuery(query).then((result: Apiario[]) => {
 
-        for (let i = 0; i < result.length; i++) {          
+        for (let i = 0; i < result.length; i++) {
           let location = result[i].getLocation();
           let apicultorNome = this.apiario.getApicultor().getNome();
           let propriedade = this.apiario.getPropriedade().getNome();
           let especieAbelha = this.apiario.getEspecieAbelha().getNome()
           location.setPopUp(apicultorNome, propriedade, especieAbelha);
 
-          if (location.key.indexOf(this.apiario.getLocation().key) >= 0){
+          if (location.key.indexOf(this.apiario.getLocation().key) >= 0) {
             location.setIcon(LeafletColorMarker.greenIcon);
             lt = location;
             continue;
@@ -141,7 +142,7 @@ export class EditApiaryComponent implements OnInit, OnDestroy {
         console.log("LOCATIONS");
         console.log(this.locations.length);
       });
-      
+
 
     }
   }
@@ -191,14 +192,30 @@ export class EditApiaryComponent implements OnInit, OnDestroy {
   validar() {
 
     this.apiario.setValido(true)
-    this.apiario.setValidadoPor(this.parseService.getUsuarioLogado());
+    this.apiario.setValidadoPor(parse.User.current());
     this.apiario.setDataValidacao(new Date());
     this.parseService.save(this.apiario).then(res => {
       if (res) {
         this.dialog.confirm('Sucesso', 'Apiário validado com sucesso', 'SUCCESS', null).subscribe(value => {
+          if(res)
+            this.sendNotification(res.getApicultor().id);
+        
         });
       }
     });
+  }
+
+
+  sendNotification(id) {
+    let query = this.parseService.createQuery(Apicultor);
+    query.equalTo('objectId', id);
+
+    let pushData: parse.Push.PushData = {};
+    pushData.where = query;
+    pushData.alert = 'Apiario validado!';
+    pushData.sound = 'default'
+
+    this.parseService.sendNotification(pushData);
   }
 
   excluir() {

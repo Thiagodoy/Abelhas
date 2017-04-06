@@ -33,7 +33,7 @@ export class ListApiaryComponent implements OnInit {
   filteredOptionsApicultor: Observable<Apicultor[]>;
   filteredOptionsPropriedade: Observable<Propriedade[]>;
 
-  @ViewChild('table')table:TableComponent;
+  @ViewChild('table') table: TableComponent;
 
 
   columns: ITdDataTableColumn[] = [
@@ -188,13 +188,14 @@ export class ListApiaryComponent implements OnInit {
                       if (this.controlStatus.value == 'nao_validado') {
                         this.listApiario = this.listApiario.filter((value) => { return result1.id != value.id; });
                       } else {
-                        debugger;
+
                         let temp = this.listApiario.find(value => { return value.id == result1.id });
                         let index = this.listApiario.indexOf(temp);
                         this.listApiario.slice(index, 1);
                         temp.valido = true;
                         this.listApiario.push(temp);
                         this.table.refresh();
+                        this.sendNotification(result1.getApicultor().id);
                       }
                     });
                   });
@@ -204,6 +205,18 @@ export class ListApiaryComponent implements OnInit {
         });
         break;
     }
+  }
+
+  sendNotification(id) {
+    let query = this.serviceParse.createQuery(Apicultor);
+    query.equalTo('objectId', id);
+
+    let pushData: parse.Push.PushData = {};
+    pushData.where = query;
+    pushData.alert = 'Apiario validado!';
+    pushData.sound = 'default'
+
+    this.serviceParse.sendNotification(pushData);
   }
 
   filterApicultor(name: string): Apicultor[] {

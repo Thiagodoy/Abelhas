@@ -1,3 +1,4 @@
+import { MotivoDesativacaoApiario } from './../models/motivo-desativacao-apiario';
 import { UserWeb } from './../models/user-web';
 import { Associacao } from './../models/associacao';
 import { Estado } from './../models/estado';
@@ -46,6 +47,7 @@ export class ParseService {
     this.core.Object.registerSubclass('Municipio', Municipio);
     this.core.Object.registerSubclass('Estado', Estado);
     this.core.Object.registerSubclass('Associacao', Associacao);
+    this.core.Object.registerSubclass('MotivoDesativacaoApiario', MotivoDesativacaoApiario)
   }
 
   /**
@@ -54,7 +56,7 @@ export class ParseService {
    */
   findAll<T extends parse.Object>(paramClass: { new (): T }): parse.Promise<T[]> {
     let query = new this.core.Query(new paramClass());
-    query.limit(1000);
+    query.limit(1000);    
     let i = this;
     i.toogleLoading(true);
 
@@ -84,6 +86,16 @@ export class ParseService {
     }).fail((erro) => {
       i.toogleLoading(false);
       i.showErrorPopUp(erro);
+    });
+  }
+
+  sendNotification(pushData: parse.Push.PushData) {
+    let i = this;
+    parse.Push.send(pushData).fail(erro => {
+      i.showErrorPopUp(erro);
+    }).then(result => {
+      console.log('Notification send');
+      console.log(result);
     });
   }
 

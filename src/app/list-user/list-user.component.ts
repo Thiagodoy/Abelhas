@@ -7,6 +7,7 @@ import { ParseService } from './../service/parse.service';
 import { Component, OnInit, NgZone, ViewContainerRef } from '@angular/core';
 import { ITdDataTableColumn } from '@covalent/core';
 import * as parse from 'parse';
+import constantes from '../constantes';
 
 @Component({
   selector: 'app-list-user',
@@ -51,15 +52,15 @@ export class ListUserComponent implements OnInit {
       user['id'] = us.id;
       user['tipo'] = us.attributes.tipo;
 
-      if (user.tipo == 'APICULTOR') {
+      if (user.tipo == constantes.APICULTOR) {
         let apicultor: Apicultor = us.attributes.apicultor;
         user['email'] = apicultor.getEmail();
         user['nome'] = apicultor.getNome();
-      } else if (user.tipo == 'ASSOCIACAO') {
+      } else if (user.tipo == constantes.ASSOCIACAO) {
         let associacao: Associacao = us.attributes.associacao;
         user['email'] = associacao.getEmail();
         user['nome'] = associacao.getNome();
-      } else if (user.tipo == 'GESTOR') {
+      } else if (user.tipo == constantes.GESTOR) {
         user['email'] = us.getEmail();
         user['nome'] = us.attributes.nomeGestor;
       }

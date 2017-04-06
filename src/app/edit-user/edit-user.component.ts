@@ -8,7 +8,7 @@ import * as parse from 'parse';
 
 import { FormControl, FormGroup, FormBuilder, Validators } from '@angular/forms';
 import { UserWeb } from './../models/user-web';
-import { Subscription } from 'rxjs/Rx';
+import { Subscription, Observable } from 'rxjs/Rx';
 import { ActivatedRoute, Router } from '@angular/router';
 import { Component, OnInit, OnDestroy, NgZone, ViewContainerRef } from '@angular/core';
 import ValidatorCustom from './validator/validator-custom';
@@ -24,8 +24,8 @@ export class EditUserComponent implements OnInit, OnDestroy {
 
 
   perfis: any[] = [{ nome: 'Apicultor', value: 'APICULTOR' }, { nome: 'Associação', value: 'ASSOCIACAO' }, { nome: 'Gestor', value: 'GESTOR' }];
-  listEstados: Estado[];
-  listMunicipios: Municipio[];
+  listEstados: Estado[] = [];
+  listMunicipios: Municipio[] = [];
   listAssociacao: Associacao[];
   selectedValue: string = undefined;
   subscription: Subscription;
@@ -37,6 +37,9 @@ export class EditUserComponent implements OnInit, OnDestroy {
   userCurrent: UserWeb;
   typeAction: string = undefined;
   tele: any;
+  listEstadosFiltered: Observable<Estado[]>;
+  listMunicipioFiltered: Observable<Municipio[]>;
+  perfilUsuarioLogado:string;
 
   maskTelefone = ['(', /\d/, /\d/, ')', ' ', /\d/, /\d/, /\d/, /\d/, '-', /\d/, /\d/, /\d/, /\d/];
   maskCelular = ['(', /\d/, /\d/, ')', ' ', /\d/, ' ', /\d/, /\d/, /\d/, /\d/, '-', /\d/, /\d/, /\d/, /\d/];
@@ -49,6 +52,7 @@ export class EditUserComponent implements OnInit, OnDestroy {
 
   ngOnInit() {
 
+    this.perfilUsuarioLogado = parse.User.current().attributes.tipo;
     this.subscriptionRouter = this.route.queryParams.subscribe(value => {
 
 
@@ -89,14 +93,13 @@ export class EditUserComponent implements OnInit, OnDestroy {
           this.mountForm(result[3][0]);
         }
       });
-
     });
   }
 
   ngOnDestroy() {
-    this.subscription.unsubscribe();
-    this.subscriptionRouter.unsubscribe();
-    this.subscriptionForm.unsubscribe();
+    // this.subscription.unsubscribe();
+    // this.subscriptionRouter.unsubscribe();
+    // this.subscriptionForm.unsubscribe();
   }
 
   createForm(paran: string) {
@@ -135,6 +138,18 @@ export class EditUserComponent implements OnInit, OnDestroy {
     this.subscription = this.formUser.get('tipo').valueChanges.subscribe(value => {
       this.selectedValue = value;
     });
+
+
+    this.listEstadosFiltered = this.formUser.get('estado').valueChanges
+      .startWith(null)
+      .map<string, string>(nome => nome ? nome : '')
+      .map(nome => nome ? this.filterEstado(nome) : this.listEstados.slice());
+
+    this.listMunicipioFiltered = this.formUser.get('municipio').valueChanges
+      .startWith(null)
+      .map<string, string>(nome => nome ? nome : '')
+      .map(nome => nome ? this.filterMunicipio(nome) : this.listMunicipios.slice());
+
 
   }
 
@@ -191,7 +206,7 @@ export class EditUserComponent implements OnInit, OnDestroy {
         this.formUser.get(name).setValue(user.attributes[name]);
     });
 
-    console.log( Object.keys(user.attributes))
+    console.log(Object.keys(user.attributes))
 
     if (user.attributes.tipo == 'GESTOR')
       this.formUser.get('nome').setValue(user.attributes.nomeGestor);
@@ -349,7 +364,7 @@ export class EditUserComponent implements OnInit, OnDestroy {
       userWeb.set('nomeGestor', user['nome']);
       userWeb.set('tipo', user['tipo']);
       userWeb.set('email', user['email']);
-       let session = parse.User.current().getSessionToken();
+      let session = parse.User.current().getSessionToken();
       this.parseService.signUp(userWeb).then(resul => {
         this.dialog.confirm('Sucesso', 'Gestor criado com sucesso!', 'SUCCESS', this.view).subscribe(resul => {
           this.routeN.navigate(['home/lista/usuarios']);
@@ -366,12 +381,12 @@ export class EditUserComponent implements OnInit, OnDestroy {
         }
         this.parseService.runCloud('updateUserPass', request).then(result => {
 
-          if (result){}
-            this.dialog.confirm('Sucesso', 'Gestor atualizada com sucesso!', 'SUCCESS', this.view).subscribe(resul => {
-              this.routeN.navigate(['home/lista/usuarios']);
-            });
+          if (result) { }
+          this.dialog.confirm('Sucesso', 'Gestor atualizada com sucesso!', 'SUCCESS', this.view).subscribe(resul => {
+            this.routeN.navigate(['home/lista/usuarios']);
+          });
         });
-      }      
+      }
     }
   }
 
@@ -402,6 +417,21 @@ export class EditUserComponent implements OnInit, OnDestroy {
     }
     return ret;
 
+  }
+
+  filterEstado(name: string): Estado[] {
+    return this.listEstados.filter(option => {
+      return new RegExp(name, 'gi').test(option.getNome())
+    });
+  }
+
+  filterMunicipio(name: string): Municipio[] {
+    return this.listMunicipios.filter(option => {
+      return new RegExp(name, 'gi').test(option.getNome())
+    });
+  }
+  displayFn(object: parse.Object): string {
+     return object ? object.attributes.nome : '';
   }
 
 

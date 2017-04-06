@@ -18,9 +18,9 @@
           <div layout="row" style="margin-top: 20px;">
             <md-icon class="icon-position">view_comfy</md-icon>
             <md-select placeholder="Motivo desativação" name="motivo" style="width: 40%;">
-              <!--<md-option selected *ngFor="let apicultor of apicultores" [value]="apicultor.value">
-                  {{apicultor.nome}}
-                </md-option>-->
+              <md-option selected *ngFor="let motivo of listDesativacao" [value]="motivo">
+                  {{motivo.getNome()}}
+                </md-option>
             </md-select>
           </div>
         </div>

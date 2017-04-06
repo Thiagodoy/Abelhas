@@ -1,5 +1,8 @@
+import { MomentService } from './../service/moment.service';
+import { Apiario } from './../models/apiario';
+
 import { Component, OnInit } from '@angular/core';
-import {MdDialogRef} from '@angular/material';
+import { MdDialogRef } from '@angular/material';
 import { ITdDataTableColumn } from '@covalent/core';
 
 @Component({
@@ -9,31 +12,26 @@ import { ITdDataTableColumn } from '@covalent/core';
 })
 export class MessageDialogComponent implements OnInit {
 
-  public  message:string;
-  public  title:string;
-  public type:string ='MESSAGE';
+  public message: string;
+  public title: string;
+  public type: string = 'MESSAGE';
 
 
-   private data: any[] = [
-      {especie:'Melaponinae',data:'12/12/2017',apicultor:'apicultor F'},
-      {especie:'Melaponinae',data:'12/12/2017',apicultor:'apicultor Y'},
-      {especie:'Melaponinae',data:'12/12/2017',apicultor:'apicultor I'},
-      {especie:'Melaponinae',data:'12/12/2017',apicultor:'apicultor '},
-      {especie:'Melaponinae',data:'12/12/2017',apicultor:'apicultor B'},
-      {especie:'Melaponinae',data:'12/12/2017',apicultor:'apicultor '}   
-
-  ];
+  data: any[] = [];
 
   columns: ITdDataTableColumn[] = [
-    { name: 'especie',  label: 'Especie' },
+    { name: 'especie', label: 'Especie' },
     { name: 'apicultor', label: 'Apicultor' },
     { name: 'data', label: 'Data' },
-  
-    
-    ];
+  ];
 
-  constructor(public dialogRef: MdDialogRef<MessageDialogComponent>) { }
+  constructor( public dialogRef: MdDialogRef<MessageDialogComponent>) { }
   ngOnInit() {
+   
+  }
+
+  itensSelecionados(itens){
+    
   }
 
 }
