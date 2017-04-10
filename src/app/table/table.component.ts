@@ -1,5 +1,5 @@
 import { Component, OnInit, Input, Output, EventEmitter, ViewContainerRef, ElementRef, AfterViewInit, OnChanges, SimpleChanges, ViewChild } from '@angular/core';
-import { ITdDataTableColumn, IPageChangeEvent, TdDataTableService, TdDataTableComponent,TdDataTableSortingOrder } from '@covalent/core';
+import { ITdDataTableColumn, IPageChangeEvent, TdDataTableService, TdDataTableComponent, TdDataTableSortingOrder } from '@covalent/core';
 
 import { ParseService } from '../service/parse.service';
 
@@ -14,13 +14,16 @@ export class TableComponent implements OnInit, AfterViewInit, OnChanges {
 
   @Input() data: any[] = [];
   @Input() columns: ITdDataTableColumn[];
+  @Input() uniqueId: string;
   @Input() selectable: boolean;
   @Input() multiple: boolean;
   @Input() sortable: boolean;
-  @Input() sortBy: string;  
+  @Input() sortBy: string;
   @Input() showPagination: boolean;
   @Input() showSelectionJquery: boolean = true;
+  @Input() itensSelecteds: any[] = []
   @ViewChild('table') table: TdDataTableComponent;
+  @Input() paginaTotal: number = 10;
 
   @Output('itemSelected2') itemSelected2 = new EventEmitter<Object>();
   @Output('itemSelected3') itemSelected3 = new EventEmitter<Object>();
@@ -33,7 +36,7 @@ export class TableComponent implements OnInit, AfterViewInit, OnChanges {
   filteredTotal: number = this.data.length;
   paginaInicial: number = 1;
   paginaAtual: number = 1;
-  paginaTotal: number = 10;
+
   itemCurrent: any;
   searchTerm: string;
 
@@ -51,9 +54,13 @@ export class TableComponent implements OnInit, AfterViewInit, OnChanges {
         Jquery(el.currentTarget).addClass('td-data-table-clicked');
       });
     }
+
+    this.table.uniqueId = this.uniqueId;
   }
 
   ngOnChanges(changes: SimpleChanges) {
+
+
     this.filteredData = this.data;
     if (!this.data) {
       return;
@@ -62,7 +69,16 @@ export class TableComponent implements OnInit, AfterViewInit, OnChanges {
     tem = this._dataTableService.pageData(tem, this.paginaInicial, this.paginaAtual * this.paginaTotal);
     this.filteredData = tem;
     this.totalRecords = this.data.length;
-    
+
+
+    // Seleciona itens na tabela
+    if (changes['itensSelecteds']) {
+      let array = changes['itensSelecteds']['currentValue'];
+      for (let i = 0; i < array.length; i++) {
+        this.table.select(array[i], true, new Event('select'));
+      }
+    }
+
     if (this.table)
       this.table.refresh();
   }
@@ -73,10 +89,10 @@ export class TableComponent implements OnInit, AfterViewInit, OnChanges {
     }
     let tem: any[] = this.data;
     tem = this._dataTableService.pageData(tem, this.paginaInicial, this.paginaAtual * this.paginaTotal);
-    this.filteredData = tem;    
+    this.filteredData = tem;
   }
 
-  refresh(){    
+  refresh() {
     this.table.refresh();
   }
 
@@ -99,7 +115,7 @@ export class TableComponent implements OnInit, AfterViewInit, OnChanges {
     this.paginaInicial = pagingEvent.fromRow;
     this.paginaAtual = pagingEvent.page;
     this.paginaTotal = pagingEvent.pageSize;
-     // let temp: any[] = this.data;
+    // let temp: any[] = this.data;
     // temp = this._dataTableService.pageData(temp, this.paginaInicial, this.paginaAtual * this.paginaTotal);
     // this.filteredData = temp;
     this.filter();
@@ -115,7 +131,7 @@ export class TableComponent implements OnInit, AfterViewInit, OnChanges {
     newData = this._dataTableService.sortData(newData, this.sortBy, this.sortOrder);
     newData = this._dataTableService.pageData(newData, this.paginaInicial, this.paginaAtual * this.paginaTotal);
     this.filteredData = newData;
-    
+
     console.log(this.filteredData.length);
   }
 }

@@ -26,14 +26,23 @@
               <input mdInput placeholder="Sigla" formControlName="sigla">
             </md-input-container>
           </div>
-          <div *ngIf="selectedValue =='APICULTOR' " layout="row" style="margin-top: 15px;margin-bottom: 15px;">
+          <!--<div *ngIf="selectedValue =='APICULTOR' " layout="row" style="margin-top: 15px;margin-bottom: 15px;">
             <md-icon class="icon-position" [style.color]="formError?.associacao ? 'red' :black">group</md-icon>
             <md-select placeholder="Associação" name="associação" style="width: 40%;" formControlName="associacao">
               <md-option *ngFor="let associacao of listAssociacao" [value]="associacao">
                 {{associacao.attributes.sigla}}
               </md-option>
             </md-select>
+          </div>-->
+          <div layout="row" *ngIf="selectedValue =='APICULTOR' " style=" margin-top: 10px">
+            <md-icon class="icon-position">view_comfy</md-icon>
+            <md-input-container style="width: 40%">
+              <input mdInput placeholder="Associação" value="Nenhum item selecionado" formControlName="controlItensSelecionados">
+            </md-input-container>
+            <a md-raised-button color="primary" style="height: 35px;margin-left: 24px;" (click)="search($event)"><md-icon>visibility</md-icon></a>
           </div>
+
+
           <div *ngIf="selectedValue =='APICULTOR'" layout="row">
             <md-icon class="icon-position" [style.color]="formError?.qtdCaixasFixas ? 'red' :black">filter_none</md-icon>
             <div layout="column" style="width: 100%">
@@ -77,7 +86,7 @@
           <div *ngIf="selectedValue == 'ASSOCIACAO'" layout="row">
             <md-icon class="icon-position" [style.color]="formError?.contatoPresidenteTelefone ? 'red' :black">phone</md-icon>
             <md-input-container style="width: 60%">
-              <input mdInput placeholder="Contato Presidente" [textMask]="{mask: maskTelefone}"  formControlName="contatoPresidenteTelefone">
+              <input mdInput placeholder="Contato Presidente" [textMask]="{mask: maskTelefone}" formControlName="contatoPresidenteTelefone">
             </md-input-container>
           </div>
           <div *ngIf="selectedValue =='APICULTOR'" layout="row">
@@ -90,11 +99,11 @@
               <div *ngIf="formError?.quantidadePontos" style="color: red;">*{{formError?.quantidadePontos.quantidadePontos.require}}</div>
             </div>
           </div>
-          <div layout="row" *ngIf="selectedValue =='APICULTOR'">  
+          <div layout="row" *ngIf="selectedValue =='APICULTOR'">
             <md-icon style="margin-right: 10px;margin-top: 5px;" [style.color]="formError?.estado ? 'red' :black">view_comfy</md-icon>
             <md-input-container style="width: 60%">
               <input type="text" mdInput [mdAutocomplete]="api" formControlName="estado" placeholder="Estado">
-            </md-input-container>            
+            </md-input-container>
             <md-autocomplete #api="mdAutocomplete" [displayWith]="displayFn" style="width: 60%">
               <md-option *ngFor="let estado of listEstadosFiltered | async" [value]="estado">
                 {{ estado.getNome() }}
@@ -109,11 +118,11 @@
               </md-option>
             </md-select>
           </div>-->
-          <div layout="row"  *ngIf="selectedValue =='APICULTOR' || selectedValue == 'ASSOCIACAO'">
+          <div layout="row" *ngIf="selectedValue =='APICULTOR' || selectedValue == 'ASSOCIACAO'">
             <md-icon style="margin-right: 10px;margin-top: 5px;" [style.color]="formError?.municipio ? 'red' :black">view_comfy</md-icon>
             <md-input-container style="width: 60%">
               <input type="text" mdInput [mdAutocomplete]="apii" formControlName="municipio" placeholder="Municipio">
-            </md-input-container>            
+            </md-input-container>
             <md-autocomplete #apii="mdAutocomplete" [displayWith]="displayFn" style="width: 60%">
               <md-option *ngFor="let municipio of listMunicipioFiltered | async" [value]="municipio">
                 {{ municipio.getNome() }}
@@ -129,9 +138,9 @@
             </md-select>
           </div>-->
           <div *ngIf="selectedValue =='APICULTOR' || selectedValue == 'ASSOCIACAO' || selectedValue == 'GESTOR'" layout="row">
-            <md-icon class="md-24 icon-position" md-list-avatar svgIcon="cpf" [style.color]="formError?.cpf ? 'red' :black" ></md-icon>
+            <md-icon class="md-24 icon-position" md-list-avatar svgIcon="cpf" [style.color]="formError?.cpf ? 'red' :black"></md-icon>
             <md-input-container style="width: 60%">
-              <input mdInput placeholder="Cnpj/Cpf" [textMask]="{mask: selectedValue == 'ASSOCIACAO' ? cnpj : cpf }"  formControlName="cpf">
+              <input mdInput placeholder="Cnpj/Cpf" [textMask]="{mask: selectedValue == 'ASSOCIACAO' ? cnpj : cpf }" formControlName="cpf">
             </md-input-container>
           </div>
           <div *ngIf="selectedValue =='APICULTOR' || selectedValue == 'ASSOCIACAO' || selectedValue == 'GESTOR'" layout="row">

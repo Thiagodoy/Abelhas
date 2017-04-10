@@ -81,6 +81,7 @@ export class AppComponent implements OnDestroy {
 
     if (this.parseService.core.User.current()) {
 
+     
       let res = this.parseService.core.User.current();
       this.perfil = res.attributes.tipo;
       this.isLogado = true;

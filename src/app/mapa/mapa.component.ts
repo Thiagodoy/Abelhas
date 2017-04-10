@@ -10,6 +10,7 @@ import * as L from 'leaflet';
 export class MapaComponent implements OnInit, OnDestroy, OnChanges {
 
   @Input() locations: any = [];
+  @Input() groupLocations: any = [];
   @Input() width: string = '100';
   @Input() heigth: string = '100';
   @Input() currentPosition: boolean = false;
@@ -31,18 +32,17 @@ export class MapaComponent implements OnInit, OnDestroy, OnChanges {
   }
 
   ngOnChanges(changes: SimpleChanges) {
-    if (changes['locations']) {
-    
+    if (changes['locations']) {    
       this.locations = changes['locations']['currentValue'];
       this.leafletService.putLocations(this.locations);
+    }else if(changes['groupLocations']){
+      this.groupLocations = changes['groupLocations']['currentValue'];
+      this.leafletService.putGroupLOcation(this.groupLocations);
     }
   }
 
-  ngOnDestroy() {
-    
+  ngOnDestroy() {    
     this.map.off();
     this.map.remove();
   }
-
-
 }

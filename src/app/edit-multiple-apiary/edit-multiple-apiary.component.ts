@@ -110,28 +110,26 @@ export class EditMultipleApiaryComponent implements OnInit {
       .startWith(null)
       .map<string, string>(nome => nome ? nome : '')
       .map((nome => nome ? this.filterPropriedade(nome) : this.listPropriedade.slice()));
-
   }
 
 
   todos() {
-
+ debugger;
     let propriedade = new Propriedade();
     propriedade.setNome('Todos');
     this.listPropriedade.push(propriedade);
 
     let apicultor = new Apicultor();
-    apicultor.setNome('Todos')
-    this.listApicultor.push(apicultor)
-    //this.listApicultor2.push(apicultor);
+    apicultor.setNome('Todos');
+    this.listApicultor.push(apicultor)  ;  
 
     let especiAbelha = new EspecieAbelha();
-    especiAbelha.setNome('Todos')
-    this.listEspecieAbelha.push(especiAbelha)
+    especiAbelha.setNome('Todos');
+    this.listEspecieAbelha.push(especiAbelha);
 
     let municipio = new Municipio();
     municipio.setNome('Todos')
-    this.listMunicipio.push(municipio)
+    this.listMunicipio.push(municipio);
 
 
   }
@@ -143,9 +141,9 @@ export class EditMultipleApiaryComponent implements OnInit {
         this.listApiarioSelected.push(paran.row);
         let apiario: Apiario = paran.row;
         let location = apiario.getLocation();
-        this.leaflet.removeLocation(location)
+        this.leaflet.removeLocation(location);
         location.setIcon(LeafletColorMarker.orangeIcon);        
-        this.leaflet.putLocation(location)
+        this.leaflet.putLocation(location);
       } else {
         this.listApiarioSelected.concat(paran.rows);
 
@@ -153,7 +151,7 @@ export class EditMultipleApiaryComponent implements OnInit {
           let location = apiario.getLocation();
           this.leaflet.removeLocation(location);
           location.setIcon(LeafletColorMarker.orangeIcon);
-          this.leaflet.putLocation(location)          
+          this.leaflet.putLocation(location);          
         }
       }      
     } else {
@@ -255,6 +253,7 @@ export class EditMultipleApiaryComponent implements OnInit {
     this.controlApicultor2.reset('');
     this.controlPropriedade2.reset('');
     this.listApiarios = [];
+    this.listApiarioSelected = [];
   }
 
   pesquisar() {

@@ -1,3 +1,5 @@
+import { MomentService } from './moment.service';
+import { DadosDesativacaoApiario } from './../models/dados-desativacao-apiario';
 import { MotivoDesativacaoApiario } from './../models/motivo-desativacao-apiario';
 import { UserWeb } from './../models/user-web';
 import { Associacao } from './../models/associacao';
@@ -28,7 +30,7 @@ export class ParseService {
   usuarioLogado: UserWeb;
   private instance: ParseService = undefined;
 
-  constructor(private loadingService: TdLoadingService, private zone: NgZone, private http: Http, private dialogService: DialogService, private route: Router) {
+  constructor(private momentService:MomentService,private loadingService: TdLoadingService, private zone: NgZone, private http: Http, private dialogService: DialogService, private route: Router) {
     //Define o banco a ser acessado
     let env = environment.getEnvironment();
     this.core.initialize(env.appid);
@@ -47,7 +49,8 @@ export class ParseService {
     this.core.Object.registerSubclass('Municipio', Municipio);
     this.core.Object.registerSubclass('Estado', Estado);
     this.core.Object.registerSubclass('Associacao', Associacao);
-    this.core.Object.registerSubclass('MotivoDesativacaoApiario', MotivoDesativacaoApiario)
+    this.core.Object.registerSubclass('MotivoDesativacaoApiario', MotivoDesativacaoApiario);
+    this.core.Object.registerSubclass('DadosDesativacaoApiario',DadosDesativacaoApiario);
   }
 
   /**
@@ -176,6 +179,7 @@ export class ParseService {
               nome: nome
             });
 
+            localStorage.setItem('session','' + this.momentService.now());  
             this.route.navigate(['home/lista/apiarios']);
 
             instance.toogleLoading(false)

@@ -17,8 +17,11 @@ export class Apicultor extends Object {
     setCelular2(param: string) {
         this.set('celular2', param);
     }
-    setAssociacao(associacao: Associacao) {
-        this.set('associacao', associacao)
+    setAssociacoes(associacao: Associacao[]) {
+        this.set('associacoes', associacao)
+    }
+    getAssociacoes(): Associacao[]{
+        return this.get('associacoes');
     }
     setQtdCaixasFixas(caixas: number) {        
         this.set('qtdCaixasFixas', caixas);

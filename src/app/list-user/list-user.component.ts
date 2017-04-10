@@ -32,7 +32,8 @@ export class ListUserComponent implements OnInit {
 
     let queryUser = this.parseService.createQuery(UserWeb);
     queryUser.include('apicultor');
-    queryUser.include('associacao');    
+    queryUser.include('associacao');
+    queryUser.include('email');    
     queryUser.addDescending('createdAt');
 
     this.parseService.executeQuery(queryUser).then((result:UserWeb[]) => {

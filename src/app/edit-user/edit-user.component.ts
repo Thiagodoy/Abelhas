@@ -1,3 +1,4 @@
+import { ITdDataTableColumn } from '@covalent/core';
 import { DialogService } from './../service/dialog.service';
 import { Associacao } from './../models/associacao';
 import { Municipio } from './../models/municipio';
@@ -39,7 +40,8 @@ export class EditUserComponent implements OnInit, OnDestroy {
   tele: any;
   listEstadosFiltered: Observable<Estado[]>;
   listMunicipioFiltered: Observable<Municipio[]>;
-  perfilUsuarioLogado:string;
+  perfilUsuarioLogado: string;
+  listAssociacoesSelecteds: any[] = [];
 
   maskTelefone = ['(', /\d/, /\d/, ')', ' ', /\d/, /\d/, /\d/, /\d/, '-', /\d/, /\d/, /\d/, /\d/];
   maskCelular = ['(', /\d/, /\d/, ')', ' ', /\d/, ' ', /\d/, /\d/, /\d/, /\d/, '-', /\d/, /\d/, /\d/, /\d/];
@@ -97,10 +99,73 @@ export class EditUserComponent implements OnInit, OnDestroy {
   }
 
   ngOnDestroy() {
-    // this.subscription.unsubscribe();
-    // this.subscriptionRouter.unsubscribe();
-    // this.subscriptionForm.unsubscribe();
+    this.subscription.unsubscribe();
+    this.subscriptionRouter.unsubscribe();
+    this.subscriptionForm.unsubscribe();
   }
+
+
+  search(event: Event) {
+    
+    event.preventDefault();
+    this.formUser.get('controlItensSelecionados').setValue('Nenhum item selecionado.');
+
+    let columns: ITdDataTableColumn[] = [
+      { name: 'nome', label: 'Nome' },
+      { name: 'sigla', label: 'Sigla' },
+      { name: 'email', label: 'Email' },
+      { name: 'telefone', label: 'Telefone' },
+    ];
+
+    let asso = this.listAssociacao.map(value => {
+      return {
+        id: value.id,
+        nome: value.getNome(),
+        sigla: value.getSigla(),
+        email: value.getEmail(),
+        telefone: value.getTelefone()
+      }
+    });
+
+    let apicultor: Apicultor = undefined;
+    let assoApicultor = this.listAssociacoesSelecteds;
+
+    if (this.userCurrent) {
+      apicultor = this.userCurrent.attributes.apicultor;
+      if (apicultor.getAssociacoes())
+        assoApicultor = apicultor.getAssociacoes().map(value => {
+          return {
+            uniqueId: value.id,
+            id: value.id,
+            nome: value.getNome(),
+            sigla: value.getSigla(),
+            email: value.getEmail(),
+            telefone: value.getTelefone()
+          }
+        });
+    }
+
+    //Ordena para exibir asa associacoes selecinadas nas primeiras posicoes
+    asso = asso.sort((a, b) => {
+      let value = assoApicultor.find(value => { return value.id == a.id });
+
+      if (value)
+        return -1;
+      else
+        return 1;
+    });
+
+    this.dialog.confirm('Escolha as associações', '', 'TABLE', this.view, asso, columns, assoApicultor,true).subscribe((value) => {
+
+      if (value.length > 0) {
+        this.listAssociacoesSelecteds = value;
+        this.formUser.get('controlItensSelecionados').setValue('' + value.length + ' itens selecionados');
+      } else {       
+        this.listAssociacoesSelecteds = [];
+      }
+    });
+  }
+
 
   createForm(paran: string) {
 
@@ -109,7 +174,7 @@ export class EditUserComponent implements OnInit, OnDestroy {
       {
         nome: [null, ValidatorCustom.validateCustomNome()],
         tipo: [this.selectedValue, Validators.required],
-        associacao: [null, ValidatorCustom.validateCustomAssociacao()],
+        controlItensSelecionados: [{ value: 'Nenhum item selecionado', disabled: true }],
         qtdCaixasFixas: [null, ValidatorCustom.validateCustomqtdCaixasFixas()],
         endereco: [null, ValidatorCustom.validateCustomEndereco()],
         sigla: [null, ValidatorCustom.validateCustomSigla()],
@@ -169,7 +234,6 @@ export class EditUserComponent implements OnInit, OnDestroy {
 
   private mountForm(user: UserWeb) {
 
-
     if (user.attributes.tipo == 'APICULTOR') {
 
       let apicultor: Apicultor = user.attributes.apicultor;
@@ -179,8 +243,30 @@ export class EditUserComponent implements OnInit, OnDestroy {
           this.formUser.get(name).setValue(apicultor.attributes[name]);
       });
 
-      let associacao: Associacao = apicultor.attributes.associacao;
-      this.formUser.get('associacao').setValue(this.listAssociacao.filter(value => { if (value.id == associacao.id) return value.id; })[0]);
+      if (user.attributes.apicultor.attributes.associacoes) {
+
+        this.listAssociacoesSelecteds = user.attributes.apicultor.attributes.associacoes
+          .filter((value) => {
+            return value != null
+          })
+          .map((value: Associacao) => {
+            return {
+              uniqueId: value.id,
+              id: value.id,
+              nome: value.getNome(),
+              sigla: value.getSigla(),
+              email: value.getEmail(),
+              telefone: value.getTelefone()
+            }
+          });
+
+        this.formUser.get('controlItensSelecionados').setValue('' + this.listAssociacoesSelecteds.length + ' itens selecionados.')
+      } else {
+        this.listAssociacoesSelecteds = [];
+        this.formUser.get('controlItensSelecionados').setValue('Nenhum item selecionada.')
+      }
+      //let associacao: Associacao = apicultor.attributes.associacao;
+      //this.formUser.get('associacao').setValue(this.listAssociacao.filter(value => { if (value.id == associacao.id) return value.id; })[0]);
 
       let municipio = apicultor.getMunicipio();
       this.formUser.get('municipio').setValue(this.listMunicipios.filter(value => { return value.id == municipio.id })[0]);
@@ -212,6 +298,14 @@ export class EditUserComponent implements OnInit, OnDestroy {
       this.formUser.get('nome').setValue(user.attributes.nomeGestor);
 
     this.formUser.get('cpf').setValue(user.getUsername());
+  }
+
+
+  removeNull(a: Associacao[]) {
+
+
+
+
   }
 
   salvar() {
@@ -292,10 +386,22 @@ export class EditUserComponent implements OnInit, OnDestroy {
   private salvarApicultor() {
 
     let user = this.formUser.value;
-    let apicultor = this.userCurrent ? this.userCurrent.attributes.apicultor : new Apicultor();
+    let apicultor: Apicultor = this.userCurrent ? this.userCurrent.attributes.apicultor : new Apicultor();
+
+    if(this.listAssociacoesSelecteds.length == 0){
+      this.dialog.confirm('Erro','Nenhuma associacao foi selecionada','ERRO',this.view)
+      return false;
+    }
+
+    let temp = [];
+    for (let a of this.listAssociacoesSelecteds) {
+      let value = this.listAssociacao.find((value) => { return value.id == a.id })
+      if (value)
+        temp.push(value)
+    }
 
     apicultor.setNome(user['nome']);
-    apicultor.setAssociacao(user['associacao']);
+    apicultor.setAssociacoes(temp);
     apicultor.setCelular(user['celular']);
     apicultor.setCelular2(user['celular2']);
     apicultor.setCpf(user['cpf']);
@@ -431,7 +537,7 @@ export class EditUserComponent implements OnInit, OnDestroy {
     });
   }
   displayFn(object: parse.Object): string {
-     return object ? object.attributes.nome : '';
+    return object ? object.attributes.nome : '';
   }
 
 

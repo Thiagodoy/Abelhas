@@ -1,3 +1,4 @@
+import { TableComponent } from './../table/table.component';
 import { MomentService } from './../service/moment.service';
 import { Apiario } from './../models/apiario';
 
@@ -15,23 +16,47 @@ export class MessageDialogComponent implements OnInit {
   public message: string;
   public title: string;
   public type: string = 'MESSAGE';
-
-
+  listItensSelected: any[] = [];
+  itensSelected: any[] = [];
   data: any[] = [];
+  columns: ITdDataTableColumn[] = [];
+  uniqueId: string = 'id'
+  multiple: boolean;
 
-  columns: ITdDataTableColumn[] = [
-    { name: 'especie', label: 'Especie' },
-    { name: 'apicultor', label: 'Apicultor' },
-    { name: 'data', label: 'Data' },
-  ];
 
-  constructor( public dialogRef: MdDialogRef<MessageDialogComponent>) { }
-  ngOnInit() {
-   
+  constructor(public dialogRef: MdDialogRef<MessageDialogComponent>) { }
+
+  ngOnInit() { }
+
+  itensSelecionados(paran) {
+
+    if (paran.selected) {
+      if (paran.row) {
+        if (!this.multiple)
+          this.listItensSelected.pop();
+        this.listItensSelected.push(paran.row);
+      } else {
+        this.listItensSelected.concat(paran.rows);
+      }
+    } else {
+
+      if (paran.rows && paran.rows.length == 0) {
+        this.listItensSelected = [];
+      } else {
+        this.listItensSelected = this.listItensSelected.filter((value, index) => { return value.id != paran.row.id });
+      }
+    }
+
+    console.log(this.listItensSelected.length);
   }
 
-  itensSelecionados(itens){
-    
+  closeTable(action: string) {
+
+    if (action == 'CANCELAR' && !this.multiple) {
+      this.dialogRef.close([]);
+    }
+
+    this.dialogRef.close(this.listItensSelected);
   }
 
 }

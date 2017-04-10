@@ -9,4 +9,8 @@ export class MomentService {
       this.core.locale('pt-BR');
    }
 
+   now():number{
+     return this.core.now();
+   }
+
 }
