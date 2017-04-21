@@ -114,6 +114,8 @@ export class EditAssociationComponent implements OnInit, OnDestroy {
     this.formAssociacao.get('contatoPresidenteTelefone').setValue(associacao.getContatoPresidenteTelefone());
     this.formAssociacao.get('email').setValue(associacao.getEmail());
     this.formAssociacao.get('cpf').setValue(this.user.getUsername());
+    this.formAssociacao.get('qtdCaixasFixas').setValue(associacao.getQtdCaixas());
+    this.formAssociacao.get('quantidadePontos').setValue(this.associacao.getQtdPontos());
 
   }
   populateAssociacao(): Associacao {
@@ -133,7 +135,8 @@ export class EditAssociationComponent implements OnInit, OnDestroy {
     associacao.setNumeroSif(this.formAssociacao.get('numeroSif').value);
     associacao.setContatoPresidenteTelefone(this.formAssociacao.get('contatoPresidenteTelefone').value);
     associacao.setEmail(this.formAssociacao.get('email').value);
-
+    associacao.setQtdCaixas(parseInt(this.formAssociacao.get('qtdCaixasFixas').value));
+    associacao.setQtdPontos(parseInt(this.formAssociacao.get('quantidadePontos').value));
     associacao.setTipoRegistro(1);
 
     return associacao;
@@ -144,7 +147,7 @@ export class EditAssociationComponent implements OnInit, OnDestroy {
 
     if (this.formAssociacao.valid) {
       let associacao = this.populateAssociacao();
-      let user = undefined;
+      let user: UserWeb = undefined;
       let cnpj: string = this.formAssociacao.get('cpf').value;
 
       if (!this.associacao) {
@@ -152,6 +155,7 @@ export class EditAssociationComponent implements OnInit, OnDestroy {
         user = new UserWeb();
         user.setUsername(cnpj);
         user.setPassword(this.formAssociacao.get('senha').value);
+        user.setEmail(this.formAssociacao.get('email').value, {});
 
         this.parseService.save(associacao).then(result => {
           if (!result)
@@ -173,13 +177,10 @@ export class EditAssociationComponent implements OnInit, OnDestroy {
 
 
         let promise = []
-        if (this.userHasUpdate()) {
-          let request = {
-            objectId: this.user.id,
-            password: this.formAssociacao.get('senha').value,
-            username: this.user.getUsername()
-          }
-          promise.push(this.parseService.runCloud('updateUserPass', request));
+        let result = this.userHasUpdate();
+        if (result.hasUpdate) {
+          delete result.hasUpdate;
+          promise.push(this.parseService.runCloud('updateUserPass', result));
         }
 
         promise.push(this.parseService.save(associacao));
@@ -194,24 +195,34 @@ export class EditAssociationComponent implements OnInit, OnDestroy {
     }
   }
 
-  userHasUpdate(): boolean {
+  userHasUpdate(): any {
 
     if (!this.user)
       return null;
 
     let cnpj: string = this.formAssociacao.get('cpf').value;
     cnpj = cnpj.replace(/[^0-9]/gi, '');
+
     let cnpjOld: string = this.user.getUsername();
-    let change: boolean = false;
+
+    let change: any = { hasUpdate: false, objectId: this.user.id };
     let password: string = this.formAssociacao.get('senha').value;
 
     if (!(cnpjOld.indexOf(cnpj) > -1)) {
-      this.user.setUsername(cnpj);
-      change = true;
+      change['username'] = cnpj
+      change['hasUpdate'] = true;
     }
 
     if (password && password.length > 0) {
-      change = true;
+      change['password'] = password
+      change['hasUpdate'] = true;
+    }
+    let emailOld = this.associacao.getEmail();
+    let email = this.formAssociacao.get('email').value;
+
+    if (email !== emailOld) {
+      change['email'] = email;
+      change['hasUpdate'] = true;
     }
 
     return change;
@@ -227,8 +238,8 @@ export class EditAssociationComponent implements OnInit, OnDestroy {
       if (control && !control.valid) {
         this.formError[field] = control.errors;
       }
-  }
-    
+    }
+
   }
   createForm(type: string) {
 
@@ -251,7 +262,9 @@ export class EditAssociationComponent implements OnInit, OnDestroy {
       confirmar_senha: ['', ValidaCustom.validateCustomSenhaConf(type)],
       senha: ['', ValidaCustom.validateCustomSenha(type)],
       cpf: [null, ValidaCustom.validateCustomCpfOrCnpj()],
-      tipo: ['ASSOCIACAO']
+      tipo: ['ASSOCIACAO'],
+      quantidadePontos: [null, ValidaCustom.validateCustomqtdPonto()],
+      qtdCaixasFixas: [null, ValidaCustom.validateCustomqtdCaixasFixas()]
     });
 
     this.listEstadosFiltered = this.formAssociacao.get('estado').valueChanges

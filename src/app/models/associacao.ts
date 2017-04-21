@@ -33,7 +33,7 @@ export class Associacao extends Object {
     }
     getTelefone(): string {
         return this.get('telefone');
-    } 
+    }
 
     setMunicipio(municipio: Municipio) {
         this.set('municipio', municipio);
@@ -61,11 +61,11 @@ export class Associacao extends Object {
     getContatoPresidenteTelefone(): string {
         return this.get('contatoPresidenteTelefone');
     }
-    setContatoPresidenteNome(param:string){
-        this.set('contatoPresidenteNome',param);
+    setContatoPresidenteNome(param: string) {
+        this.set('contatoPresidenteNome', param);
     }
-    setContatoPresidenteTelefone(param:string){
-        this.set('contatoPresidenteTelefone',param);
+    setContatoPresidenteTelefone(param: string) {
+        this.set('contatoPresidenteTelefone', param);
     }
     getEndereco(): string {
         return this.get('endereco');
@@ -73,8 +73,8 @@ export class Associacao extends Object {
     getCep(): string {
         return this.get('cep');
     }
-    setCep(param:string) {
-        this.set('cep',param);
+    setCep(param: string) {
+        this.set('cep', param);
     }
     getRegistro(): string {
         return this.get('registro');
@@ -83,16 +83,39 @@ export class Associacao extends Object {
         return this.get('numeroSif');
     }
     setNumeroSif(paran: string) {
-        this.set('numeroSif',paran);
+        this.set('numeroSif', paran);
     }
-    setTipoRegistro(paran:number){
-        this.set('tipoRegistro',paran);
+    setTipoRegistro(paran: number) {
+        this.set('tipoRegistro', paran);
     }
-    setRegistro(param:string){
-        this.set('registro',param);
+    setRegistro(param: string) {
+        this.set('registro', param);
     }
-
-    setExcluded(param:boolean){
-        this.set('excluded',param);
+    setExcluded(param: boolean) {
+        this.set('excluded', param);
+    }
+    setQtdPontos(paran: number) {
+        this.set('quantidadePontos', paran)
+    }
+    getQtdPontos(): number {
+        return this.get('quantidadePontos');
+    }
+    getQtdCaixas(): number {
+        return this.get('qtdCaixasFixas');
+    }
+    setQtdCaixas(param: number) {
+        return this.set('qtdCaixasFixas', param);
+    }
+    setAcordoCooperacaoAbelha(paran:boolean){
+        this.set('acordoCooperacaoAbelha',paran);
+    }
+    getAcordoCooperacaoAbelha():boolean{
+        return this.get('acordoCooperacaoAbelha');
+    }
+     setDataTermoCompromisso(param: Date) {
+        this.set('dataTermoCompromisso', param);
+    }
+    getDataTermoCompromisso(): Date {
+        return this.get('dataTermoCompromisso');
     }
 }

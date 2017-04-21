@@ -99,7 +99,7 @@ function validateCustomqtdCaixasFixas(): ValidatorFn {
         let p = control.parent.get('tipo');
         let value = control.value;
 
-        if (p.value === constantes.APICULTOR)
+        if (p.value === constantes.ASSOCIACAO)
             if (isNaN(value) || value == '' || value == null || value == 0)
                 return { 'qtdCaixasFixas': { require: 'Insira um valor válido' } };
 
@@ -133,7 +133,7 @@ function validateCustomqtdPonto(): ValidatorFn {
         let p = control.parent.get('tipo');
         let value = control.value;
 
-        if (p.value === constantes.APICULTOR)
+        if (p.value === constantes.ASSOCIACAO)
             if (isNaN(value) || value == '' || value == null || value == 0)
                 return { 'quantidadePontos': { require: 'Insira um valor válido' } };
 

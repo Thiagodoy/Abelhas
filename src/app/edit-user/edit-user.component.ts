@@ -36,12 +36,13 @@ export class EditUserComponent implements OnInit, OnDestroy {
   formUser: FormGroup;
   submit: boolean = false;
   userCurrent: UserWeb;
-  typeAction: string = undefined;
-  tele: any;
+  typeAction: string = undefined; 
   listEstadosFiltered: Observable<Estado[]>;
   listMunicipioFiltered: Observable<Municipio[]>;
   perfilUsuarioLogado: string;
   listAssociacoesSelecteds: any[] = [];
+  dataTermoCompromisso: Date = undefined;
+
 
   maskTelefone = ['(', /\d/, /\d/, ')', ' ', /\d/, /\d/, /\d/, /\d/, '-', /\d/, /\d/, /\d/, /\d/];
   maskCelular = ['(', /\d/, /\d/, ')', ' ', /\d/, ' ', /\d/, /\d/, /\d/, /\d/, '-', /\d/, /\d/, /\d/, /\d/];
@@ -60,6 +61,7 @@ export class EditUserComponent implements OnInit, OnDestroy {
 
       let userId = value['user'];
       let type = value['type'];
+      let email = value['email'];
       let query = undefined;
       let promiseUser = undefined;
       let promises = [];
@@ -92,7 +94,11 @@ export class EditUserComponent implements OnInit, OnDestroy {
         this.listMunicipios = result[2];
         if (result.length > 3) {
           this.userCurrent = result[3][0];
-          this.mountForm(result[3][0]);
+
+          if (email)
+            this.userCurrent.setEmail(email, {});
+
+          this.mountForm(this.userCurrent);
         }
       });
     });
@@ -104,9 +110,12 @@ export class EditUserComponent implements OnInit, OnDestroy {
     this.subscriptionForm.unsubscribe();
   }
 
+  select(dateSelected) {
+    this.dataTermoCompromisso = dateSelected;
+  }
 
   search(event: Event) {
-    
+
     event.preventDefault();
     this.formUser.get('controlItensSelecionados').setValue('Nenhum item selecionado.');
 
@@ -145,27 +154,19 @@ export class EditUserComponent implements OnInit, OnDestroy {
         });
     }
 
-    //Ordena para exibir asa associacoes selecinadas nas primeiras posicoes
-    asso = asso.sort((a, b) => {
-      let value = assoApicultor.find(value => { return value.id == a.id });
+    //Ordena para exibir asa associacoes selecionadas nas primeiras posicoes
+    asso = asso.sort((a, b) => {return assoApicultor.find(value => { return value.id == a.id }) ? -1 : 1;});
 
-      if (value)
-        return -1;
-      else
-        return 1;
-    });
-
-    this.dialog.confirm('Escolha as associações', '', 'TABLE', this.view, asso, columns, assoApicultor,true).subscribe((value) => {
+    this.dialog.confirm('Escolha as associações', '', 'TABLE', this.view, asso, columns, assoApicultor, true).subscribe((value) => {
 
       if (value.length > 0) {
         this.listAssociacoesSelecteds = value;
         this.formUser.get('controlItensSelecionados').setValue('' + value.length + ' itens selecionados');
-      } else {       
+      } else {
         this.listAssociacoesSelecteds = [];
       }
     });
   }
-
 
   createForm(paran: string) {
 
@@ -190,8 +191,11 @@ export class EditUserComponent implements OnInit, OnDestroy {
         email: [null],
         senha: [null, ValidatorCustom.validateCustomSenha(paran)],
         confirmar_senha: [null, ValidatorCustom.validateCustomSenhaConf(paran)],
-        registroSif: [null],
-        qtdCaixasMigratorias: [null, ValidatorCustom.validateCustomqtdCaixasMigratorias()]
+        registroSif: [false],
+        qtdCaixasMigratorias: [null, ValidatorCustom.validateCustomqtdCaixasMigratorias()],
+        compartilhaDado: [false],
+        termoParticipacaoProjeto: [false],
+        acordoCooperacaoAbelha: [false]
       }
     );
 
@@ -204,7 +208,6 @@ export class EditUserComponent implements OnInit, OnDestroy {
       this.selectedValue = value;
     });
 
-
     this.listEstadosFiltered = this.formUser.get('estado').valueChanges
       .startWith(null)
       .map<string, string>(nome => nome ? nome : '')
@@ -214,8 +217,6 @@ export class EditUserComponent implements OnInit, OnDestroy {
       .startWith(null)
       .map<string, string>(nome => nome ? nome : '')
       .map(nome => nome ? this.filterMunicipio(nome) : this.listMunicipios.slice());
-
-
   }
 
   private changeForm(data: any) {
@@ -242,6 +243,18 @@ export class EditUserComponent implements OnInit, OnDestroy {
         if (this.formUser.contains(name))
           this.formUser.get(name).setValue(apicultor.attributes[name]);
       });
+
+      let registroSif = apicultor.getRegistroSif();
+      if (registroSif == undefined || registroSif == null)
+        this.formUser.get('registroSif').setValue(false);
+
+      let compartilhaDado = apicultor.isCompartilhaDado();
+      if (compartilhaDado == undefined || compartilhaDado == null)
+        this.formUser.get('compartilhaDado').setValue(false);
+
+      let termoParticipacaoProjeto = apicultor.isTermoParticipacaoProjeto();
+      if (termoParticipacaoProjeto == undefined || termoParticipacaoProjeto == null)
+        this.formUser.get('termoParticipacaoProjeto').setValue(false);
 
       if (user.attributes.apicultor.attributes.associacoes) {
 
@@ -274,9 +287,11 @@ export class EditUserComponent implements OnInit, OnDestroy {
       let estado = municipio.getEstado();
       this.formUser.get('estado').setValue(this.listEstados.filter(value => { return value.id == estado.id })[0]);
 
+      if (apicultor.getDataTermoCompromisso())
+        this.dataTermoCompromisso = apicultor.getDataTermoCompromisso()
+
     } else if (user.attributes.tipo == 'ASSOCIACAO') {
       let associacao: Associacao = user.attributes.associacao;
-      console.log(Object.keys(associacao.attributes));
       Object.keys(associacao.attributes).forEach(name => {
         if (this.formUser.contains(name))
           this.formUser.get(name).setValue(associacao.attributes[name]);
@@ -284,6 +299,11 @@ export class EditUserComponent implements OnInit, OnDestroy {
 
       let municipio = associacao.getMunicipio();
       this.formUser.get('municipio').setValue(this.listMunicipios.filter(value => { return value.id == municipio.id })[0]);
+      this.formUser.get('acordoCooperacaoAbelha').setValue(associacao.getAcordoCooperacaoAbelha());
+
+      if (associacao.getDataTermoCompromisso())
+        this.dataTermoCompromisso = associacao.getDataTermoCompromisso()
+
     }
 
     // atributos da user comum a todos    
@@ -292,20 +312,12 @@ export class EditUserComponent implements OnInit, OnDestroy {
         this.formUser.get(name).setValue(user.attributes[name]);
     });
 
-    console.log(Object.keys(user.attributes))
+
 
     if (user.attributes.tipo == 'GESTOR')
       this.formUser.get('nome').setValue(user.attributes.nomeGestor);
 
     this.formUser.get('cpf').setValue(user.getUsername());
-  }
-
-
-  removeNull(a: Associacao[]) {
-
-
-
-
   }
 
   salvar() {
@@ -339,7 +351,10 @@ export class EditUserComponent implements OnInit, OnDestroy {
     associacao.setContatoPresidenteTelefone(user['contatoPresidenteTelefone']);
     associacao.setMunicipio(user['municipio']);
     associacao.setEmail(user['email']);
-
+    associacao.setAcordoCooperacaoAbelha(user['acordoCooperacaoAbelha']);
+    associacao.setDataTermoCompromisso(this.dataTermoCompromisso);
+    associacao.setQtdCaixas(parseInt(user['qtdCaixasFixas']));    
+    associacao.setQtdPontos(parseInt(user['quantidadePontos']));
 
     if (!this.userCurrent) {
 
@@ -349,6 +364,7 @@ export class EditUserComponent implements OnInit, OnDestroy {
 
         let userNew = this.createUser();
         userNew.set('associacao', result);
+
         let session = parse.User.current().getSessionToken();
         this.parseService.signUp(userNew).then(result => {
           this.dialog.confirm('Sucesso', 'Associação Criada com sucesso!', 'SUCCESS', this.view).subscribe(resul => {
@@ -362,18 +378,11 @@ export class EditUserComponent implements OnInit, OnDestroy {
 
       let promises = [];
       promises.push(this.parseService.save(associacao));
-
-      if (this.hasUpdateUser()) {
-        let request = {
-          objectId: this.user.id,
-          password: this.formUser.get('senha').value,
-          username: this.user.getUsername()
-        }
-
-        promises.push(this.parseService.runCloud('updateUserPass', request));
-
+      let result = this.hasUpdateUser();
+      if (result.hasUpdate) {
+        delete result.hasUpdate;
+        promises.push(this.parseService.runCloud('updateUserPass', result));
       }
-
       parse.Promise.when(promises).then(result => {
         if (result)
           this.dialog.confirm('Sucesso', 'Associação atualizada com sucesso!', 'SUCCESS', this.view).subscribe(resul => {
@@ -388,8 +397,8 @@ export class EditUserComponent implements OnInit, OnDestroy {
     let user = this.formUser.value;
     let apicultor: Apicultor = this.userCurrent ? this.userCurrent.attributes.apicultor : new Apicultor();
 
-    if(this.listAssociacoesSelecteds.length == 0){
-      this.dialog.confirm('Erro','Nenhuma associacao foi selecionada','ERRO',this.view)
+    if (this.listAssociacoesSelecteds.length == 0) {
+      this.dialog.confirm('Erro', 'Nenhuma associacao foi selecionada!', 'ERRO', this.view)
       return false;
     }
 
@@ -408,11 +417,16 @@ export class EditUserComponent implements OnInit, OnDestroy {
     apicultor.setEmail(user['email']);
     apicultor.setEndereco(user['endereco']);
     apicultor.setMunicipio(user['municipio']);
-    apicultor.setQtdCaixasFixas(parseInt(user['qtdCaixasFixas']));
+    //apicultor.setQtdCaixasFixas(parseInt(user['qtdCaixasFixas']));
     apicultor.setQtdCaixasMigratorias(parseInt(user['qtdCaixasMigratorias']));
-    apicultor.setQtdPontos(parseInt(user['quantidadePontos']));
+    //apicultor.setQtdPontos(parseInt(user['quantidadePontos']));
     apicultor.setRegistroSif(user['registroSif']);
     apicultor.setTelefone(user['telefone']);
+    apicultor.setDataTermoCompromisso(this.dataTermoCompromisso);
+
+    apicultor.setTermoParticipacaoProjeto(this.perfilUsuarioLogado == constantes.ASSOCIACAO ? false : user['termoParticipacaoProjeto']);
+    apicultor.setCompartilhaDado(user['compartilhaDado'])
+
 
     if (!this.userCurrent) {
 
@@ -437,18 +451,11 @@ export class EditUserComponent implements OnInit, OnDestroy {
 
       let promises = [];
       promises.push(this.parseService.save(apicultor));
-
-      if (this.hasUpdateUser()) {
-        let request = {
-          objectId: this.user.id,
-          password: this.formUser.get('senha').value,
-          username: this.user.getUsername()
-        }
-
-        promises.push(this.parseService.runCloud('updateUserPass', request));
-
+      let result = this.hasUpdateUser();
+      if (result.hasUpdate) {
+        delete result.hasUpdate;
+        promises.push(this.parseService.runCloud('updateUserPass', result));
       }
-
       parse.Promise.when(promises).then(result => {
         if (result)
           this.dialog.confirm('Sucesso', 'Apicultor atualizado com sucesso!', 'SUCCESS', this.view).subscribe(resul => {
@@ -459,7 +466,6 @@ export class EditUserComponent implements OnInit, OnDestroy {
   }
 
   private salvarGestor() {
-
 
     if (!this.userCurrent) {
       let user = this.formUser.value;
@@ -479,19 +485,18 @@ export class EditUserComponent implements OnInit, OnDestroy {
       });
     } else {
 
-      if (this.hasUpdateUser()) {
-        let request = {
-          objectId: this.user.id,
-          password: this.formUser.get('senha').value,
-          username: this.user.getUsername()
-        }
-        this.parseService.runCloud('updateUserPass', request).then(result => {
-
-          if (result) { }
-          this.dialog.confirm('Sucesso', 'Gestor atualizada com sucesso!', 'SUCCESS', this.view).subscribe(resul => {
-            this.routeN.navigate(['home/lista/usuarios']);
-          });
+      let result = this.hasUpdateUser()
+      if (result.hasUpdate) {
+        delete result.hasUpdate;
+        this.parseService.runCloud('updateUserPass', result).then(result => {
+          if (result) {
+            this.dialog.confirm('Sucesso', 'Gestor atualizado com sucesso!', 'SUCCESS', this.view).subscribe(resul => {
+              this.routeN.navigate(['home/lista/usuarios']);
+            });
+          }
         });
+      } else {
+        this.dialog.confirm('Erro', 'Nenhum dado foi alterado!', 'ERRO', this.view);
       }
     }
   }
@@ -504,22 +509,33 @@ export class EditUserComponent implements OnInit, OnDestroy {
     newUser.setUsername(cpf);
     newUser.setPassword(user['senha']);
     newUser.set('tipo', user['tipo']);
+    newUser.setEmail(user['email'], {});
     return newUser;
   }
 
-  hasUpdateUser(): boolean {
+  hasUpdateUser(): any {
     let user = this.formUser.value;
-    let ret: boolean = false;
+    let ret: any = { hasUpdate: false, objectId: this.userCurrent.id };
     let cpf: string = user['cpf'].replace(/[^0-9]/gi, '');
     if (!(cpf.indexOf(this.userCurrent.getUsername()) >= 0)) {
       this.userCurrent.setUsername(cpf);
-      ret = true;
+      ret['username'] = cpf;
+      ret['hasUpdate'] = true;
     }
 
     let senha: string = user['senha'];
     if (senha && senha.length > 0) {
       this.userCurrent.setPassword(senha);
-      ret = true;
+      ret['password'] = senha;
+      ret['hasUpdate'] = true;
+    }
+
+    let email: string = user['email'];
+    let emailOld: string = this.userCurrent.getEmail();
+    if (email != emailOld) {
+      this.userCurrent.setEmail(email, {});
+      ret['email'] = email;
+      ret['hasUpdate'] = true;
     }
     return ret;
 

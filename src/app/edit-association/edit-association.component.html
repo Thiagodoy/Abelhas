@@ -22,6 +22,26 @@
               <input mdInput placeholder="Sigla" formControlName="sigla">
             </md-input-container>
           </div>
+          <div  layout="row">
+            <md-icon class="icon-position" [style.color]="formError?.qtdCaixasFixas ? 'red' :black">filter_none</md-icon>
+            <div layout="column" style="width: 100%">
+              <md-input-container style="width: 60%">
+                <input mdInput placeholder="Quantidade de caixas fixas" formControlName="qtdCaixasFixas">
+                <span md-suffix>unidades.</span>
+              </md-input-container>
+              <div *ngIf="formError?.qtdCaixasFixas" style="color: red;">*{{formError?.qtdCaixasFixas.qtdCaixasFixas.require}}</div>
+            </div>
+          </div>
+          <div  layout="row">
+            <md-icon class="icon-position" [style.color]="formError?.quantidadePontos ? 'red' :black">grain</md-icon>
+            <div layout="column" style="width: 100%">
+              <md-input-container style="width: 60%">
+                <input mdInput placeholder="Quantidade de pontos" value="99" formControlName="quantidadePontos">
+                <span md-suffix>pontos.</span>
+              </md-input-container>
+              <div *ngIf="formError?.quantidadePontos" style="color: red;">*{{formError?.quantidadePontos.quantidadePontos.require}}</div>
+            </div>
+          </div>
           <div layout="row">
             <md-icon class="icon-position" [style.color]="formError?.endereco ? 'red' :black">home</md-icon>
             <md-input-container style="width: 60%">

@@ -20,10 +20,10 @@ export class Apicultor extends Object {
     setAssociacoes(associacao: Associacao[]) {
         this.set('associacoes', associacao)
     }
-    getAssociacoes(): Associacao[]{
+    getAssociacoes(): Associacao[] {
         return this.get('associacoes');
     }
-    setQtdCaixasFixas(caixas: number) {        
+    setQtdCaixasFixas(caixas: number) {
         this.set('qtdCaixasFixas', caixas);
     }
     setEndereco(endereco: string) {
@@ -38,26 +38,47 @@ export class Apicultor extends Object {
     setMunicipio(municipio: Municipio) {
         this.set('municipio', municipio);
     }
-    getMunicipio():Municipio {
+    getMunicipio(): Municipio {
         return this.get('municipio');
     }
     setCelular(param: string) {
         this.set('celular', param);
     }
-    setCpf(cpf:string){
-        this.set('cpf',cpf);
+    setCpf(cpf: string) {
+        this.set('cpf', cpf);
     }
-    setEmail(email:string){
-        this.set('email',email);
+    setEmail(email: string) {
+        this.set('email', email);
     }
-    getEmail():string{
+    getEmail(): string {
         return this.get('email');
     }
-    setRegistroSif(registro:string){
-        this.set('registroSif',registro);
+    setRegistroSif(registro: string) {
+        this.set('registroSif', registro);
     }
-    setQtdCaixasMigratorias(caixa:Number){
-        this.set('qtdCaixasMigratorias',caixa);
-    }  
+    setQtdCaixasMigratorias(caixa: Number) {
+        this.set('qtdCaixasMigratorias', caixa);
+    }
+    getRegistroSif(): boolean {
+        return this.get('registroSif');
+    }
+    setDataTermoCompromisso(param: Date) {
+        this.set('dataTermoCompromisso', param);
+    }
+    getDataTermoCompromisso(): Date {
+        return this.get('dataTermoCompromisso');
+    }
+    isCompartilhaDado(): boolean {
+        return this.get('compartilhaDado');
+    }
+    setCompartilhaDado(paran: boolean) {
+        this.set('compartilhaDado', paran);
+    }
+    isTermoParticipacaoProjeto(): boolean {
+        return this.get('termoParticipacaoProjeto');
+    }
+    setTermoParticipacaoProjeto(param: boolean) {
+        this.set('termoParticipacaoProjeto', param);
+    }
 
 }

@@ -1,3 +1,4 @@
+import { UserWeb } from './../models/user-web';
 import { TableComponent } from './../table/table.component';
 import { Apiario } from './../models/apiario';
 import { FormControl } from '@angular/forms';
@@ -41,6 +42,8 @@ export class ListApiaryComponent implements OnInit {
     { name: 'especie', label: 'Espécie' },
     { name: 'apicultor', label: 'Apicultor' },
     { name: 'propriedadea', label: 'Propriedade' },
+    { name: 'qtdPontos', label: 'Pontos' },
+    { name: 'qtdCaixas', label: 'Caixas' },
     { name: 'status', label: 'Status' },
     { name: 'data', label: 'Data' },
     { name: 'acoes', label: 'Ações' }];
@@ -86,6 +89,7 @@ export class ListApiaryComponent implements OnInit {
     this.queryApiario.include('especieAbelha');
     this.queryApiario.include('propriedade');
     this.queryApiario.notEqualTo('excluded', true);
+    this.queryApiario.descending('createAt');
 
     if (this.controlApicultor.value != '' && this.controlApicultor.value != null) {
       let queryApicultor = this.serviceParse.createQuery(Apicultor);
@@ -113,20 +117,57 @@ export class ListApiaryComponent implements OnInit {
     }
 
     this.queryApiario.limit(1000);
-    this.serviceParse.executeQuery(this.queryApiario).done(result => {
+    this.serviceParse.executeQuery(this.queryApiario).done((result: Apiario[]) => {
 
-      let list = result.map((value) => {
+      let list = result.filter(value => { return value.getApicultor().getAssociacoes().length == 1 }).map((value) => {
         let apiario: Apiario = value;
-        return {
-          id: apiario.id,
-          valido: apiario.isValido(),
-          especie: apiario.getEspecieAbelha().getNome(),
-          apicultor: apiario.getApicultor().getNome(),
-          propriedadea: apiario.getPropriedade().getNome(),
-          status: apiario.getStatus(),
-          data: this.momentService.core(apiario.createdAt).format('DD/MM/YYYY HH:mm')
+        let obj;
+        try {
+          obj = {
+            id: apiario.id,
+            valido: apiario.isValido(),
+            especie: apiario.getEspecieAbelha().getNome(),
+            apicultor: apiario.getApicultor().getNome(),
+            propriedadea: apiario.getPropriedade().getNome(),
+            qdtPontos: apiario.getApicultor().getAssociacoes()[0].getQtdPontos(),
+            qdtCaixas: apiario.getApicultor().getAssociacoes()[0].getQtdCaixas(),
+            status: apiario.getStatus(),
+            data: this.momentService.core(apiario.createdAt).format('DD/MM/YYYY HH:mm')
+          }
+        } catch (e) {
+          console.error('Erro ao montar lista Apiario');
+          console.error('Apiario ' + apiario.id);
+          console.error(e);
         }
+        return obj;
       });
+
+      let list2 = result.filter(value => { return value.getApicultor().getAssociacoes().length > 1 })
+      let list3 = [];
+      for (let ap of list2) {
+        for (let ass of ap.getApicultor().getAssociacoes()) {
+          try {
+            let obj = {
+              id: ap.id,
+              valido: ap.isValido(),
+              especie: ap.getEspecieAbelha().getNome(),
+              apicultor: ap.getApicultor().getNome(),
+              propriedadea: ap.getPropriedade().getNome(),
+              qdtPontos: ass.getQtdPontos(),
+              qdtCaixas: ass.getQtdCaixas(),
+              status: ap.getStatus(),
+              data: this.momentService.core(ap.createdAt).format('DD/MM/YYYY HH:mm')
+            }
+            list3.push(obj);
+          } catch (e) {
+            console.error('Erro ao montar lista Apiario');
+            console.error('Apiario ' + ap.id);
+            console.error(e);
+          }
+        }
+      }
+
+      list.concat(list3);
       this.atualiza(list);
     });
 
@@ -177,12 +218,23 @@ export class ListApiaryComponent implements OnInit {
         menssagem = '<p>Tem certeza que deseja validar este dado?</p>' + '<p>Este procedimento não poderá ser revertido!</p>';
         this.dialogService.confirm('Confirmar validação', menssagem, null, this.viewContainerRef).subscribe((value) => {
           if (value) {
-            this.serviceParse.get(param.element.id, Apiario).then(result => {
-              result.setValidadoPor(parse.User.current());
-              result.setValido(true);
-              result.setDataValidacao(new Date());
+
+
+
+
+            this.serviceParse.get(param.element.id, Apiario, ['apicultor']).then(result => {
+              //result.setValidadoPor(parse.User.current());
+              //result.setValido(true);
+              //result.setDataValidacao(new Date());
+
+              let apicultor: Apicultor = result.getApicultor();
+              let queryApicultor = this.serviceParse.createQuery(Apicultor);
+              queryApicultor.equalTo('objectId', apicultor.id);
+              let queryUser = this.serviceParse.createQuery(UserWeb);
+              queryUser.matchesQuery('apicultor', queryApicultor);
+
               this.serviceParse.save(result).then(result1 => {
-                if (result1)
+                if (result1) {
                   this.zone.run(() => {
                     this.dialogService.confirm('Sucesso', 'Apiario validado com sucesso!', 'SUCCESS', this.viewContainerRef).subscribe(() => {
                       if (this.controlStatus.value == 'nao_validado') {
@@ -195,28 +247,48 @@ export class ListApiaryComponent implements OnInit {
                         temp.valido = true;
                         this.listApiario.push(temp);
                         this.table.refresh();
-                        this.sendNotification(result1.getApicultor().id);
+                        this.serviceParse.executeQuery(queryUser).then(result2 => {
+                          this.sendNotification(result2[0].id);
+                        });
                       }
                     });
                   });
+                }
               });
             });
           }
         });
+
         break;
     }
   }
 
   sendNotification(id) {
-    let query = this.serviceParse.createQuery(Apicultor);
-    query.equalTo('objectId', id);
 
-    let pushData: parse.Push.PushData = {};
-    pushData.where = query;
-    pushData.alert = 'Apiario validado!';
-    pushData.sound = 'default'
 
-    this.serviceParse.sendNotification(pushData);
+    this.serviceParse.findAll(parse.Session).then((result) => {
+
+      if (result && result.length > 0) {        
+        for (let session of result) {          
+          let userId = session.attributes.user.id;          
+          if (id == userId){            
+            let queryInstallation = this.serviceParse.createQuery(parse.Installation);
+            queryInstallation.equalTo('installationId', session.attributes.installationId);
+
+            let pushData: parse.Push.PushData = {};
+            pushData.where = queryInstallation;
+            pushData.data = {
+              alert: 'Caro seu apiário foi validado!',
+              badge: 1,
+              sound: 'default'
+            }
+            this.serviceParse.sendNotification(pushData);
+          }
+        }
+      } else {
+        this.dialogService.confirm('Erro', 'Não foi enviar a notificação', 'ERRO', this.viewContainerRef);
+      }
+    });
   }
 
   filterApicultor(name: string): Apicultor[] {

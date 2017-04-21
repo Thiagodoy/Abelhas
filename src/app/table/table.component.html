@@ -6,7 +6,7 @@
 <md-divider *ngIf="filteredData.length > 0" ></md-divider>
 
 <td-data-table [selectable]="selectable" [data]="filteredData" [columns]="columns" [multiple]="multiple" [sortable]="sortable"
-  [sortBy]="sortBy" [sortOrder]="sortOrder" (sortChange)="sortTable($event)" (rowSelect)="itemSelected($event)" (selectAll)="itemAllSelected($event)" #table>
+  [sortBy]="sortBy" [sortOrder]="sortOrder" (sortChange)="sortTable($event)" (rowSelect)="itemSelected($event)"  (selectAll)="itemAllSelected($event)"  (sortChange)="sort($event)" #table>
   <!--Template Lista Apiario-->
   <template tdDataTableTemplate="valido" let-value="value" let-row="row" let-column="column">
     <div layout="row">
@@ -55,7 +55,8 @@
               <md-icon>menu</md-icon>
               </button>
       <md-menu #menuUser="mdMenu">
-        <button md-menu-item (click)="acoes('EDITAR',row)"> <md-icon>mode_edit</md-icon>Editar</button>
+        <button md-menu-item *ngIf="perfil == 'GESTOR' && row.tipo !='GESTOR' && row.tipo !='ASSOCIACAO'" [disabled]="row.habilitado" (click)="acoes('HABILITAR',row)"> <md-icon>check</md-icon>Habilitar</button>
+        <button md-menu-item [disabled]="perfil == 'ASSOCIACAO'" (click)="acoes('EDITAR',row)"> <md-icon>mode_edit</md-icon>Editar</button>
         <button md-menu-item (click)="acoes('EXCLUIR',row)"> <md-icon>delete</md-icon> Excluir </button>
       </md-menu>
     </div>

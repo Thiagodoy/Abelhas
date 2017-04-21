@@ -1,5 +1,5 @@
 import { Component, OnInit, Input, Output, EventEmitter, ViewContainerRef, ElementRef, AfterViewInit, OnChanges, SimpleChanges, ViewChild } from '@angular/core';
-import { ITdDataTableColumn, IPageChangeEvent, TdDataTableService, TdDataTableComponent, TdDataTableSortingOrder } from '@covalent/core';
+import { ITdDataTableColumn, IPageChangeEvent, TdDataTableService, TdDataTableComponent, TdDataTableSortingOrder,ITdDataTableSortChangeEvent } from '@covalent/core';
 
 import { ParseService } from '../service/parse.service';
 
@@ -21,7 +21,7 @@ export class TableComponent implements OnInit, AfterViewInit, OnChanges {
   @Input() sortBy: string;
   @Input() showPagination: boolean;
   @Input() showSelectionJquery: boolean = true;
-  @Input() itensSelecteds: any[] = []
+  @Input() itensSelecteds: any[] = []  
   @ViewChild('table') table: TdDataTableComponent;
   @Input() paginaTotal: number = 10;
 
@@ -39,11 +39,10 @@ export class TableComponent implements OnInit, AfterViewInit, OnChanges {
 
   itemCurrent: any;
   searchTerm: string;
+  perfil:string;        
 
-  constructor(
-    private _dataTableService: TdDataTableService,
-    private elementRef: ElementRef,
-    private parseService: ParseService) {
+  constructor(private _dataTableService: TdDataTableService, private elementRef: ElementRef, private parseService: ParseService) {
+    this.perfil = this.parseService.core.User.current().attributes.tipo;
   }
 
   ngAfterViewInit() {
@@ -54,7 +53,6 @@ export class TableComponent implements OnInit, AfterViewInit, OnChanges {
         Jquery(el.currentTarget).addClass('td-data-table-clicked');
       });
     }
-
     this.table.uniqueId = this.uniqueId;
   }
 
@@ -69,8 +67,7 @@ export class TableComponent implements OnInit, AfterViewInit, OnChanges {
     tem = this._dataTableService.pageData(tem, this.paginaInicial, this.paginaAtual * this.paginaTotal);
     this.filteredData = tem;
     this.totalRecords = this.data.length;
-
-
+    
     // Seleciona itens na tabela
     if (changes['itensSelecteds']) {
       let array = changes['itensSelecteds']['currentValue'];
@@ -114,16 +111,19 @@ export class TableComponent implements OnInit, AfterViewInit, OnChanges {
   page(pagingEvent: IPageChangeEvent): void {
     this.paginaInicial = pagingEvent.fromRow;
     this.paginaAtual = pagingEvent.page;
-    this.paginaTotal = pagingEvent.pageSize;
-    // let temp: any[] = this.data;
-    // temp = this._dataTableService.pageData(temp, this.paginaInicial, this.paginaAtual * this.paginaTotal);
-    // this.filteredData = temp;
+    this.paginaTotal = pagingEvent.pageSize;    
     this.filter();
   }
   search(searchTerm: string): void {
     this.searchTerm = searchTerm;
     this.filter();
   }
+   sort(sortEvent: ITdDataTableSortChangeEvent): void {
+    this.sortBy = sortEvent.name;
+    this.sortOrder = sortEvent.order;
+    this.filter();
+  }
+
   filter(): void {
     let newData: any[] = this.data;
     newData = this._dataTableService.filterData(newData, this.searchTerm, true);
