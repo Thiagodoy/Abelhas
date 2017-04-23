@@ -1,3 +1,4 @@
+import { AtividadeApicula } from './../models/atividade-apicula';
 import { MomentService } from './moment.service';
 import { DadosDesativacaoApiario } from './../models/dados-desativacao-apiario';
 import { MotivoDesativacaoApiario } from './../models/motivo-desativacao-apiario';
@@ -7,9 +8,6 @@ import { Estado } from './../models/estado';
 import { Municipio } from './../models/municipio';
 import { Injectable, EventEmitter, Output, NgZone, } from '@angular/core';
 import { Router } from '@angular/router';
-import { Http, RequestOptionsArgs, ResponseContentType, Response } from '@angular/http';
-import { Observable, } from 'rxjs/Rx'
-import { TdLoadingService } from '@covalent/core';
 import * as parse from 'parse';
 import { environment } from '../../environments/environment';
 import { Apiario } from '../models/apiario';
@@ -30,7 +28,7 @@ export class ParseService {
   usuarioLogado: UserWeb;
   private instance: ParseService = undefined;
 
-  constructor(private momentService: MomentService, private loadingService: TdLoadingService, private zone: NgZone, private http: Http, private dialogService: DialogService, private route: Router) {
+  constructor(private momentService: MomentService, private zone: NgZone, private dialogService: DialogService, private route: Router) {
     //Define o banco a ser acessado
     let env = environment.getEnvironment();
     this.core.initialize(env.appid);
@@ -51,19 +49,21 @@ export class ParseService {
     this.core.Object.registerSubclass('Associacao', Associacao);
     this.core.Object.registerSubclass('MotivoDesativacaoApiario', MotivoDesativacaoApiario);
     this.core.Object.registerSubclass('DadosDesativacaoApiario', DadosDesativacaoApiario);
+    this.core.Object.registerSubclass('AtividadeApicula', AtividadeApicula);
+
   }
 
   /**
    * Busca todos os objetos na base de acordo com a classe passada 
    * @param Classe extende Parse.Object 
    */
-  findAll<T extends parse.Object>(paramClass: { new (): T }): parse.Promise<T[]> {
+  findAll<T extends parse.Object>(paramClass: { new (): T }, options?: any): parse.Promise<T[]> {
     let query = new this.core.Query(new paramClass());
     query.limit(1000);
     let i = this;
     i.toogleLoading(true);
 
-    return query.find().done(result => {
+    return query.find(options).done(result => {
 
       i.toogleLoading(false);
       return result;
@@ -99,14 +99,44 @@ export class ParseService {
     });
   }
 
-  sendNotification(pushData: parse.Push.PushData) {
+  sendNotification(id: string, msg: string) {
     let i = this;
-    parse.Push.send(pushData, { useMasterKey: true }).fail(erro => {
-      i.showErrorPopUp(erro);
-    }).then(result => {
-      console.log('Notification');
-      console.log(result);
+    this.findAll(parse.Session, { useMasterKey: true }).then((result) => {
+
+      if (result && result.length > 0) {
+        for (let session of result) {
+          let userId = session.attributes.user.id;
+          if (id == userId) {
+            let queryInstallation = this.createQuery(parse.Installation);
+            queryInstallation.equalTo('installationId', session.attributes.installationId);
+
+            let pushData: parse.Push.PushData = {};
+            pushData.where = queryInstallation;
+            pushData.data = {
+              alert: msg,
+              badge: 1,
+              sound: 'default'
+            }
+
+            parse.Push.send(pushData, { useMasterKey: true }).fail(erro => {
+              i.showErrorPopUp(erro);
+            }).then(result => {
+              console.log('Notification sent');
+              console.log(result);
+            });
+
+          }
+        }
+      } else {
+        this.showErrorPopUp(new parse.Error(parse.ErrorCode.OTHER_CAUSE, 'Não foi possivel enviar a notificação'));
+      }
     });
+
+
+
+
+
+
   }
 
   /**
@@ -142,11 +172,6 @@ export class ParseService {
     });
   }
 
-  /**
-   * Realiza o login na aplicação
-   * @param Usuario que extende Parse.User
-   * @returns Promise<>
-   */
   logout() {
     this.toogleLoading(true);
     let i = this;
@@ -156,9 +181,14 @@ export class ParseService {
         isLogado: false
       });
       i.toogleLoading(false);
+      location.reload();
     })
   }
-  
+  /**
+     * Realiza o login na aplicação
+     * @param Usuario que extende Parse.User
+     * @returns Promise<>
+     */
   login(user: Parse.User) {
     let instance = this;
     instance.toogleLoading(true);
@@ -171,8 +201,11 @@ export class ParseService {
             if (res.attributes.tipo == 'GESTOR')
               nome = res.attributes.nomeGestor;
             if (res.attributes.tipo == 'APICULTOR') {
-              let apicultor: Apicultor = res.attributes.apicultor;
-              nome = apicultor.getNome();
+              instance.toogleLoading(false);
+              this.dialogService.confirm('Erro', 'Acesso não permitido, usuário com perfil Apicultor', 'ERRO', null).subscribe(value => {
+                instance.logout();
+              });
+              return false;
             }
             if (res.attributes.tipo == 'ASSOCIACAO') {
               let associacao: Associacao = res.attributes.associacao;
@@ -188,7 +221,7 @@ export class ParseService {
             localStorage.setItem('session', '' + this.momentService.now());
             this.route.navigate(['home/lista/apiarios']);
 
-            instance.toogleLoading(false)
+            instance.toogleLoading(false);
           });
         },
         (erro) => {

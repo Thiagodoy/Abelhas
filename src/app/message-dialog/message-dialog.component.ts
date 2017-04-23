@@ -1,6 +1,4 @@
 import { TableComponent } from './../table/table.component';
-import { MomentService } from './../service/moment.service';
-import { Apiario } from './../models/apiario';
 
 import { Component, OnInit } from '@angular/core';
 import { MdDialogRef } from '@angular/material';

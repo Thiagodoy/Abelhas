@@ -1,5 +1,5 @@
 import { Apicultor } from './../models/apicultor';
-import { LeafletColorMarker } from './../table-pagination/leaflet-color-marker';
+import { LeafletColorMarker } from '../leaflet-color-marker';
 import { UserWeb } from './../models/user-web';
 import { DialogService } from './../service/dialog.service';
 import { Apiario } from './../models/apiario';
@@ -7,9 +7,9 @@ import { Location } from './../models/location';
 import { EspecieAbelha } from './../models/especie-abelha';
 import { Cultura } from './../models/cultura';
 import { Propriedade } from './../models/propriedade';
-import { FormGroup, FormBuilder, FormControl, AbstractControl } from '@angular/forms';
-import { Component, OnInit, EventEmitter, OnDestroy, NgZone, SecurityContext, AfterViewInit } from '@angular/core';
-import { ActivatedRoute } from '@angular/router';
+import { FormGroup, FormBuilder, FormControl } from '@angular/forms';
+import { Component, OnInit, EventEmitter, OnDestroy, SecurityContext } from '@angular/core';
+import { ActivatedRoute, Router } from '@angular/router';
 import { DomSanitizer, } from '@angular/platform-browser';
 import { ParseService } from '../service/parse.service';
 
@@ -46,7 +46,7 @@ export class EditApiaryComponent implements OnInit, OnDestroy {
   motivoMortandade: FormGroup;
 
 
-  constructor(private route: ActivatedRoute, private parseService: ParseService, private zone: NgZone, private sanitizer: DomSanitizer, private dialog: DialogService, private fb: FormBuilder) { }
+  constructor(private routeR: Router, private route: ActivatedRoute, private parseService: ParseService, private sanitizer: DomSanitizer, private dialog: DialogService, private fb: FormBuilder) { }
 
   ngOnInit() {
 
@@ -197,32 +197,30 @@ export class EditApiaryComponent implements OnInit, OnDestroy {
     this.parseService.save(this.apiario).then(res => {
       if (res) {
         this.dialog.confirm('Sucesso', 'Apiário validado com sucesso', 'SUCCESS', null).subscribe(value => {
-          if(res)
-            this.sendNotification(res.getApicultor().id);
-        
+          if (res) {
+            let queryUser = this.parseService.createQuery(UserWeb);
+            let queryApicultor = this.parseService.createQuery(Apicultor);
+            queryApicultor.equalTo('objectId', this.apiario.getApicultor().id);
+            queryUser.matchesQuery('apicultor', queryApicultor);
+            this.parseService.executeQuery(queryUser).then(result => {
+              if (result && result.length > 0) {
+                this.parseService.sendNotification(result[0].id, 'Caro seu apiário foi validado!');
+              }
+            });
+          }
+          this.routeR.navigate(['home/lista/apiarios']);
         });
       }
     });
-  }
-
-
-  sendNotification(id) {
-    let query = this.parseService.createQuery(Apicultor);
-    query.equalTo('objectId', id);
-
-    let pushData: parse.Push.PushData = {};
-    pushData.where = query;
-    pushData.alert = 'Apiario validado!';
-    pushData.sound = 'default'
-
-    this.parseService.sendNotification(pushData);
   }
 
   excluir() {
     this.apiario.setAtivo(false);
     this.parseService.save(this.apiario).then(res => {
       if (res) {
-        this.dialog.confirm('Sucesso', 'Apiário excluido com sucesso!', 'SUCCESS', null);
+        this.dialog.confirm('Sucesso', 'Apiário excluido com sucesso!', 'SUCCESS', null).subscribe(value => {
+          this.routeR.navigate(['home/lista/apiarios']);
+        });
       }
     });
   }
@@ -231,7 +229,9 @@ export class EditApiaryComponent implements OnInit, OnDestroy {
     this.mountApiario();
     this.parseService.save(this.apiario).then(res => {
       if (res) {
-        this.dialog.confirm('Sucesso', 'Apiário salvo com sucesso!', 'SUCCESS', null);
+        this.dialog.confirm('Sucesso', 'Apiário salvo com sucesso!', 'SUCCESS', null).subscribe(value => {
+          this.routeR.navigate(['home/lista/apiarios']);
+        });
       }
     });
   }
@@ -265,7 +265,7 @@ export class EditApiaryComponent implements OnInit, OnDestroy {
     if (!event)
       return false;
     event.preventDefault();
-    var img = jquery(event.currentTarget);
+
     if (event.type == 'load') {
       EditApiaryComponent.activePopUp();
     }

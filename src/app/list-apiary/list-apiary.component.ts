@@ -5,7 +5,7 @@ import { FormControl } from '@angular/forms';
 import { Observable } from 'rxjs/Rx';
 import { Propriedade } from './../models/propriedade';
 import { Apicultor } from './../models/apicultor';
-import { Component, OnInit, ViewChild, ContentChild, AfterContentInit, NgZone, ViewContainerRef, AfterContentChecked, AfterViewInit, AfterViewChecked } from '@angular/core';
+import { Component, OnInit, ViewChild, ContentChild, NgZone, ViewContainerRef} from '@angular/core';
 import { Router } from '@angular/router'
 import { ITdDataTableColumn } from '@covalent/core';
 import { ParseService } from '../service/parse.service';
@@ -193,8 +193,8 @@ export class ListApiaryComponent implements OnInit {
         break;
       case 'EXCLUIR':
         menssagem = '<p> Deseja prosseguir com a exclusão do dado?</p>';
-        this.dialogService.confirm('Confirmar exclusão', menssagem, null, this.viewContainerRef).subscribe((value) => {
-          if (value) {
+        this.dialogService.confirm('Confirmar exclusão', menssagem, null, this.viewContainerRef).subscribe((val) => {
+          if (val) {
             this.serviceParse.get(param.element.id, Apiario).then(result => {
               result.setExcluded(true);
               this.serviceParse.save(result).then(result1 => {
@@ -218,15 +218,10 @@ export class ListApiaryComponent implements OnInit {
         menssagem = '<p>Tem certeza que deseja validar este dado?</p>' + '<p>Este procedimento não poderá ser revertido!</p>';
         this.dialogService.confirm('Confirmar validação', menssagem, null, this.viewContainerRef).subscribe((value) => {
           if (value) {
-
-
-
-
             this.serviceParse.get(param.element.id, Apiario, ['apicultor']).then(result => {
-              //result.setValidadoPor(parse.User.current());
-              //result.setValido(true);
-              //result.setDataValidacao(new Date());
-
+              result.setValidadoPor(parse.User.current());
+              result.setValido(true);
+              result.setDataValidacao(new Date());
               let apicultor: Apicultor = result.getApicultor();
               let queryApicultor = this.serviceParse.createQuery(Apicultor);
               queryApicultor.equalTo('objectId', apicultor.id);
@@ -264,31 +259,7 @@ export class ListApiaryComponent implements OnInit {
   }
 
   sendNotification(id) {
-
-
-    this.serviceParse.findAll(parse.Session).then((result) => {
-
-      if (result && result.length > 0) {        
-        for (let session of result) {          
-          let userId = session.attributes.user.id;          
-          if (id == userId){            
-            let queryInstallation = this.serviceParse.createQuery(parse.Installation);
-            queryInstallation.equalTo('installationId', session.attributes.installationId);
-
-            let pushData: parse.Push.PushData = {};
-            pushData.where = queryInstallation;
-            pushData.data = {
-              alert: 'Caro seu apiário foi validado!',
-              badge: 1,
-              sound: 'default'
-            }
-            this.serviceParse.sendNotification(pushData);
-          }
-        }
-      } else {
-        this.dialogService.confirm('Erro', 'Não foi enviar a notificação', 'ERRO', this.viewContainerRef);
-      }
-    });
+    this.serviceParse.sendNotification(id, 'Caro seu apiário foi validado!');
   }
 
   filterApicultor(name: string): Apicultor[] {

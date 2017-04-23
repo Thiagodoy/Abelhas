@@ -7,15 +7,18 @@ function validateCustomNome(): ValidatorFn {
     return (control: AbstractControl): { [key: string]: any } => {
 
 
-        if (!control.parent)
+        if (!control.parent){
             return null;
+        }
 
         let nome: string = control.value;
         let p = control.parent.get('tipo');
 
-        if (p.value === constantes.APICULTOR || p.value === constantes.ASSOCIACAO || p.value === constantes.GESTOR)
-            if (!nome || (nome && nome.length == 0))
+        if (p.value === constantes.APICULTOR || p.value === constantes.ASSOCIACAO || p.value === constantes.GESTOR){
+            if (!nome || (nome && nome.length == 0)){
                 return { 'nome': { required: 'Nome obrigatorio!' } };
+            }
+        }
 
         return null;
     };
@@ -24,8 +27,9 @@ function validateCustomNome(): ValidatorFn {
 function validateCustomEndereco(): ValidatorFn {
     return (control: AbstractControl): { [key: string]: any } => {
 
-        if (!control.parent || !control.parent.get('endereco'))
+        if (!control.parent || !control.parent.get('endereco')){
             return null;
+        }
 
         let p = control.parent.get('tipo');
         let end = control.value;
@@ -41,16 +45,18 @@ function validateCustomEndereco(): ValidatorFn {
 function validateCustomTelefone(): ValidatorFn {
     return (control: AbstractControl): { [key: string]: any } => {
 
-        if (!control.parent)
+        if (!control.parent){
             return null;
+        }
 
         let p = control.parent.get('tipo');
         let telefone: string = control.value;
 
-        if (p.value === constantes.ASSOCIACAO)
-            if (!telefone || telefone.length == 0)
+        if (p.value === constantes.ASSOCIACAO){
+            if (!telefone || telefone.length == 0){
                 return { 'telefone': { require: 'Campo obrigatório' } }
-
+            }
+        }
         return null;
     };
 }
@@ -58,8 +64,9 @@ function validateCustomTelefone(): ValidatorFn {
 function validateCustomAssociacao(): ValidatorFn {
     return (control: AbstractControl): { [key: string]: any } => {
 
-        if (!control.parent || !control.parent.get('associacao'))
+        if (!control.parent || !control.parent.get('associacao')){
             return null;
+        }
 
         let p = control.parent.get('tipo');
         let ass: Associacao = control.value;
@@ -75,15 +82,18 @@ function validateCustomAssociacao(): ValidatorFn {
 function validateCustomSigla(): ValidatorFn {
     return (control: AbstractControl): { [key: string]: any } => {
 
-        if (!control.parent)
+        if (!control.parent){
             return null;
+        }
 
         let p = control.parent.get('tipo');
         let sigla: string = control.value;
 
-        if (p.value === constantes.ASSOCIACAO)
-            if (!sigla || sigla.length == 0)
+        if (p.value === constantes.ASSOCIACAO){
+            if (!sigla || sigla.length == 0){
                 return { 'sigla': { require: 'Campo obrigatório' } }
+            }
+        }
 
         return null;
 
@@ -93,15 +103,18 @@ function validateCustomSigla(): ValidatorFn {
 function validateCustomqtdCaixasFixas(): ValidatorFn {
     return (control: AbstractControl): { [key: string]: any } => {
 
-        if (!control.parent)
+        if (!control.parent){
             return null;
+        }
 
         let p = control.parent.get('tipo');
         let value = control.value;
 
-        if (p.value === constantes.ASSOCIACAO)
-            if (isNaN(value) || value == '' || value == null || value == 0)
+        if (p.value === constantes.ASSOCIACAO){
+            if (isNaN(value) || value == '' || value == null || value == 0){
                 return { 'qtdCaixasFixas': { require: 'Insira um valor válido' } };
+            }
+        }
 
         return null;
     };
@@ -110,15 +123,18 @@ function validateCustomqtdCaixasFixas(): ValidatorFn {
 function validateCustomContatoPresidente(): ValidatorFn {
     return (control: AbstractControl): { [key: string]: any } => {
 
-        if (!control.parent)
+        if (!control.parent){
             return null;
+        }
 
         let p = control.parent.get('tipo');
         let value: string = control.value;
 
-        if (p.value === constantes.ASSOCIACAO)
-            if (!value || value.length == 0)
+        if (p.value === constantes.ASSOCIACAO){
+            if (!value || value.length == 0){
                 return { 'contatoPresidente': { required: 'Campo obrigatório' } };
+            }
+        }
 
         return null;
     };
@@ -127,15 +143,18 @@ function validateCustomContatoPresidente(): ValidatorFn {
 function validateCustomqtdPonto(): ValidatorFn {
     return (control: AbstractControl): { [key: string]: any } => {
 
-        if (!control.parent)
+        if (!control.parent){
             return null;
+        }
 
         let p = control.parent.get('tipo');
         let value = control.value;
 
-        if (p.value === constantes.ASSOCIACAO)
-            if (isNaN(value) || value == '' || value == null || value == 0)
+        if (p.value === constantes.ASSOCIACAO){
+            if (isNaN(value) || value == '' || value == null || value == 0){
                 return { 'quantidadePontos': { require: 'Insira um valor válido' } };
+            }
+        }
 
         return null;
     };
@@ -144,8 +163,9 @@ function validateCustomqtdPonto(): ValidatorFn {
 function validateCustomCpfOrCnpj(): ValidatorFn {
     return (control: AbstractControl): { [key: string]: any } => {
 
-        if (!control.parent || !control.parent.get('cpf'))
+        if (!control.parent || !control.parent.get('cpf')){
             return null;
+        }
 
         let p = control.parent.get('tipo');
         let value: string = control.value;
@@ -161,8 +181,9 @@ function validateCustomCpfOrCnpj(): ValidatorFn {
 function validateCustomqtdCaixasMigratorias() {
     return (control: AbstractControl): { [key: string]: any } => {
 
-        if (!control.parent)
+        if (!control.parent){
             return null;
+        }
 
         let p = control.parent.get('tipo');
         let value = control.value;
@@ -184,19 +205,17 @@ function validateCustomSenha(param: string) {
 
         let controlSenha = control.parent.get('senha');
         let controlSenhaConf = control.parent.get('confirmar_senha');
-        let value = control.value;
-
-
 
         if (param === constantes.CREATE) {
-            if (!controlSenha.value || (controlSenha.value && controlSenha.value.length == 0))
+            if (!controlSenha.value || (controlSenha.value && controlSenha.value.length == 0)){
                 return { 'senha': { require: 'Insira uma senha valida' } };
-
+            }
         }
 
         if (param === constantes.CHANGE) {
-            if (controlSenha.value && controlSenha.value.length == 0 && controlSenhaConf.value.length > 0)
+            if (controlSenha.value && controlSenha.value.length == 0 && controlSenhaConf.value.length > 0){
                 return { 'senha': { require: 'Insira uma senha valida' } };
+            }
 
             if (controlSenha.value && controlSenha.value.length > 0 && controlSenhaConf.value.length == 0) {
                 controlSenhaConf.setErrors({confirmar_senha:{no_match:'*Prencher este campo!'}});
@@ -214,20 +233,22 @@ function validateCustomSenhaConf(param: string) {
             return null;
 
         let controlSenha = control.parent.get('senha');
-        let controlSenhaConf = control.parent.get('confirmar_senha');
-        let value = control.value;
+        let controlSenhaConf = control.parent.get('confirmar_senha');       
 
         if (param === constantes.CREATE) {
-            if (!controlSenhaConf.value || (controlSenhaConf.value && controlSenhaConf.value.length == 0))
+            if (!controlSenhaConf.value || (controlSenhaConf.value && controlSenhaConf.value.length == 0)){
                 return { 'confirmar_senha': { require: 'Insira uma senha valida' } };
+            }
 
-            if (controlSenhaConf.value != controlSenha.value)
+            if (controlSenhaConf.value != controlSenha.value){
                 return { 'confirmar_senha': { no_match: '*Senha não confere!' } };
+            }
         }
 
         if (param === constantes.CHANGE) {
-            if (controlSenhaConf.value != controlSenha.value)
+            if (controlSenhaConf.value != controlSenha.value){
                 return { 'confirmar_senha': { no_match: '*Senha não confere!' } };                
+            }
         }
 
         return null;
@@ -272,8 +293,4 @@ export default {
     validateCustomSenhaConf(param: string): ValidatorFn {
         return validateCustomSenhaConf(param);
     }
-
-
-
-
 }

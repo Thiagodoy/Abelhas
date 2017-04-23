@@ -1,8 +1,7 @@
-import { Router } from '@angular/router';
 import { ParseService } from './../service/parse.service';
 import { UserWeb } from './../models/user-web';
-import { Component, OnInit, NgZone } from '@angular/core';
-import { FormControl, FormGroup, FormBuilder, Validators } from '@angular/forms';
+import { Component, OnInit,ChangeDetectorRef } from '@angular/core';
+import { FormGroup, FormBuilder, Validators } from '@angular/forms';
 
 @Component({
   selector: 'app-login',
@@ -16,10 +15,10 @@ export class LoginComponent implements OnInit {
   cpf = [/\d/, /\d/, /\d/, '.', /\d/, /\d/, /\d/, '.', /\d/, /\d/, /\d/, '-', /\d/, /\d/];
   cnpj = [/\d/, /\d/, '.', /\d/, /\d/, /\d/, '.', /\d/, /\d/, /\d/, '/', /\d/, /\d/, /\d/, /\d/, '-', /\d/, /\d/,];
 
-  constructor(private fb: FormBuilder, private parseService: ParseService, private route: Router, private zone: NgZone) { }
+  constructor(private fb: FormBuilder, private parseService: ParseService) { }
 
-  ngOnInit() {
-    this.createForm();
+  ngOnInit() {    
+    this.createForm();    
   }
   createForm() {
     this.formLogin = this.fb.group({
@@ -35,14 +34,12 @@ export class LoginComponent implements OnInit {
   }
 
   login() {
-
     let user = new UserWeb();
     let username:string = this.formLogin.get('username').value;
     username = username.replace(/[^0-9]/gi,'');
     user.setUsername(username);
     user.setPassword(this.formLogin.get('password').value);
-    this.parseService.login(user);
-    
+    this.parseService.login(user);    
   }
 
 }

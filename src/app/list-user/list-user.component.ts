@@ -87,10 +87,10 @@ export class ListUserComponent implements OnInit {
       case 'EDITAR':
         let queryParam = { user: user.id, type: user.tipo };
 
-        if (user.tipo == constantes.GESTOR)
+        if (user.tipo == constantes.GESTOR){
           queryParam['email'] = user.email;
+        }
 
-        debugger
         this.route.navigate(['home/editar/usuario'], { queryParams: queryParam });
         break;
       case 'EXCLUIR':

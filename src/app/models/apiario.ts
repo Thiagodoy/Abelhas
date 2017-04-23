@@ -1,5 +1,4 @@
-import { LeafletColorMarker } from './../table-pagination/leaflet-color-marker';
-import { UserWeb } from './user-web';
+import { LeafletColorMarker } from './../leaflet-color-marker';
 import { Object } from 'parse';
 import { Cultura } from './cultura';
 import { Propriedade } from './propriedade';

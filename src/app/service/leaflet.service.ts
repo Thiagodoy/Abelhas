@@ -21,13 +21,13 @@ export class LeafletService {
   constructor(private geocode: GeocodeService, sanitizer: DomSanitizer) {
 
     this.baseMaps = {
-      Exemplo_1: L.tileLayer("http://{s}.tile.openstreetmap.fr/hot/{z}/{x}/{y}.png", {
+      Exemplo_1: L.tileLayer('http://{s}.tile.openstreetmap.fr/hot/{z}/{x}/{y}.png', {
         attribution: ''
       }),
-      Exemplo_2: L.tileLayer("http://server.arcgisonline.com/ArcGIS/rest/services/World_Topo_Map/MapServer/tile/{z}/{y}/{x}", {
+      Exemplo_2: L.tileLayer('http://server.arcgisonline.com/ArcGIS/rest/services/World_Topo_Map/MapServer/tile/{z}/{y}/{x}', {
         attribution: ''
       }),
-      Exemplo_3: L.tileLayer("http://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}.png", {
+      Exemplo_3: L.tileLayer('http://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}.png', {
         attribution: ''
       })
     };
@@ -54,7 +54,6 @@ export class LeafletService {
 
     this.removeAll()
     for (let location of locations) {
-
       this.map.panTo([location.latitude, location.longitude]);
       let marker = this.core.marker([location.latitude, location.longitude], { icon: location.getIcon() }).bindPopup(location.getPopUp()).addTo(this.map).openPopup();
       this.markers.set(location.getKey(), marker);
@@ -100,8 +99,9 @@ export class LeafletService {
 
   putGroupLOcation(l: Location[]) {
 
-    if (l.length == 0)
+    if (l.length == 0){
       return false;
+    }
 
     if (this.group){
       this.map.removeLayer(this.group);
@@ -118,7 +118,7 @@ export class LeafletService {
     this.group = this.core.layerGroup(m);
 
 
-    var overlayMaps = { "Apiarios": this.group };
+    let overlayMaps = { "Apiarios": this.group };
     let location = l[0];
     let LatLng = new L.LatLng(location.getLatitude(), location.getLongitude());
     this.map.setView(LatLng, 10);

@@ -1,4 +1,4 @@
-import { Component, OnInit, Input, Output, EventEmitter, ViewContainerRef, ElementRef, AfterViewInit, OnChanges, SimpleChanges, ViewChild } from '@angular/core';
+import { Component, OnInit, Input, Output, EventEmitter, AfterViewInit, OnChanges, SimpleChanges, ViewChild } from '@angular/core';
 import { ITdDataTableColumn, IPageChangeEvent, TdDataTableService, TdDataTableComponent, TdDataTableSortingOrder,ITdDataTableSortChangeEvent } from '@covalent/core';
 
 import { ParseService } from '../service/parse.service';
@@ -39,9 +39,9 @@ export class TableComponent implements OnInit, AfterViewInit, OnChanges {
 
   itemCurrent: any;
   searchTerm: string;
-  perfil:string;        
+  perfil: string;        
 
-  constructor(private _dataTableService: TdDataTableService, private elementRef: ElementRef, private parseService: ParseService) {
+  constructor(private _dataTableService: TdDataTableService, private parseService: ParseService) {
     this.perfil = this.parseService.core.User.current().attributes.tipo;
   }
 

@@ -1,3 +1,4 @@
+import { OnlyReadComponent } from './../only-read/only-read.component';
 import { CanActivateUser } from './../guards/can-active-user';
 import { ListPropertyComponent } from './../list-property/list-property.component';
 import { LoginComponent } from './../login/login.component';
@@ -50,7 +51,8 @@ export const route: Routes = [
             { path: 'propriedades', component: ListPropertyComponent },
             { path: 'dados/desativação', component: DataDeactivationComponent },
             { path: 'editar/usuario', component: EditUserComponent },
-            { path: 'historic', component: HistoricComponent }
+            { path: 'historic', component: HistoricComponent },
+            { path: 'leitura', component: OnlyReadComponent }
         ]
     },
 

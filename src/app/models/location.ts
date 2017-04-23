@@ -1,5 +1,5 @@
-import {LatLngBounds,Icon} from "leaflet";
-import * as L  from "leaflet";
+import {LatLngBounds,Icon} from 'leaflet';
+import * as L  from 'leaflet';
 
 export class Location {
     latitude: number;

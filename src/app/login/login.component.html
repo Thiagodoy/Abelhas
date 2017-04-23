@@ -1,4 +1,7 @@
-<div layout="column" style="margin-top: 60px;align-items: center">
+<div layout="row" layout-align="center center">
+  <img class="m-top-20"   src="assets/logo.png" alt="">
+</div>
+<div layout="column" style="margin-top: 60px;align-items: center;margin-left: -60px;">
   <md-card>
     <md-card-title>
       <md-toolbar class="login-toolbar-positon" color="accent"> </md-toolbar>
@@ -25,7 +28,7 @@
       </form>
     </md-card-content>
     <md-card-actions layout="row" layout-align="center">
-      <button [disabled]="!formLogin.valid" (click)="login()" class="login-button" md-raised-button color="accent">Entrar<md-icon>input</md-icon></button>
+      <button [disabled]="!formLogin.valid" (click)="login()" class="login-button" md-raised-button color="accent">Entrar<md-icon style="margin-left: 5px">input</md-icon></button>
     </md-card-actions>
   </md-card>
 </div>

@@ -7,11 +7,11 @@ import { Apicultor } from './../models/apicultor';
 import { ParseService } from './../service/parse.service';
 import * as parse from 'parse';
 
-import { FormControl, FormGroup, FormBuilder, Validators } from '@angular/forms';
+import { FormGroup, FormBuilder, Validators } from '@angular/forms';
 import { UserWeb } from './../models/user-web';
 import { Subscription, Observable } from 'rxjs/Rx';
 import { ActivatedRoute, Router } from '@angular/router';
-import { Component, OnInit, OnDestroy, NgZone, ViewContainerRef } from '@angular/core';
+import { Component, OnInit, OnDestroy, ViewContainerRef } from '@angular/core';
 import ValidatorCustom from './validator/validator-custom';
 import constantes from '../constantes';
 
@@ -51,7 +51,7 @@ export class EditUserComponent implements OnInit, OnDestroy {
 
 
 
-  constructor(private route: ActivatedRoute, private routeN: Router, private builder: FormBuilder, private parseService: ParseService, private zone: NgZone, private dialog: DialogService, private view: ViewContainerRef) { }
+  constructor(private route: ActivatedRoute, private routeN: Router, private builder: FormBuilder, private parseService: ParseService, private dialog: DialogService, private view: ViewContainerRef) { }
 
   ngOnInit() {
 

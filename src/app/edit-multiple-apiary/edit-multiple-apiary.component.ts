@@ -1,4 +1,4 @@
-import { LeafletColorMarker } from './../table-pagination/leaflet-color-marker';
+import { LeafletColorMarker } from './../leaflet-color-marker';
 import { DialogService } from './../service/dialog.service';
 import { Location } from './../models/location';
 import { LeafletService } from './../service/leaflet.service';
@@ -8,10 +8,9 @@ import { Municipio } from './../models/municipio';
 import { EspecieAbelha } from './../models/especie-abelha';
 import { Propriedade } from './../models/propriedade';
 import { Apicultor } from './../models/apicultor';
-import { ActivatedRoute } from '@angular/router';
 import { ParseService } from './../service/parse.service';
-import { Component, OnInit, OnDestroy, NgZone, ViewContainerRef } from '@angular/core';
-import { Subscription, Observable } from 'rxjs/Rx';
+import { Component, OnInit,  NgZone, ViewContainerRef } from '@angular/core';
+import { Observable } from 'rxjs/Rx';
 import { FormControl, Validators, AbstractControl } from '@angular/forms';
 import { ITdDataTableColumn } from '@covalent/core';
 import * as parse from 'parse';
@@ -55,7 +54,7 @@ export class EditMultipleApiaryComponent implements OnInit {
 
   error: any = {};
 
-  constructor(private view:ViewContainerRef,private dialogService: DialogService, private parseService: ParseService, private route: ActivatedRoute, private momentService: MomentService, private zone: NgZone, private leaflet: LeafletService) { }
+  constructor(private view:ViewContainerRef,private dialogService: DialogService, private parseService: ParseService, private momentService: MomentService, private zone: NgZone, private leaflet: LeafletService) { }
 
   ngOnInit() {
 
@@ -114,7 +113,7 @@ export class EditMultipleApiaryComponent implements OnInit {
 
 
   todos() {
- debugger;
+ 
     let propriedade = new Propriedade();
     propriedade.setNome('Todos');
     this.listPropriedade.push(propriedade);
@@ -209,7 +208,7 @@ export class EditMultipleApiaryComponent implements OnInit {
 
   mover() {
     if (this.validar('')) {
-      debugger
+      
       if (this.listApiarioSelected.length == 0) {
         let message = '<p>Não existe nenhum apiário selecionado</p>'
         this.dialogService.confirm('Erro', message, 'ERRO', this.view);

@@ -1,12 +1,12 @@
 import { ITdDataTableColumn } from '@covalent/core';
 import { DataPickerCustomComponent } from './../data-picker-custom/data-picker-custom.component';
 import { DadosDesativacaoApiario } from './../models/dados-desativacao-apiario';
-import { FormControl, FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { MotivoDesativacaoApiario } from './../models/motivo-desativacao-apiario';
 import { MomentService } from './../service/moment.service';
 import { Apiario } from './../models/apiario';
 import { ParseService } from './../service/parse.service';
-import { Component, OnInit, ViewContainerRef, ElementRef, ViewChild } from '@angular/core';
+import { Component, OnInit, ViewContainerRef, ViewChild } from '@angular/core';
 import { DialogService } from '../service/dialog.service';
 import * as parse from 'parse';
 
@@ -25,8 +25,7 @@ export class DataDeactivationComponent implements OnInit {
   @ViewChild('data') dataCustom: DataPickerCustomComponent;
 
   constructor(private dialogService: DialogService,
-    private viewContainerRef: ViewContainerRef,
-    private elementRef: ElementRef,
+    private viewContainerRef: ViewContainerRef,    
     private parseService: ParseService,
     private momentService: MomentService,
     private fb: FormBuilder) { }

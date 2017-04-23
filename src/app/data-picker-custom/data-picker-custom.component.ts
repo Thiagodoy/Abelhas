@@ -79,7 +79,7 @@ export class DataPickerCustomComponent implements OnInit, OnChanges {
     // colors
     this.colors = {
       'black': '#333333',
-      'blue': '#1285bf',
+      'blue': 'green',
       'lightGrey': '#f1f1f1',
       'white': '#ffffff'
     };
