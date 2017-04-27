@@ -205,8 +205,14 @@ export class ParseService {
           this.zone.run(() => {
             this.usuarioLogado = res;
             let nome = ''
-            if (res.attributes.tipo == 'GESTOR')
+            if (res.attributes.tipo == 'GESTOR') {
               nome = res.attributes.nomeGestor;
+              this.usuarioLogadoEvent.emit({
+                isLogado: true,
+                perfil: res.attributes.tipo,
+                nome: nome
+              });
+            }
             if (res.attributes.tipo == 'APICULTOR') {
               instance.toogleLoading(false);
               this.dialogService.confirm('Erro', 'Acesso não permitido, usuário com perfil Apicultor', 'ERRO', null).subscribe(value => {
@@ -215,8 +221,16 @@ export class ParseService {
               return false;
             }
             if (res.attributes.tipo == 'ASSOCIACAO') {
-              let associacao: Associacao = res.attributes.associacao;
-              nome = associacao.getNome();
+              this.get(res.id, UserWeb, ['associacao']).then(result => {
+                let associacao: Associacao = result.attributes.associacao;
+                nome = associacao.getNome();
+                this.usuarioLogadoEvent.emit({
+                  isLogado: true,
+                  perfil: res.attributes.tipo,
+                  nome: nome
+                });
+
+              });
             }
 
             this.usuarioLogadoEvent.emit({
