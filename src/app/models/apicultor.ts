@@ -47,6 +47,9 @@ export class Apicultor extends Object {
     setCpf(cpf: string) {
         this.set('cpf', cpf);
     }
+    getCpf():string {
+      return this.get('cpf');
+    }
     setEmail(email: string) {
         this.set('email', email);
     }

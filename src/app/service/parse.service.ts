@@ -57,11 +57,18 @@ export class ParseService {
    * Busca todos os objetos na base de acordo com a classe passada 
    * @param Classe extende Parse.Object 
    */
-  findAll<T extends parse.Object>(paramClass: { new (): T }, options?: any): parse.Promise<T[]> {
+  findAll<T extends parse.Object>(paramClass: { new (): T }, options?: any, include?: string[]): parse.Promise<T[]> {
     let query = new this.core.Query(new paramClass());
     query.limit(1000);
     let i = this;
     i.toogleLoading(true);
+
+    if (include) {
+      for (let j of include) {
+        query.include(j);
+      }
+    }
+
 
     return query.find(options).done(result => {
 

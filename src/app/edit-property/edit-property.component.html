@@ -35,6 +35,15 @@
               </md-option>
             </md-autocomplete>
           </div>
+          <div layout="row" style=" margin-top: 10px">
+            <md-icon class="icon-position">view_comfy</md-icon>
+            <md-input-container style="width: 40%">
+              <input mdInput placeholder="Apicultores" value="Nenhum item selecionado" formControlName="controlItensSelecionados">
+            </md-input-container>
+            <a md-raised-button color="primary" style="height: 35px;margin-left: 24px;" (click)="search($event)">
+              <md-icon>visibility</md-icon>
+            </a>
+          </div>
         </div>
       </form>
     </md-card-content>

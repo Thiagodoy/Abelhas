@@ -12,6 +12,7 @@ export class CanActivateUser implements CanActivate {
         state: RouterStateSnapshot
     ): Observable<boolean> | Promise<boolean> | boolean {      
 
+        
         if (this.parseService.core.User.current())                
             return true;
         else{
