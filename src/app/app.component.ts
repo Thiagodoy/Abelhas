@@ -82,7 +82,7 @@ export class AppComponent implements OnDestroy {
         this.nome = associacao.getNome();
       }
 
-      this.route.navigate(['home/lista/apiarios']);
+     // this.route.navigate(['home/lista/apiarios']);
 
     }
   }

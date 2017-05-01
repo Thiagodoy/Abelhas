@@ -1,3 +1,4 @@
+import { ApicultorAssociacao } from './../models/apicultor-associacao';
 import { AtividadeApicula } from './../models/atividade-apicula';
 import { MomentService } from './moment.service';
 import { DadosDesativacaoApiario } from './../models/dados-desativacao-apiario';
@@ -50,6 +51,7 @@ export class ParseService {
     this.core.Object.registerSubclass('MotivoDesativacaoApiario', MotivoDesativacaoApiario);
     this.core.Object.registerSubclass('DadosDesativacaoApiario', DadosDesativacaoApiario);
     this.core.Object.registerSubclass('AtividadeApicula', AtividadeApicula);
+    this.core.Object.registerSubclass('ApicultorAssociacao', ApicultorAssociacao);
 
   }
 
@@ -138,12 +140,6 @@ export class ParseService {
         this.showErrorPopUp(new parse.Error(parse.ErrorCode.OTHER_CAUSE, 'Não foi possivel enviar a notificação'));
       }
     });
-
-
-
-
-
-
   }
 
   /**
@@ -332,6 +328,8 @@ export class ParseService {
     return object.destroy().fail((erro) => {
       instance.toogleLoading(false);
       instance.showErrorPopUp(erro);
+    }).done(()=>{
+      instance.toogleLoading(false);
     });
   }
 

@@ -88,10 +88,23 @@
     </div>
   </template>
   <!--Template de gestão das propriedades-->
+  <!--Template de gestão ApicultorAssociação-->
+  <template tdDataTableTemplate="acoes_apicultor_asso" let-value="value" let-row="row" let-column="column">
+    <div layout="row">
+      <button md-icon-button [mdMenuTriggerFor]="menuPropriedade">
+              <md-icon>menu</md-icon>
+              </button>
+      <md-menu #menuPropriedade="mdMenu">
+        <button md-menu-item (click)="acoes('EDITAR',row)"> <md-icon>mode_edit</md-icon>Editar </button>
+        <button md-menu-item (click)="acoes('EXCLUIR',row)" > <md-icon>delete</md-icon> Excluir </button>
+      </md-menu>
+    </div>
+  </template>
+  <!--Template de gestão ApicultorAssociação-->
 </td-data-table>
 <td-paging-bar *ngIf="showPagination && data.length>0" #pagingBar [pageSizes]="[5, 10, 15, 20]" [total]="totalRecords" [pageSize]="paginaTotal" (change)="page($event)">
   <span td-paging-bar-label hide-xs>Linhas por pagina:</span>
-  {{paginaTotal}} <span hide-xs>de {{filteredTotal}}</span>
+  {{paginaAtual * paginaTotal }} <span hide-xs>de {{filteredTotal}}</span>
 </td-paging-bar>
 <!--
 <td-paging-bar2 *ngIf="showPagination && data.length>0" [pageSizes]="[5, 10, 15, 20]" [total]="totalRecords" (change)="page($event)"></td-paging-bar2>-->

@@ -1,3 +1,4 @@
+import { ApicultorAssociacao } from './apicultor-associacao';
 import { Municipio } from './municipio';
 import { Associacao } from './associacao';
 import { Object } from 'parse';
@@ -47,8 +48,8 @@ export class Apicultor extends Object {
     setCpf(cpf: string) {
         this.set('cpf', cpf);
     }
-    getCpf():string {
-      return this.get('cpf');
+    getCpf(): string {
+        return this.get('cpf');
     }
     setEmail(email: string) {
         this.set('email', email);
@@ -82,6 +83,12 @@ export class Apicultor extends Object {
     }
     setTermoParticipacaoProjeto(param: boolean) {
         this.set('termoParticipacaoProjeto', param);
+    }
+    setApiculorAssociacao(param: ApicultorAssociacao[]) {
+        this.set('apicultorAssociacao', param);
+    }
+    getApiculorAssociacao(): ApicultorAssociacao[] {
+        return this.get('apicultorAssociacao') ? this.get('apicultorAssociacao') : [];
     }
 
 }

@@ -51,3 +51,15 @@ $candy-app-theme: mat-light-theme($candy-app-primary, $candy-app-accent, $candy-
 // Alternatively, you can import and @include the theme mixins for each component
 // that you are using.
 @include angular-material-theme($candy-app-theme);
+
+.mat-option:hover:not(.mat-option-disabled), .mat-option:focus:not(.mat-option-disabled) {
+    background:#aed581!important;
+}
+.mat-option.mat-selected {
+    background:#aed581!important;
+    color: white;
+}
+mat-option.mat-active {
+    background:#aed581!important;
+    color: white;
+}

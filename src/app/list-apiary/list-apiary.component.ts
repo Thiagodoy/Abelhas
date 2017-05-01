@@ -1,3 +1,4 @@
+import { ApicultorAssociacao } from './../models/apicultor-associacao';
 import { UserWeb } from './../models/user-web';
 import { TableComponent } from './../table/table.component';
 import { Apiario } from './../models/apiario';
@@ -5,7 +6,7 @@ import { FormControl } from '@angular/forms';
 import { Observable } from 'rxjs/Rx';
 import { Propriedade } from './../models/propriedade';
 import { Apicultor } from './../models/apicultor';
-import { Component, OnInit, ViewChild, ContentChild, NgZone, ViewContainerRef} from '@angular/core';
+import { Component, OnInit, ViewChild, ContentChild, NgZone, ViewContainerRef } from '@angular/core';
 import { Router } from '@angular/router'
 import { ITdDataTableColumn } from '@covalent/core';
 import { ParseService } from '../service/parse.service';
@@ -26,6 +27,7 @@ export class ListApiaryComponent implements OnInit {
   filter: any = { status: undefined, startDate: undefined, endDate: undefined, apicultor: undefined };
   listApicultor: Apicultor[] = [];
   listProriedade: Propriedade[] = [];
+  listApicultorAssociacao: ApicultorAssociacao[] = []
 
   controlApicultor: FormControl = new FormControl();
   controlPropriedade: FormControl = new FormControl();
@@ -63,9 +65,11 @@ export class ListApiaryComponent implements OnInit {
   ngOnInit() {
     let promiseApicultor = this.serviceParse.findAll(Apicultor);
     let promisePropriedade = this.serviceParse.findAll(Propriedade);
-    parse.Promise.when([promiseApicultor, promisePropriedade]).then((res: any[]) => {
+    let promiseApicultoAssociacao = this.serviceParse.findAll(ApicultorAssociacao);
+    parse.Promise.when([promiseApicultor, promisePropriedade, promiseApicultoAssociacao]).then((res: any[]) => {
       this.listApicultor = res[0];
       this.listProriedade = res[1];
+      this.listApicultorAssociacao = res[2];
     });
 
     this.filteredOptionsApicultor = this.controlApicultor.valueChanges
@@ -83,6 +87,7 @@ export class ListApiaryComponent implements OnInit {
 
   listarApiario() {
 
+    let promises = []
 
     this.queryApiario = this.serviceParse.createQuery(Apiario);
     this.queryApiario.include('apicultor');
@@ -90,6 +95,8 @@ export class ListApiaryComponent implements OnInit {
     this.queryApiario.include('propriedade');
     this.queryApiario.notEqualTo('excluded', true);
     this.queryApiario.descending('createAt');
+
+
 
     if (this.controlApicultor.value != '' && this.controlApicultor.value != null) {
       let queryApicultor = this.serviceParse.createQuery(Apicultor);
@@ -117,11 +124,19 @@ export class ListApiaryComponent implements OnInit {
     }
 
     this.queryApiario.limit(1000);
-    this.serviceParse.executeQuery(this.queryApiario).done((result: Apiario[]) => {
 
-      let list = result.filter(value => { return value.getApicultor().getAssociacoes().length == 1 }).map((value) => {
+    this.serviceParse.executeQuery(this.queryApiario).done((result: Apiario[]) => {
+    
+    
+        
+        let list = result.filter(value => { return value.getApicultor().getApiculorAssociacao().length <= 1 }).map((value) => {
         let apiario: Apiario = value;
+        let apicultor: Apicultor = apiario.getApicultor();
+        let apicultorAssociacao = apicultor.getApiculorAssociacao()[0];
+        
         let obj;
+        let pontos = apicultorAssociacao ? this.listApicultorAssociacao.find(value => { return value.id == apicultorAssociacao.id }).getQtdPontos() : 0;
+        let caixas = apicultorAssociacao ? this.listApicultorAssociacao.find(value => { return value.id == apicultorAssociacao.id }).getQtdCaixas() : 0;
         try {
           obj = {
             id: apiario.id,
@@ -129,8 +144,8 @@ export class ListApiaryComponent implements OnInit {
             especie: apiario.getEspecieAbelha().getNome(),
             apicultor: apiario.getApicultor().getNome(),
             propriedadea: apiario.getPropriedade().getNome(),
-            qdtPontos: apiario.getApicultor().getAssociacoes()[0].getQtdPontos(),
-            qdtCaixas: apiario.getApicultor().getAssociacoes()[0].getQtdCaixas(),
+            qtdPontos: pontos,
+            qtdCaixas: caixas,
             status: apiario.getStatus(),
             data: this.momentService.core(apiario.createdAt).format('DD/MM/YYYY HH:mm')
           }
@@ -141,20 +156,24 @@ export class ListApiaryComponent implements OnInit {
         }
         return obj;
       });
-
-      let list2 = result.filter(value => { return value.getApicultor().getAssociacoes().length > 1 })
+      
+      
+      let list2 = result.filter(value => { return value.getApicultor().getApiculorAssociacao().length > 1 })
       let list3 = [];
+      
       for (let ap of list2) {
-        for (let ass of ap.getApicultor().getAssociacoes()) {
+        for (let ass of ap.getApicultor().getApiculorAssociacao()) {
           try {
+            let pontos = ass ? this.listApicultorAssociacao.find(value => { return value.id == ass.id }).getQtdPontos() : 0;
+            let caixas = ass ? this.listApicultorAssociacao.find(value => { return value.id == ass.id }).getQtdCaixas() : 0;
             let obj = {
               id: ap.id,
               valido: ap.isValido(),
               especie: ap.getEspecieAbelha().getNome(),
               apicultor: ap.getApicultor().getNome(),
               propriedadea: ap.getPropriedade().getNome(),
-              qdtPontos: ass.getQtdPontos(),
-              qdtCaixas: ass.getQtdCaixas(),
+              qtdPontos: pontos,
+              qtdCaixas: caixas,
               status: ap.getStatus(),
               data: this.momentService.core(ap.createdAt).format('DD/MM/YYYY HH:mm')
             }
@@ -167,7 +186,8 @@ export class ListApiaryComponent implements OnInit {
         }
       }
 
-      list.concat(list3);
+     list = list.concat(list3);
+     
       this.atualiza(list);
     });
 

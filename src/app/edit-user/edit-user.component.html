@@ -33,7 +33,7 @@
               </md-option>
             </md-select>
           </div>-->
-          <div layout="row" *ngIf="selectedValue =='APICULTOR' " style=" margin-top: 10px">
+          <!--<div layout="row" *ngIf="selectedValue =='APICULTOR' " style=" margin-top: 10px">
             <md-icon class="icon-position">view_comfy</md-icon>
             <md-input-container style="width: 40%">
               <input mdInput placeholder="Associação" value="Nenhum item selecionado" formControlName="controlItensSelecionados">
@@ -41,7 +41,7 @@
             <a md-raised-button color="primary" style="height: 35px;margin-left: 24px;" (click)="search($event)">
               <md-icon>visibility</md-icon>
             </a>
-          </div>
+          </div>-->
 
 
           <div *ngIf="selectedValue =='ASSOCIACAO'" layout="row">
@@ -166,15 +166,6 @@
               <div *ngIf="formError?.confirmar_senha" style="color: red">{{formError?.confirmar_senha.confirmar_senha.no_match}}</div>
             </div>
           </div>
-          <div *ngIf="selectedValue =='APICULTOR'" layout="column">
-            <div flex="" style="margin-bottom: 20px;">
-              <h3>Registro SIF</h3>
-              <md-radio-group class="example-radio-group" style="margin-left: 15px;" formControlName="registroSif">
-                <md-radio-button name="sif" [value]="true">Sim </md-radio-button>
-                <md-radio-button name="sif" [value]="false">Não </md-radio-button>
-              </md-radio-group>
-            </div>
-          </div>
           <div *ngIf="selectedValue =='APICULTOR'" layout="row">
             <md-icon class="icon-position" [style.color]="formError?.qtdCaixasMigratorias ? 'red' :black">filter_none</md-icon>
             <div layout="column" style="width: 100%">
@@ -185,8 +176,28 @@
               <div *ngIf="formError?.qtdCaixasMigratorias" style="color: red">*{{formError?.qtdCaixasMigratorias.qtdCaixasMigratorias.require}}</div>
             </div>
           </div>
+          <div *ngIf="selectedValue =='APICULTOR'" layout="column">
+            <div flex="" style="margin-bottom: 20px;">
+              <h3>Registro SIF</h3>
+              <md-radio-group class="example-radio-group" style="margin-left: 15px;" formControlName="registroSif">
+                <md-radio-button name="sif" [value]="true">Sim </md-radio-button>
+                <md-radio-button name="sif" [value]="false">Não </md-radio-button>
+              </md-radio-group>
+            </div>
+          </div>
+          <!--tabela ApicultorAssociação-->
+          <div *ngIf="selectedValue =='APICULTOR'">
+            <div layout="row" layout-align="center center">
+              <button md-raised-button color="primary" (click)="adicionarAssociacao($event)">Adicionar Associação</button>
+            </div>
+            <div layout="row">
+              <app-table #table style="width: 100%" [data]="listApicultorAssociacao" [columns]="columnsApicultorAssociacao" [paginaTotal]="5"
+                [selectable]="false" [showPagination]="true" [multiple]="multiple" [showSelectionJquery]="true" (itemSelected2)="editarApicultorAssociacao($event)"
+                [sortable]="true"></app-table>
+            </div>
+          </div>
+          <!--tabela ApicultorAssociação-->
           <div *ngIf="perfilUsuarioLogado == 'GESTOR'" layout="column">
-
             <div class="div-alert" *ngIf="selectedValue =='APICULTOR' || selectedValue =='ASSOCIACAO'">
               <div *ngIf="selectedValue =='APICULTOR'">
                 <h4>Assinatura do Termo de Participação do Projeto</h4>

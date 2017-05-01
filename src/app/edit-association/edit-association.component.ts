@@ -114,8 +114,8 @@ export class EditAssociationComponent implements OnInit, OnDestroy {
     this.formAssociacao.get('contatoPresidenteTelefone').setValue(associacao.getContatoPresidenteTelefone());
     this.formAssociacao.get('email').setValue(associacao.getEmail());
     this.formAssociacao.get('cpf').setValue(this.user.getUsername());
-    this.formAssociacao.get('qtdCaixasFixas').setValue(associacao.getQtdCaixas());
-    this.formAssociacao.get('quantidadePontos').setValue(this.associacao.getQtdPontos());
+    // this.formAssociacao.get('qtdCaixasFixas').setValue(associacao.getQtdCaixas());
+    // this.formAssociacao.get('quantidadePontos').setValue(this.associacao.getQtdPontos());
 
   }
   populateAssociacao(): Associacao {
@@ -135,8 +135,8 @@ export class EditAssociationComponent implements OnInit, OnDestroy {
     associacao.setNumeroSif(this.formAssociacao.get('numeroSif').value);
     associacao.setContatoPresidenteTelefone(this.formAssociacao.get('contatoPresidenteTelefone').value);
     associacao.setEmail(this.formAssociacao.get('email').value);
-    associacao.setQtdCaixas(parseInt(this.formAssociacao.get('qtdCaixasFixas').value));
-    associacao.setQtdPontos(parseInt(this.formAssociacao.get('quantidadePontos').value));
+    // associacao.setQtdCaixas(parseInt(this.formAssociacao.get('qtdCaixasFixas').value));
+    // associacao.setQtdPontos(parseInt(this.formAssociacao.get('quantidadePontos').value));
     associacao.setTipoRegistro(1);
 
     return associacao;
@@ -263,8 +263,8 @@ export class EditAssociationComponent implements OnInit, OnDestroy {
       senha: ['', ValidaCustom.validateCustomSenha(type)],
       cpf: [null, ValidaCustom.validateCustomCpfOrCnpj()],
       tipo: ['ASSOCIACAO'],
-      quantidadePontos: [null, ValidaCustom.validateCustomqtdPonto()],
-      qtdCaixasFixas: [null, ValidaCustom.validateCustomqtdCaixasFixas()]
+      // quantidadePontos: [null, ValidaCustom.validateCustomqtdPonto()],
+      // qtdCaixasFixas: [null, ValidaCustom.validateCustomqtdCaixasFixas()]
     });
 
     this.listEstadosFiltered = this.formAssociacao.get('estado').valueChanges

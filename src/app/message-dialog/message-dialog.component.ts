@@ -1,3 +1,5 @@
+import { ApicultorAssociacao } from './../models/apicultor-associacao';
+import { FormControl, FormGroup } from '@angular/forms';
 import { TableComponent } from './../table/table.component';
 
 import { Component, OnInit } from '@angular/core';
@@ -21,10 +23,23 @@ export class MessageDialogComponent implements OnInit {
   uniqueId: string = 'id'
   multiple: boolean;
 
+  
+  qtdPonto:FormControl  = new FormControl();
+  qtdCaixa:FormControl = new FormControl();
+  name:FormControl = new FormControl({value:'',disabled:true}); 
+  myGroup:FormGroup = new FormGroup({});
+  apicultorAssociacao:ApicultorAssociacao;
+
 
   constructor(public dialogRef: MdDialogRef<MessageDialogComponent>) { }
 
-  ngOnInit() { }
+  ngOnInit() { 
+    
+    this.myGroup.addControl('name',this.name);
+    this.myGroup.addControl('qtdCaixa',this.qtdCaixa);
+    this.myGroup.addControl('qtdPonto',this.qtdPonto);
+
+  }
 
   itensSelecionados(paran) {
 
@@ -55,6 +70,18 @@ export class MessageDialogComponent implements OnInit {
     }
 
     this.dialogRef.close(this.listItensSelected);
+  }
+
+  editApicultorAssociacao(data:ApicultorAssociacao){
+        this.apicultorAssociacao = data;
+        this.name.setValue(data.getAssociacao().getNome());
+        this.qtdCaixa.setValue(data.getQtdCaixas());
+        this.qtdPonto.setValue(data.getQtdPontos());
+  }
+  alterar(){
+    this.apicultorAssociacao.setQtdCaixas(this.qtdCaixa.value);
+    this.apicultorAssociacao.setQtdPontos(this.qtdPonto.value);
+    this.dialogRef.close(this.apicultorAssociacao);
   }
 
 }

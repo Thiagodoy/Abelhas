@@ -1,3 +1,5 @@
+import { TableComponent } from './../table/table.component';
+import { ApicultorAssociacao } from './../models/apicultor-associacao';
 import { ITdDataTableColumn } from '@covalent/core';
 import { DialogService } from './../service/dialog.service';
 import { Associacao } from './../models/associacao';
@@ -11,7 +13,7 @@ import { FormGroup, FormBuilder, Validators } from '@angular/forms';
 import { UserWeb } from './../models/user-web';
 import { Subscription, Observable } from 'rxjs/Rx';
 import { ActivatedRoute, Router } from '@angular/router';
-import { Component, OnInit, OnDestroy, ViewContainerRef } from '@angular/core';
+import { Component, OnInit, OnDestroy, ViewContainerRef, ViewChild } from '@angular/core';
 import ValidatorCustom from './validator/validator-custom';
 import constantes from '../constantes';
 
@@ -23,7 +25,7 @@ import constantes from '../constantes';
 })
 export class EditUserComponent implements OnInit, OnDestroy {
 
-
+  @ViewChild('table') table: TableComponent
   perfis: any[] = [{ nome: 'Apicultor', value: 'APICULTOR' }, { nome: 'Associação', value: 'ASSOCIACAO' }, { nome: 'Gestor', value: 'GESTOR' }];
   listEstados: Estado[] = [];
   listMunicipios: Municipio[] = [];
@@ -36,12 +38,22 @@ export class EditUserComponent implements OnInit, OnDestroy {
   formUser: FormGroup;
   submit: boolean = false;
   userCurrent: UserWeb;
-  typeAction: string = undefined; 
+  typeAction: string = undefined;
   listEstadosFiltered: Observable<Estado[]>;
   listMunicipioFiltered: Observable<Municipio[]>;
   perfilUsuarioLogado: string;
   listAssociacoesSelecteds: any[] = [];
   dataTermoCompromisso: Date = undefined;
+  listApicultorAssociacao: any[] = [];
+
+
+
+  columnsApicultorAssociacao: ITdDataTableColumn[] = [
+    { name: 'attributes.associacao.attributes.nome', label: 'Associação' },
+    { name: 'attributes.qtdPontos', label: 'Qtd. Pontos' },
+    { name: 'attributes.qtdCaixas', label: 'Qtd. Caixas' },
+    { name: 'acoes_apicultor_asso', label: 'Ações' },
+  ];
 
 
   maskTelefone = ['(', /\d/, /\d/, ')', ' ', /\d/, /\d/, /\d/, /\d/, '-', /\d/, /\d/, /\d/, /\d/];
@@ -155,7 +167,7 @@ export class EditUserComponent implements OnInit, OnDestroy {
     }
 
     //Ordena para exibir asa associacoes selecionadas nas primeiras posicoes
-    asso = asso.sort((a, b) => {return assoApicultor.find(value => { return value.id == a.id }) ? -1 : 1;});
+    asso = asso.sort((a, b) => { return assoApicultor.find(value => { return value.id == a.id }) ? -1 : 1; });
 
     this.dialog.confirm('Escolha as associações', '', 'TABLE', this.view, asso, columns, assoApicultor, true).subscribe((value) => {
 
@@ -243,6 +255,15 @@ export class EditUserComponent implements OnInit, OnDestroy {
         if (this.formUser.contains(name))
           this.formUser.get(name).setValue(apicultor.attributes[name]);
       });
+
+
+      this.listApicultorAssociacao = apicultor.getApiculorAssociacao() ? apicultor.getApiculorAssociacao() : [];
+
+      for (let ap of this.listApicultorAssociacao) {
+        this.parseService.get(ap.id, ApicultorAssociacao).then(result => {
+          ap = result;
+        });
+      }
 
       let registroSif = apicultor.getRegistroSif();
       if (registroSif == undefined || registroSif == null)
@@ -353,7 +374,7 @@ export class EditUserComponent implements OnInit, OnDestroy {
     associacao.setEmail(user['email']);
     associacao.setAcordoCooperacaoAbelha(user['acordoCooperacaoAbelha']);
     associacao.setDataTermoCompromisso(this.dataTermoCompromisso);
-    associacao.setQtdCaixas(parseInt(user['qtdCaixasFixas']));    
+    associacao.setQtdCaixas(parseInt(user['qtdCaixasFixas']));
     associacao.setQtdPontos(parseInt(user['quantidadePontos']));
 
     if (!this.userCurrent) {
@@ -397,20 +418,20 @@ export class EditUserComponent implements OnInit, OnDestroy {
     let user = this.formUser.value;
     let apicultor: Apicultor = this.userCurrent ? this.userCurrent.attributes.apicultor : new Apicultor();
 
-    if (this.listAssociacoesSelecteds.length == 0) {
-      this.dialog.confirm('Erro', 'Nenhuma associacao foi selecionada!', 'ERRO', this.view)
-      return false;
-    }
+    // if (this.listAssociacoesSelecteds.length == 0) {
+    //   this.dialog.confirm('Erro', 'Nenhuma associacao foi selecionada!', 'ERRO', this.view)
+    //   return false;
+    // }
 
-    let temp = [];
-    for (let a of this.listAssociacoesSelecteds) {
-      let value = this.listAssociacao.find((value) => { return value.id == a.id })
-      if (value)
-        temp.push(value)
-    }
+    // let temp = [];
+    // for (let a of this.listAssociacoesSelecteds) {
+    //   let value = this.listAssociacao.find((value) => { return value.id == a.id })
+    //   if (value)
+    //     temp.push(value)
+    // }
 
     apicultor.setNome(user['nome']);
-    apicultor.setAssociacoes(temp);
+    // apicultor.setAssociacoes(temp);
     apicultor.setCelular(user['celular']);
     apicultor.setCelular2(user['celular2']);
     apicultor.setCpf(user['cpf']);
@@ -425,14 +446,22 @@ export class EditUserComponent implements OnInit, OnDestroy {
     apicultor.setDataTermoCompromisso(this.dataTermoCompromisso);
 
     apicultor.setTermoParticipacaoProjeto(this.perfilUsuarioLogado == constantes.ASSOCIACAO ? false : user['termoParticipacaoProjeto']);
-    apicultor.setCompartilhaDado(user['compartilhaDado'])
+    apicultor.setCompartilhaDado(user['compartilhaDado']);
+
+
 
 
     if (!this.userCurrent) {
 
+      apicultor.setApiculorAssociacao(this.listApicultorAssociacao);
+
       this.parseService.save(apicultor).then(result => {
 
         if (!result) return false;
+
+        for (let ap of this.listApicultorAssociacao) {
+          this.parseService.save(ap);
+        }
 
         let newUser = this.createUser();
         newUser.set('apicultor', result);
@@ -554,6 +583,75 @@ export class EditUserComponent implements OnInit, OnDestroy {
   }
   displayFn(object: parse.Object): string {
     return object ? object.attributes.nome : '';
+  }
+
+  adicionarAssociacao(event) {
+
+    event.preventDefault();
+    let columns: ITdDataTableColumn[] = [
+      { name: 'nome', label: 'Nome' },
+      { name: 'sigla', label: 'Sigla' },
+      { name: 'email', label: 'Email' },
+      { name: 'telefone', label: 'Telefone' },
+    ];
+
+    let asso = this.listAssociacao.map(value => {
+      return {
+        id: value.id,
+        nome: value.getNome(),
+        sigla: value.getSigla(),
+        email: value.getEmail(),
+        telefone: value.getTelefone()
+      }
+    });
+
+    //  Filtra para nao exibir as associações ja selecionadas
+    if (this.listApicultorAssociacao.length > 0) {
+      asso = asso.filter(value => { return this.listApicultorAssociacao.find(v => { return v.attributes.associacao.id == value.id }) == undefined });
+    }
+
+    this.dialog.confirm('Escolha as associações', '', 'TABLE', this.view, asso, columns, [], true).subscribe((value: any[]) => {
+
+      if (value.length > 0) {
+        this.listApicultorAssociacao = value.map(val1 => {
+          let apicultorAssociacao = new ApicultorAssociacao();
+          apicultorAssociacao.setAssociacao(this.listAssociacao.find((val2) => { return val1.id == val2.id }));
+          this.parseService.save(apicultorAssociacao);
+          return apicultorAssociacao;
+        });
+
+        if (this.userCurrent) {
+          let apicultor: Apicultor = this.userCurrent.attributes.apicultor
+          apicultor.setApiculorAssociacao(this.listApicultorAssociacao);
+          this.parseService.save(apicultor);
+        }
+      }
+    });
+  }
+
+  editarApicultorAssociacao(data: any) {
+
+    if (data.acao == 'EDITAR') {
+      this.dialog.editApicultorAssociacao(data.element, this.view).subscribe((value: ApicultorAssociacao) => {
+        if (value) {
+          let temp: ApicultorAssociacao = this.listApicultorAssociacao.find(v => { return value.id == v.id });
+          temp.setQtdCaixas(value.getQtdCaixas());
+          temp.setQtdPontos(value.getQtdPontos());
+          this.parseService.save(temp);
+          this.table.refresh();
+        }
+      });
+    } else {
+      this.listApicultorAssociacao = this.listApicultorAssociacao.filter(v => { return v.attributes.associacao.id != data.element.attributes.associacao.id });
+      this.parseService.destroy(data.element);
+
+      if (this.userCurrent) {
+        let apicultor: Apicultor = this.userCurrent.attributes.apicultor
+        apicultor.setApiculorAssociacao(this.listApicultorAssociacao);
+        this.parseService.save(apicultor);
+        this.table.refresh();
+      }
+    }
   }
 
 
