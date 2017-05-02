@@ -613,17 +613,21 @@ export class EditUserComponent implements OnInit, OnDestroy {
     this.dialog.confirm('Escolha as associações', '', 'TABLE', this.view, asso, columns, [], true).subscribe((value: any[]) => {
 
       if (value.length > 0) {
-        this.listApicultorAssociacao = value.map(val1 => {
+        let temp = value.map(val1 => {
           let apicultorAssociacao = new ApicultorAssociacao();
           apicultorAssociacao.setAssociacao(this.listAssociacao.find((val2) => { return val1.id == val2.id }));
           this.parseService.save(apicultorAssociacao);
           return apicultorAssociacao;
         });
 
+        this.listApicultorAssociacao = this.listApicultorAssociacao.concat(temp);
+
         if (this.userCurrent) {
           let apicultor: Apicultor = this.userCurrent.attributes.apicultor
           apicultor.setApiculorAssociacao(this.listApicultorAssociacao);
-          this.parseService.save(apicultor);
+          this.parseService.save(apicultor).then(()=>{
+              this.dialog.confirm('Sucesso', 'Associação realizada com sucesso!', 'SUCCESS', this.view);     
+          });
         }
       }
     });
@@ -637,13 +641,17 @@ export class EditUserComponent implements OnInit, OnDestroy {
           let temp: ApicultorAssociacao = this.listApicultorAssociacao.find(v => { return value.id == v.id });
           temp.setQtdCaixas(value.getQtdCaixas());
           temp.setQtdPontos(value.getQtdPontos());
-          this.parseService.save(temp);
+          this.parseService.save(temp).done(value=>{
+            this.dialog.confirm('Sucesso', 'Dados atualizado com sucesso!', 'SUCCESS', this.view);
+          });
           this.table.refresh();
         }
       });
     } else {
       this.listApicultorAssociacao = this.listApicultorAssociacao.filter(v => { return v.attributes.associacao.id != data.element.attributes.associacao.id });
-      this.parseService.destroy(data.element);
+      this.parseService.destroy(data.element).done(()=>{
+        this.dialog.confirm('Sucesso', 'Dados excluido com sucesso!', 'SUCCESS', this.view);
+      });
 
       if (this.userCurrent) {
         let apicultor: Apicultor = this.userCurrent.attributes.apicultor

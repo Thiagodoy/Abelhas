@@ -104,7 +104,7 @@
 </td-data-table>
 <td-paging-bar *ngIf="showPagination && data.length>0" #pagingBar [pageSizes]="[5, 10, 15, 20]" [total]="totalRecords" [pageSize]="paginaTotal" (change)="page($event)">
   <span td-paging-bar-label hide-xs>Linhas por pagina:</span>
-  {{paginaAtual * paginaTotal }} <span hide-xs>de {{filteredTotal}}</span>
+  <div *ngIf="!((paginaAtual * paginaTotal) >= filteredTotal) " > {{paginaAtual * paginaTotal }} <span hide-xs>de {{filteredTotal}}</span></div>  
 </td-paging-bar>
 <!--
 <td-paging-bar2 *ngIf="showPagination && data.length>0" [pageSizes]="[5, 10, 15, 20]" [total]="totalRecords" (change)="page($event)"></td-paging-bar2>-->
