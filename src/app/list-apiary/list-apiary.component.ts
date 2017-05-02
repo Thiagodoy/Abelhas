@@ -1,3 +1,4 @@
+import { Associacao } from './../models/associacao';
 import { ApicultorAssociacao } from './../models/apicultor-associacao';
 import { UserWeb } from './../models/user-web';
 import { TableComponent } from './../table/table.component';
@@ -36,6 +37,8 @@ export class ListApiaryComponent implements OnInit {
   filteredOptionsApicultor: Observable<Apicultor[]>;
   filteredOptionsPropriedade: Observable<Propriedade[]>;
 
+  user: UserWeb;
+
   @ViewChild('table') table: TableComponent;
 
 
@@ -71,6 +74,12 @@ export class ListApiaryComponent implements OnInit {
       this.listProriedade = res[1];
       this.listApicultorAssociacao = res[2];
     });
+
+
+    this.serviceParse.get(parse.User.current().id, UserWeb).then(result => {
+      if (result)
+        this.user = result;
+    })
 
     this.filteredOptionsApicultor = this.controlApicultor.valueChanges
       .startWith(null)
@@ -126,14 +135,20 @@ export class ListApiaryComponent implements OnInit {
     this.queryApiario.limit(1000);
 
     this.serviceParse.executeQuery(this.queryApiario).done((result: Apiario[]) => {
-    
-    
-        
-        let list = result.filter(value => { return value.getApicultor().getApiculorAssociacao().length <= 1 }).map((value) => {
+
+      // Quando o usuario for do tipo associação so carrega o apiarios cujo o apicultor esteja vinculado
+      if (this.user.attributes.tipo == 'ASSOCIACAO') {
+        let associacao: Associacao = this.user.attributes.associacao;
+        result = result.filter(value => {
+          return value.getApicultor().getApiculorAssociacao().find(v => { return v.getAssociacao().id == associacao.id });
+        });
+      }
+
+      let list = result.filter(value => { return value.getApicultor().getApiculorAssociacao().length <= 1 }).map((value) => {
         let apiario: Apiario = value;
         let apicultor: Apicultor = apiario.getApicultor();
         let apicultorAssociacao = apicultor.getApiculorAssociacao()[0];
-        
+
         let obj;
         let pontos = apicultorAssociacao ? this.listApicultorAssociacao.find(value => { return value.id == apicultorAssociacao.id }).getQtdPontos() : 0;
         let caixas = apicultorAssociacao ? this.listApicultorAssociacao.find(value => { return value.id == apicultorAssociacao.id }).getQtdCaixas() : 0;
@@ -156,11 +171,11 @@ export class ListApiaryComponent implements OnInit {
         }
         return obj;
       });
-      
-      
+
+
       let list2 = result.filter(value => { return value.getApicultor().getApiculorAssociacao().length > 1 })
       let list3 = [];
-      
+
       for (let ap of list2) {
         for (let ass of ap.getApicultor().getApiculorAssociacao()) {
           try {
@@ -186,8 +201,8 @@ export class ListApiaryComponent implements OnInit {
         }
       }
 
-     list = list.concat(list3);
-     
+      list = list.concat(list3);
+
       this.atualiza(list);
     });
 
