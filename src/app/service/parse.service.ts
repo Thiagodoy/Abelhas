@@ -28,6 +28,7 @@ export class ParseService {
   @Output() loaderEvent: EventEmitter<Boolean> = new EventEmitter();
   usuarioLogado: UserWeb;
   private instance: ParseService = undefined;
+  private limitQuery: number = 1000;
 
   constructor(private momentService: MomentService, private zone: NgZone, private dialogService: DialogService, private route: Router) {
     //Define o banco a ser acessado
@@ -35,7 +36,6 @@ export class ParseService {
     this.core.initialize(env.appid);
     this.core.serverURL = env.url;
     this.core.masterKey = env.masterKey || '';
-
 
     // Mapeia as classes que serão utilizadas no parse
     this.core.Object.registerSubclass('Apiario', Apiario);
@@ -58,10 +58,12 @@ export class ParseService {
   /**
    * Busca todos os objetos na base de acordo com a classe passada 
    * @param Classe extende Parse.Object 
+   * @param Options 
+   * @param Include campos que podem serm inclusos na query  
    */
   findAll<T extends parse.Object>(paramClass: { new (): T }, options?: any, include?: string[]): parse.Promise<T[]> {
     let query = new this.core.Query(new paramClass());
-    query.limit(1000);
+    query.limit(this.limitQuery);
     let i = this;
     i.toogleLoading(true);
 
@@ -70,7 +72,6 @@ export class ParseService {
         query.include(j);
       }
     }
-
 
     return query.find(options).done(result => {
 
@@ -85,7 +86,9 @@ export class ParseService {
 
   /**
    * Recupera um objeto de acordo com o id e classe
+   * @param String id do objeto
    * @param Classe extende Parse.Object 
+   * @param Include campos que podem serm inclusos na query 
    */
   get<T extends parse.Object>(id: string, paramClass: { new (): T }, include?: string[]): parse.Promise<T> {
 
@@ -108,6 +111,12 @@ export class ParseService {
     });
   }
 
+  /**
+     * Envia a notificação para um usuario da aplicação
+     * @param String id do objeto
+     * @param Classe extende Parse.Object 
+     * @param Include campos que podem serm inclusos na query 
+     */
   sendNotification(id: string, msg: string) {
     let i = this;
     this.findAll(parse.Session, { useMasterKey: true }).then((result) => {
@@ -175,6 +184,10 @@ export class ParseService {
     });
   }
 
+  /**
+     * Sai da aplicação e encerra a sessão
+     * 
+     */
   logout() {
     this.toogleLoading(true);
     let i = this;
@@ -281,7 +294,11 @@ export class ParseService {
       i.toogleLoading(false)
     });
   }
-
+/**
+   * Executa funções no cloud
+   * @param String nome do script
+   * @param Any parametros
+   */
   runCloud(script: string, paran?: any) {
     this.toogleLoading(true);
     let i = this;
@@ -328,7 +345,7 @@ export class ParseService {
     return object.destroy().fail((erro) => {
       instance.toogleLoading(false);
       instance.showErrorPopUp(erro);
-    }).done(()=>{
+    }).done(() => {
       instance.toogleLoading(false);
     });
   }

@@ -1,4 +1,21 @@
 
+.group-date-picker{
+  display: inline-flex; 
+  flex-wrap: wrap;
+}
+
+.group-auto-complete{
+  width: 95%;
+  position: relative;
+  top:-12px;
+}
+
+#button-search{
+  margin-bottom:-10px;
+  width: 152px;
+  margin-left: 10px
+}
+
 .date-picker-icon {
   position: absolute;
   z-index: 1;

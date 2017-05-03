@@ -1,7 +1,7 @@
-<md-card style="margin: 20px;">
+<md-card class="m-20">
   <md-card-title>Apiarios</md-card-title>
   <div layout="row">
-    <md-card style="width: 100%">
+    <md-card class="width-100">
       <md-card-content>
         <div layout="row">
           <div layout="column" flex="10">
@@ -20,14 +20,14 @@
             <div flex>
               <h3>Periodo</h3>
             </div>
-            <div flex style="display: inline-flex; flex-wrap: wrap">
+            <div flex class="group-date-picker">
               <div>
                 <span>De :</span>
                 <app-data-picker-custom    (onSelect)="selectDate('startDate',$event)" [fontFamily]="font" [dateFormat]="'DD-MM-YYYY'" [placeholder]="'DD/MM/YYYY'"
                   [disabled]="false" class="date-picker-custom date-picker-input">
                 </app-data-picker-custom>
               </div>
-              <div style="margin-left: 10px">
+              <div class="m-left-10">
                 <span>Ate :</span>
                 <app-data-picker-custom (onSelect)="selectDate('endDate',$event)" [fontFamily]="font" [dateFormat]="'DD-MM-YYYY'" [placeholder]="'DD/MM/YYYY'"
                   class="date-picker-custom date-picker-input">
@@ -35,30 +35,30 @@
               </div>
             </div>
           </div>
-          <div layout="column" flex="15" style="margin-left: 5px ">
+          <div layout="column" flex="15" class="m-left-5">
             <div flex="">
               <h3 style="height: 5px">Apicultor</h3>
             </div>
             <div flex="">
-              <md-input-container style="width: 95%;position: relative;top:-12px;" [dividerColor]="accent">
+              <md-input-container class="group-auto-complete" [dividerColor]="accent">
                 <input type="text" mdInput [mdAutocomplete]="auto1" [formControl]="controlApicultor">
               </md-input-container>
-              <md-autocomplete #auto1="mdAutocomplete" [displayWith]="displayFn" style="width: 95%">
+              <md-autocomplete #auto1="mdAutocomplete" [displayWith]="displayFn" class="width-95">
                 <md-option *ngFor="let option of filteredOptionsApicultor | async" [value]="option">
                   {{ option.getNome() }}
                 </md-option>
               </md-autocomplete>
             </div>
           </div>
-          <div layout="column" flex="15" style="margin-left: 15px;">
+          <div layout="column" flex="15" class=".m-left-15">
             <div flex="">
               <h3 style="height: 5px">Propriedade</h3>
             </div>
             <div flex="">
-              <md-input-container style="width: 95%;position: relative;top:-12px;" [dividerColor]="accent">
+              <md-input-container class="group-auto-complete" [dividerColor]="accent">
                 <input type="text" mdInput [mdAutocomplete]="auto" [formControl]="controlPropriedade">
               </md-input-container>
-              <md-autocomplete #auto="mdAutocomplete" [displayWith]="displayFn" style="width: 95%">
+              <md-autocomplete #auto="mdAutocomplete" [displayWith]="displayFn" class="width-95">
                 <md-option *ngFor="let option of filteredOptionsPropriedade | async" [value]="option">
                   {{ option.getNome() }}
                 </md-option>
@@ -67,7 +67,7 @@
           </div>
           <div layout="row" flex="20" layout-align="end center">
             <div flex>
-              <button md-raised-button color="primary" style="margin-bottom:-10px;width: 152px;margin-left: 10px" (click)="listarApiario()"><md-icon>search</md-icon></button>
+              <button md-raised-button  id="button-search" color="primary"  (click)="listarApiario()"><md-icon>search</md-icon></button>
             </div>
           </div>
         </div>
@@ -76,7 +76,7 @@
   </div>
   <md-card-content>
     <div layout="row">
-      <app-table #table style="width: 100%" [data]="listApiario" [columns]="columns" [selectable]="false" [showPagination]="'true'" (itemSelected2)="acoes($event)" [sortable]="true"></app-table>
+      <app-table #table class="width-100" [data]="listApiario" [columns]="columns" [selectable]="false" [showPagination]="'true'" (itemSelected2)="acoes($event)" [sortable]="true"></app-table>
     </div>
   </md-card-content>
 </md-card>

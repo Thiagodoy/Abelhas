@@ -45,9 +45,6 @@ export class EditUserComponent implements OnInit, OnDestroy {
   listAssociacoesSelecteds: any[] = [];
   dataTermoCompromisso: Date = undefined;
   listApicultorAssociacao: any[] = [];
-
-
-
   columnsApicultorAssociacao: ITdDataTableColumn[] = [
     { name: 'attributes.associacao.attributes.nome', label: 'Associação' },
     { name: 'attributes.qtdPontos', label: 'Qtd. Pontos' },
@@ -166,7 +163,7 @@ export class EditUserComponent implements OnInit, OnDestroy {
         });
     }
 
-    //Ordena para exibir asa associacoes selecionadas nas primeiras posicoes
+    //Ordena para exibir as associacoes selecionadas nas primeiras posicoes
     asso = asso.sort((a, b) => { return assoApicultor.find(value => { return value.id == a.id }) ? -1 : 1; });
 
     this.dialog.confirm('Escolha as associações', '', 'TABLE', this.view, asso, columns, assoApicultor, true).subscribe((value) => {
@@ -187,16 +184,14 @@ export class EditUserComponent implements OnInit, OnDestroy {
       {
         nome: [null, ValidatorCustom.validateCustomNome()],
         tipo: [this.selectedValue, Validators.required],
-        controlItensSelecionados: [{ value: 'Nenhum item selecionado', disabled: true }],
-        qtdCaixasFixas: [null, ValidatorCustom.validateCustomqtdCaixasFixas()],
+        controlItensSelecionados: [{ value: 'Nenhum item selecionado', disabled: true }],       
         endereco: [null, ValidatorCustom.validateCustomEndereco()],
         sigla: [null, ValidatorCustom.validateCustomSigla()],
         bairro: [null],
         celular: [null],
         celular2: [null],
         telefone: [null, ValidatorCustom.validateCustomTelefone()],
-        contatoPresidenteTelefone: [null, ValidatorCustom.validateCustomContatoPresidente()],
-        quantidadePontos: [null, ValidatorCustom.validateCustomqtdPonto()],
+        contatoPresidenteTelefone: [null, ValidatorCustom.validateCustomContatoPresidente()],        
         estado: [null],
         municipio: [null],
         cpf: [null, ValidatorCustom.validateCustomCpfOrCnpj()],
@@ -298,9 +293,7 @@ export class EditUserComponent implements OnInit, OnDestroy {
       } else {
         this.listAssociacoesSelecteds = [];
         this.formUser.get('controlItensSelecionados').setValue('Nenhum item selecionada.')
-      }
-      //let associacao: Associacao = apicultor.attributes.associacao;
-      //this.formUser.get('associacao').setValue(this.listAssociacao.filter(value => { if (value.id == associacao.id) return value.id; })[0]);
+      }      
 
       let municipio = apicultor.getMunicipio();
       this.formUser.get('municipio').setValue(this.listMunicipios.filter(value => { return value.id == municipio.id })[0]);
@@ -373,9 +366,7 @@ export class EditUserComponent implements OnInit, OnDestroy {
     associacao.setMunicipio(user['municipio']);
     associacao.setEmail(user['email']);
     associacao.setAcordoCooperacaoAbelha(user['acordoCooperacaoAbelha']);
-    associacao.setDataTermoCompromisso(this.dataTermoCompromisso);
-    associacao.setQtdCaixas(parseInt(user['qtdCaixasFixas']));
-    associacao.setQtdPontos(parseInt(user['quantidadePontos']));
+    associacao.setDataTermoCompromisso(this.dataTermoCompromisso);    
 
     if (!this.userCurrent) {
 
@@ -418,38 +409,19 @@ export class EditUserComponent implements OnInit, OnDestroy {
     let user = this.formUser.value;
     let apicultor: Apicultor = this.userCurrent ? this.userCurrent.attributes.apicultor : new Apicultor();
 
-    // if (this.listAssociacoesSelecteds.length == 0) {
-    //   this.dialog.confirm('Erro', 'Nenhuma associacao foi selecionada!', 'ERRO', this.view)
-    //   return false;
-    // }
-
-    // let temp = [];
-    // for (let a of this.listAssociacoesSelecteds) {
-    //   let value = this.listAssociacao.find((value) => { return value.id == a.id })
-    //   if (value)
-    //     temp.push(value)
-    // }
-
-    apicultor.setNome(user['nome']);
-    // apicultor.setAssociacoes(temp);
+    apicultor.setNome(user['nome']);    
     apicultor.setCelular(user['celular']);
     apicultor.setCelular2(user['celular2']);
     apicultor.setCpf(user['cpf']);
     apicultor.setEmail(user['email']);
     apicultor.setEndereco(user['endereco']);
-    apicultor.setMunicipio(user['municipio']);
-    //apicultor.setQtdCaixasFixas(parseInt(user['qtdCaixasFixas']));
-    apicultor.setQtdCaixasMigratorias(parseInt(user['qtdCaixasMigratorias']));
-    //apicultor.setQtdPontos(parseInt(user['quantidadePontos']));
+    apicultor.setMunicipio(user['municipio']);    
+    apicultor.setQtdCaixasMigratorias(parseInt(user['qtdCaixasMigratorias']));    
     apicultor.setRegistroSif(user['registroSif']);
     apicultor.setTelefone(user['telefone']);
     apicultor.setDataTermoCompromisso(this.dataTermoCompromisso);
-
     apicultor.setTermoParticipacaoProjeto(this.perfilUsuarioLogado == constantes.ASSOCIACAO ? false : user['termoParticipacaoProjeto']);
     apicultor.setCompartilhaDado(user['compartilhaDado']);
-
-
-
 
     if (!this.userCurrent) {
 
@@ -667,16 +639,14 @@ export class EditUserComponent implements OnInit, OnDestroy {
   formError: any = {
     nome: null,
     tipo: null,
-    associacao: null,
-    qtdCaixasFixas: null,
+    associacao: null,    
     endereco: null,
     sigla: null,
     bairro: null,
     celular: null, //ok
     celular2: null,//ok
     telefone: null, //ok
-    contatoPresidenteTelefone: null,
-    quantidadePontos: null,
+    contatoPresidenteTelefone: null,    
     estado: null,
     municipio: null,
     cpf: null, //ok
