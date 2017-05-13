@@ -1,0 +1,141 @@
+<md-sidenav-container class="example-container">
+  <md-sidenav #sidenav class="example-sidenav">
+    <!--Apiarios-->
+    <td-expansion-panel expand="true">
+      <template td-expansion-panel-label>
+        <md-icon class="md-16" md-list-avatar>menu</md-icon>
+      </template>
+      <template #panelUser td-expansion-panel-sublabel>
+        <md-list-item>
+          <h4 md-line>Apiarios</h4>
+        </md-list-item>
+      </template>
+      <td-expansion-summary>
+        <md-list>
+          <md-list-item [routerLink]="['home/lista/apiarios']" class="margin-item-menu" (click)="sidenav.toggle()">
+            <md-icon class="md-16" md-list-avatar>folder</md-icon>
+            <h4 md-line>Listar Apiarios</h4>
+          </md-list-item>
+          <md-list-item [routerLink]="['home/edicao/multipla']" class="margin-item-menu" (click)="sidenav.toggle()">
+            <md-icon class="md-16" md-list-avatar>folder</md-icon>
+            <h4 md-line>Edição multipla</h4>
+          </md-list-item>
+        </md-list>
+      </td-expansion-summary>
+    </td-expansion-panel>
+    <!--Apiarios-->
+    <!--Associações-->
+    <td-expansion-panel expand="true">
+      <template td-expansion-panel-label>
+        <md-icon class="md-16" md-list-avatar>menu</md-icon>
+      </template>
+      <template td-expansion-panel-sublabel>
+        <md-list-item>
+          <h4 md-line>Associações</h4>
+        </md-list-item>
+      </template>
+      <td-expansion-summary>
+        <md-list>
+          <md-list-item [routerLink]="['home/associações']" class="margin-item-menu" (click)="sidenav.toggle()">
+            <md-icon class="md-16" md-list-avatar>folder</md-icon>
+            <h4 md-line>Listar Associações</h4>
+          </md-list-item>
+        </md-list>
+      </td-expansion-summary>
+    </td-expansion-panel>
+    <!--Associações-->
+    <!--Propriedades-->
+    <td-expansion-panel expand="true">
+      <template td-expansion-panel-label>
+        <md-icon class="md-16" md-list-avatar>menu</md-icon>
+      </template>
+      <template td-expansion-panel-sublabel>
+        <md-list-item>
+          <h4 md-line>Propriedades</h4>
+        </md-list-item>
+      </template>
+      <td-expansion-summary>
+        <md-list>
+          <md-list-item [routerLink]="['home/lista/propriedade']" class="margin-item-menu" (click)="sidenav.toggle()">
+            <md-icon class="md-16" md-list-avatar>folder</md-icon>
+            <h4 md-line>Listar Propriedades</h4>
+          </md-list-item>
+        </md-list>
+      </td-expansion-summary>
+    </td-expansion-panel>
+    <!--Propriedades-->
+    <!--Desativacao-->
+    <td-expansion-panel expand="true">
+      <template td-expansion-panel-label>
+        <md-icon class="md-16" md-list-avatar>menu</md-icon>
+      </template>
+      <template td-expansion-panel-sublabel>
+        <md-list-item>
+          <h4 md-line>Desativação</h4>
+        </md-list-item>
+      </template>
+      <td-expansion-summary>
+        <md-list>
+          <md-list-item [routerLink]="['home/dados/desativação']" class="margin-item-menu" (click)="sidenav.toggle()">
+            <md-icon class="md-16" md-list-avatar>folder</md-icon>
+            <h4 md-line>Dados</h4>
+          </md-list-item>
+        </md-list>
+      </td-expansion-summary>
+    </td-expansion-panel>
+    <!--Desativacao-->
+    <!--Usuarios-->
+    <td-expansion-panel expand="true">
+      <template td-expansion-panel-label>
+        <md-icon class="md-16" md-list-avatar>menu</md-icon>
+      </template>
+      <template td-expansion-panel-sublabel>
+        <md-list-item>
+          <h4 md-line>Usuarios</h4>
+        </md-list-item>
+      </template>
+      <td-expansion-summary>
+        <md-list>
+          <md-list-item [routerLink]="['home/lista/usuarios']" class="margin-item-menu" (click)="sidenav.toggle()">
+            <md-icon class="md-16" md-list-avatar>folder</md-icon>
+            <h4 md-line>Listar Usuários</h4>
+          </md-list-item>
+           <md-list-item [routerLink]="['home/leitura']" class="margin-item-menu" (click)="sidenav.toggle()">
+            <md-icon class="md-16" md-list-avatar>folder</md-icon>
+            <h4 md-line>Dados leitura</h4>
+          </md-list-item>
+        </md-list>
+      </td-expansion-summary>
+    </td-expansion-panel>
+    <!--Usuarios-->
+     <a md-list-item (click)="logout()" style="cursor: pointer">
+       <div layout="row">
+          <md-icon md-list-avatar style="margin-left: 25px">exit_to_app</md-icon> 
+          <span >Sair</span>
+       </div>      
+    </a>
+   
+  </md-sidenav>
+  <md-toolbar *ngIf="isLogado" class="app-position" color="accent">
+    <button md-icon-button (click)="sidenav.toggle()">
+             <md-icon>menu</md-icon>
+        </button>
+    <md-icon md-list-avatar>person</md-icon>
+    <div style="margin-left: 6px"><span><b style="font-size: large">{{perfil}}:&nbsp;</b></span><span style="font-size: large">{{nome}}</span></div>    
+    <img class="logo-menu-principal" src="assets/logo2.png" alt="">
+  </md-toolbar>
+  
+  <router-outlet></router-outlet>
+
+</md-sidenav-container>
+<div class="teste" *tdLoading="'loading'; mode:'indeterminate'; type:'circle'; strategy:'overlay'; color:'accent'">
+</div>
+<!-- The Modal -->
+<div id="myModal" class="modal">
+  <!-- The Close Button -->
+  <span id="closeModal" class="close" onclick="document.getElementById('myModal').style.display='none'">&times;</span>
+  <!-- Modal Content (The Image) -->
+  <img class="modal-content" id="img01">
+  <!-- Modal Caption (Image Text) -->
+  <div id="caption"></div>
+</div>

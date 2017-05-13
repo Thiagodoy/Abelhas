@@ -1,0 +1,55 @@
+<div layout="row" layout-align="center center">
+  <md-card style="width: 33%">
+    <md-card-title>Propriedade</md-card-title>
+    <md-card-content>
+      <form [formGroup]="formPropriedade">
+        <div layout="column">
+          <div layout="row">
+            <md-icon class="icon-position">label</md-icon>
+            <md-input-container style="width: 60%">
+              <input mdInput placeholder="Nome" formControlName="nome">
+            </md-input-container>
+          </div>
+          <div layout="row">
+            <md-icon class="icon-position">room</md-icon>
+            <md-input-container style="width: 60%">
+              <input mdInput placeholder="Rota de acesso" value="1APR_E" formControlName="rotaAcesso">
+            </md-input-container>
+          </div>
+          <!--<div layout="row" style="margin-top: 15px;">
+            <md-icon class="icon-position">view_comfy</md-icon>
+            <md-select placeholder="Municipio" name="municipio" style="width: 40%;">
+              <md-option selected *ngFor="let apicultor of apicultores" [value]="apicultor.value">
+                  {{apicultor.nome}}
+                </md-option>
+            </md-select>
+          </div>           -->
+          <div layout="row">
+            <md-icon style="margin-right: 10px;margin-top: 5px;">view_comfy</md-icon>
+            <md-input-container style="width: 60%">
+              <input type="text" mdInput [mdAutocomplete]="api" formControlName="municipio" placeholder="Municipio">
+            </md-input-container>
+            <md-autocomplete #api="mdAutocomplete" [displayWith]="displayFn" style="width: 60%">
+              <md-option *ngFor="let municipio of ListfilteredMunicipio | async" [value]="municipio">
+                {{ municipio.getNome() }}
+              </md-option>
+            </md-autocomplete>
+          </div>
+          <div layout="row" style=" margin-top: 10px">
+            <md-icon class="icon-position">view_comfy</md-icon>
+            <md-input-container style="width: 40%">
+              <input mdInput placeholder="Apicultores" value="Nenhum item selecionado" formControlName="controlItensSelecionados">
+            </md-input-container>
+            <a md-raised-button color="primary" style="height: 35px;margin-left: 24px;" (click)="search($event)">
+              <md-icon>visibility</md-icon>
+            </a>
+          </div>
+        </div>
+      </form>
+    </md-card-content>
+    <md-card-actions layout="row" layout-align="start center">
+      <button md-raised-button color="primary" (click)="salvar()">{{propriedade ? 'Atualizar' : 'Salvar'}}</button>
+      <button md-raised-button color="warn" [routerLink]="['/home/lista/propriedade']">Voltar</button>
+    </md-card-actions>
+  </md-card>
+</div>

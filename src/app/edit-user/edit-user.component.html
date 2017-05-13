@@ -1,0 +1,189 @@
+<div layout="row" layout-align="center center">
+  <md-card style="width: 40%">
+    <md-card-title *ngIf="selectedValue != undefined">{{selectedValue }}</md-card-title>
+    <md-card-title *ngIf="selectedValue == undefined">Selecione o tipo de usuário que deseja criar: </md-card-title>
+    <md-card-content>
+      <form [formGroup]="formUser" novalidate autocomplete="off" (ngSubmit)="salvar()">
+        <div layout="column">
+          <div *ngIf="selectedValue =='APICULTOR' || selectedValue == 'ASSOCIACAO' || selectedValue == 'GESTOR'" layout="row">
+            <md-icon class="icon-position" [style.color]="formError?.nome ? 'red' :black">person</md-icon>
+            <md-input-container class="width-60">
+              <input mdInput placeholder="Nome" formControlName="nome">
+            </md-input-container>
+          </div>
+          <div layout="row" class="m-top-15">
+            <md-icon class="md-20 icon-position" md-list-avatar svgIcon="edit_profile"></md-icon>
+            <md-select placeholder="Perfil" name="perfil" class="width-40" formControlName="tipo">
+              <md-option *ngFor="let perfil of perfis" [value]="perfil.value">
+                {{perfil.nome}}
+              </md-option>
+            </md-select>
+          </div>
+          <div *ngIf="selectedValue =='ASSOCIACAO'" layout="row" class="m-top-15">
+            <md-icon class="icon-position" [style.color]="formError?.sigla ? 'red' :black">font_download</md-icon>
+            <md-input-container class="width-60">
+              <input mdInput placeholder="Sigla" formControlName="sigla">
+            </md-input-container>
+          </div>        
+         
+          <div *ngIf="selectedValue =='APICULTOR' || selectedValue == 'ASSOCIACAO'" layout="row">
+            <md-icon class="icon-position" [style.color]="formError?.endereco ? 'red' :black">home</md-icon>
+            <md-input-container class="width-60">
+              <input mdInput placeholder="Endereço" value="Av. Sylvio Marcondes, Adalberto Roxo" formControlName="endereco">
+            </md-input-container>
+          </div>
+           <div *ngIf="selectedValue == 'ASSOCIACAO'" layout="row">
+            <md-icon class="icon-position" [style.color]="formError?.bairro ? 'red' :black">home</md-icon>
+            <md-input-container class="width-60">
+              <input mdInput placeholder="Bairro" value="Av. Sylvio Marcondes, Adalberto Roxo" formControlName="bairro">
+            </md-input-container>
+          </div>
+          <div *ngIf="selectedValue =='APICULTOR'" layout="row">
+            <md-icon class="icon-position" [style.color]="formError?.celular ? 'red' :black">phone_android</md-icon>
+            <md-input-container class="width-30">
+              <input mdInput placeholder="Celular 1" [textMask]="{mask: maskCelular}" formControlName="celular">
+            </md-input-container>
+          </div>
+          <div *ngIf="selectedValue =='APICULTOR'" layout="row">
+            <md-icon class="icon-position" [style.color]="formError?.celular2 ? 'red' :black">phone_android</md-icon>
+            <md-input-container class="width-30">
+              <input mdInput placeholder="Celular 2" [textMask]="{mask: maskCelular}" formControlName="celular2">
+            </md-input-container>
+          </div>
+          <div *ngIf="selectedValue =='APICULTOR' || selectedValue == 'ASSOCIACAO'" layout="row">
+            <md-icon class="icon-position" [style.color]="formError?.telefone ? 'red' :black">phone</md-icon>
+            <md-input-container class="width-30">
+              <input mdInput placeholder="Telefone" [textMask]="{mask: maskTelefone}" formControlName="telefone">
+            </md-input-container>
+          </div>
+          <div *ngIf="selectedValue == 'ASSOCIACAO'" layout="row">
+            <md-icon class="icon-position" [style.color]="formError?.contatoPresidenteTelefone ? 'red' :black">phone</md-icon>
+            <md-input-container class="width-60">
+              <input mdInput placeholder="Contato Presidente" [textMask]="{mask: maskTelefone}" formControlName="contatoPresidenteTelefone">
+            </md-input-container>
+          </div>
+
+          <div layout="row" *ngIf="selectedValue =='APICULTOR'">
+            <md-icon class="icons-group" [style.color]="formError?.estado ? 'red' :black">view_comfy</md-icon>
+            <md-input-container class="width-40">
+              <input type="text" mdInput [mdAutocomplete]="api" formControlName="estado" placeholder="Estado">
+            </md-input-container>
+            <md-autocomplete #api="mdAutocomplete" [displayWith]="displayFn" class="width-60">
+              <md-option *ngFor="let estado of listEstadosFiltered | async" [value]="estado">
+                {{ estado.getNome() }}
+              </md-option>
+            </md-autocomplete>
+          </div>
+          <div layout="row" *ngIf="selectedValue =='APICULTOR' || selectedValue == 'ASSOCIACAO'">
+            <md-icon class="icons-group" [style.color]="formError?.municipio ? 'red' :black">view_comfy</md-icon>
+            <md-input-container class="width-40">
+              <input type="text" mdInput [mdAutocomplete]="apii" formControlName="municipio" placeholder="Municipio">
+            </md-input-container>
+            <md-autocomplete #apii="mdAutocomplete" [displayWith]="displayFn" class="width-60">
+              <md-option *ngFor="let municipio of listMunicipioFiltered | async" [value]="municipio">
+                {{ municipio.getNome() }}
+              </md-option>
+            </md-autocomplete>
+          </div>
+          <div *ngIf="selectedValue =='APICULTOR' || selectedValue == 'ASSOCIACAO' || selectedValue == 'GESTOR'" layout="row">
+            <md-icon class="md-24 icon-position" md-list-avatar svgIcon="cpf" [style.color]="formError?.cpf ? 'red' :black"></md-icon>
+            <md-input-container class="width-40">
+              <input mdInput [placeholder]="selectedValue == 'ASSOCIACAO' ? 'Cnpj' : 'Cpf'" [textMask]="{mask: selectedValue == 'ASSOCIACAO' ? cnpj : cpf }" formControlName="cpf">
+            </md-input-container>
+          </div>
+          <div *ngIf="selectedValue =='APICULTOR' || selectedValue == 'ASSOCIACAO' || selectedValue == 'GESTOR'" layout="row">
+            <md-icon class="icon-position" [style.color]="formError?.email ? 'red' :black">email</md-icon>
+            <md-input-container class="width-60">
+              <input mdInput placeholder="Email" value="example@example.com.br" formControlName="email">
+            </md-input-container>
+          </div>
+          <div *ngIf="selectedValue =='APICULTOR' || selectedValue == 'ASSOCIACAO' || selectedValue == 'GESTOR'" layout="row">
+            <md-icon class="icon-position" [style.color]="formError?.senha ? 'red' :black">lock</md-icon>
+            <div layout="column" class="width-40">
+              <md-input-container>
+                <input mdInput placeholder="Senha" type="password"  formControlName="senha">
+              </md-input-container>
+            </div>
+          </div>
+          <div *ngIf="selectedValue =='APICULTOR' || selectedValue == 'ASSOCIACAO' || selectedValue == 'GESTOR'" layout="row">
+            <md-icon class="icon-position" [style.color]="formError?.confirmar_senha ? 'red' :black">lock</md-icon>
+            <div layout="column" class="width-40">
+              <md-input-container >
+                <input mdInput placeholder="Confirmar senha" type="password"  formControlName="confirmar_senha">
+              </md-input-container>
+              <div *ngIf="formError?.confirmar_senha" class="alert-danger">{{formError?.confirmar_senha.confirmar_senha.no_match}}</div>
+            </div>
+          </div>
+          <div *ngIf="selectedValue =='APICULTOR'" layout="row">
+            <md-icon class="icon-position" [style.color]="formError?.qtdCaixasMigratorias ? 'red' :black">filter_none</md-icon>
+            <div layout="column" class="width-100">
+              <md-input-container class="width-60">
+                <input mdInput placeholder="Quantidades de caixas migratórias" value="25" formControlName="qtdCaixasMigratorias">
+                <span md-suffix>unidades.</span>
+              </md-input-container>
+              <div *ngIf="formError?.qtdCaixasMigratorias" class="alert-danger">*{{formError?.qtdCaixasMigratorias.qtdCaixasMigratorias.require}}</div>
+            </div>
+          </div>
+          <div *ngIf="selectedValue =='APICULTOR'" layout="column">
+            <div flex="" class="m-bottom-20">
+              <h3>Registro SIF</h3>
+              <md-radio-group class="example-radio-group" class="m-left-15" formControlName="registroSif">
+                <md-radio-button name="sif" [value]="true">Sim </md-radio-button>
+                <md-radio-button name="sif" [value]="false">Não </md-radio-button>
+              </md-radio-group>
+            </div>
+          </div>
+          <!--tabela ApicultorAssociação-->
+          <div *ngIf="selectedValue =='APICULTOR'">
+            <div layout="row" layout-align="center center">
+              <button md-raised-button color="primary" (click)="adicionarAssociacao($event)">Adicionar Associação</button>
+            </div>
+            <div layout="row">
+              <app-table #table class="width-100" [data]="listApicultorAssociacao" [columns]="columnsApicultorAssociacao" [paginaTotal]="5"
+                [selectable]="false" [showPagination]="true" [multiple]="multiple" [showSelectionJquery]="true" (itemSelected2)="editarApicultorAssociacao($event)"
+                [sortable]="true"></app-table>
+            </div>
+          </div>
+          <!--tabela ApicultorAssociação-->
+          <div *ngIf="perfilUsuarioLogado == 'GESTOR'" layout="column">
+            <div class="div-alert" *ngIf="selectedValue =='APICULTOR' || selectedValue =='ASSOCIACAO'">
+              <div *ngIf="selectedValue =='APICULTOR'">
+                <h4>Assinatura do Termo de Participação do Projeto</h4>
+                <md-radio-group class="example-radio-group" class="m-left-15" formControlName="termoParticipacaoProjeto">
+                  <md-radio-button name="sif" [value]="true" selected>Sim </md-radio-button>
+                  <md-radio-button name="sif" [value]="false">Não </md-radio-button>
+                </md-radio-group>
+              </div>
+              <div *ngIf="selectedValue =='APICULTOR'">
+                <h4>Compartilhamento de dados</h4>
+                <md-radio-group class="example-radio-group" class="m-left-15" formControlName="compartilhaDado">
+                  <md-radio-button name="sif" [value]="true">Sim </md-radio-button>
+                  <md-radio-button name="sif" [value]="false" selected>Não </md-radio-button>
+                </md-radio-group>
+              </div>
+
+              <div *ngIf="selectedValue =='ASSOCIACAO'">
+                <h4>Acordo de Cooperação Abelha</h4>
+                <md-radio-group class="example-radio-group" class="m-left-15" formControlName="acordoCooperacaoAbelha">
+                  <md-radio-button name="sif" [value]="true">Sim </md-radio-button>
+                  <md-radio-button name="sif" [value]="false">Não </md-radio-button>
+                </md-radio-group>
+              </div>
+
+              <div *ngIf="selectedValue =='ASSOCIACAO' || selectedValue =='APICULTOR'" layout="column">
+                <h4 flex="">Validade do termo de compromisso</h4>
+                <app-data-picker-custom (onSelect)="select($event)" [fontFamily]="font" [date]="dataTermoCompromisso" [dateFormat]="'DD-MM-YYYY'"
+                  [placeholder]="'DD/MM/YYYY'" [disabled]="false" class="date-picker-custom date-picker-input">
+                </app-data-picker-custom>
+              </div>
+            </div>
+          </div>
+        </div>
+      </form>
+    </md-card-content>
+    <md-card-actions layout="row" layout-align="start center">
+      <button md-raised-button type="submit" [disabled]="!formUser.valid" color="primary" (click)="salvar()">{{typeAction == 'CREATE' ? 'Salvar' : 'Atualizar'}}</button>
+      <button md-raised-button color="warn" [routerLink]="['/home/lista/usuarios']">Cancelar</button>
+    </md-card-actions>
+  </md-card>
+</div>

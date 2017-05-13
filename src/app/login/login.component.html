@@ -1,0 +1,34 @@
+<div layout="row" layout-align="center center">
+  <img class="m-top-20"   src="assets/logo.png" alt="">
+</div>
+<div layout="column" style="margin-top: 60px;align-items: center;margin-left: -60px;">
+  <md-card>
+    <md-card-title>
+      <md-toolbar class="login-toolbar-positon" color="accent"> </md-toolbar>
+    </md-card-title>
+    <md-card-content class="login-content-position" layout="column">
+      <form [formGroup]="formLogin" layout="column">
+        <section class="example-section">
+          <md-slide-toggle  [color]="color" [checked]="false" (change)="change($event)">
+            Associação
+          </md-slide-toggle>
+        </section>
+        <div layout="row" style="align-items: center">
+          <md-icon class="login-icons">person</md-icon>
+          <md-input-container>
+            <input mdInput name="username" formControlName="username" [textMask]="{mask: selectedValue  ? cnpj : cpf }" [placeholder]="selectedValue ? ' Cnpj': ' Cpf'">
+          </md-input-container>
+        </div>
+        <div layout="row" style="align-items: center;">
+          <md-icon class="login-icons">lock</md-icon>
+          <md-input-container>
+            <input mdInput name="password" formControlName="password" type="password" placeholder=" senha" value="">
+          </md-input-container>
+        </div>
+      </form>
+    </md-card-content>
+    <md-card-actions layout="row" layout-align="center">
+      <button [disabled]="!formLogin.valid" (click)="login()" class="login-button" md-raised-button color="accent">Entrar<md-icon style="margin-left: 5px">input</md-icon></button>
+    </md-card-actions>
+  </md-card>
+</div>

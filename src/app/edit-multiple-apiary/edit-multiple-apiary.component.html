@@ -1,0 +1,94 @@
+<md-card>
+  <md-card-title>Edição Multipla</md-card-title>
+  <md-card-content>
+    <div layout="column">
+      <div layout="row">
+        <md-icon style="margin-right: 10px;margin-top: 5px;"  [style.color]="error?.municipio ? 'red' :black">view_comfy</md-icon>
+        <md-input-container style="width: 20%" [dividerColor]="accent">
+          <input type="text" mdInput placeholder="Municipio"  [mdAutocomplete]="auto" [formControl]="controlMunicipio">
+          <md-hint *ngIf="error?.municipio" [ngStyle]="{'color': 'red'}" align="start">*Campo obrigatório.</md-hint>
+        </md-input-container>
+        <md-autocomplete #auto="mdAutocomplete" [displayWith]="displayFn" style="width: 20%">
+          <md-option *ngFor="let option of filteredOptionsMunicipio | async" [value]="option">
+            {{ option.getNome() }}
+          </md-option>
+        </md-autocomplete>        
+      </div>
+      <div layout="row">
+        <md-icon style="margin-right: 10px;margin-top: 5px;"  [style.color]="error?.apicultor ? 'red' :black">person</md-icon>
+        <md-input-container style="width: 20%">
+          <input type="text" mdInput  [mdAutocomplete]="api" [formControl]="controlApicultor" placeholder="Apicultor">
+          <md-hint *ngIf="error?.apicultor" [ngStyle]="{'color': 'red'}" align="start">*Campo obrigatório.</md-hint>
+        </md-input-container>
+        <md-autocomplete #api="mdAutocomplete" [displayWith]="displayFn" style="width: 20%">
+          <md-option *ngFor="let option of filteredOptionsApicultor | async" [value]="option">
+            {{ option.getNome() }}
+          </md-option>
+        </md-autocomplete>
+      </div>
+      <div layout="row">
+        <md-icon class="md-20" md-list-avatar svgIcon="bee" style="margin-right: 10px;"  [style.color]="error?.abelha ? 'red' :black"></md-icon>
+       <md-input-container style="width: 20%">
+          <input type="text" mdInput  [mdAutocomplete]="abelha" [formControl]="controlAbelha" placeholder="Especie Abelha">
+          <md-hint *ngIf="error?.abelha" [ngStyle]="{'color': 'red'}" align="start">*Campo obrigatório.</md-hint>
+        </md-input-container>
+        <md-autocomplete #abelha="mdAutocomplete" [displayWith]="displayFn" style="width: 20%">
+          <md-option *ngFor="let option of filteredOptionsEspecieAbelha | async" [value]="option">
+            {{ option.getNome() }}
+          </md-option>
+        </md-autocomplete>
+      </div>
+      <div layout="row">
+        <md-icon style="margin-right: 10px;margin-top: 5px;" [style.color]="error?.propriedade ? 'red' :black">view_comfy</md-icon>
+        <md-input-container style="width: 20%">
+          <input type="text" mdInput  [mdAutocomplete]="propri" [formControl]="controlPropriedade" placeholder="Propriedade">
+          <md-hint *ngIf="error?.propriedade" [ngStyle]="{'color': 'red'}" align="start">*Campo obrigatório.</md-hint>
+        </md-input-container>
+        <md-autocomplete #propri="mdAutocomplete" [displayWith]="displayFn" style="width: 20%">
+          <md-option *ngFor="let option of filteredOptionsPropriedade | async" [value]="option">
+            {{ option.getNome() }}
+          </md-option>
+        </md-autocomplete>       
+      </div>      
+    </div>
+    <div layout="row">
+       <button md-raised-button (click)="pesquisar()" color="primary" style="height: 35px;">Pesquisar</button>
+    </div>
+    <div layout="row">
+      <app-table style="width: 100%" [data]="listApiarios" [columns]="columns" [selectable]="true" [showPagination]="true" [multiple]="true" (itemSelectedAll)="itensSelected($event)" (itemSelected3)="itensSelected($event)" 
+        [showSelectionJquery]="false"></app-table>
+    </div>
+    <div layout="column">
+    
+      <div layout="row">
+        <md-icon style="margin-right: 10px;margin-top: 5px;">person</md-icon>
+         <md-input-container style="width: 20%">
+          <input type="text" mdInput  [mdAutocomplete]="api1" [formControl]="controlApicultor2" placeholder="Apicultor">
+           <md-hint *ngIf="error?.apicultor2" [ngStyle]="{'color': 'red'}" align="start">*Campo obrigatório.</md-hint>
+        </md-input-container>
+        <md-autocomplete #api1="mdAutocomplete" [displayWith]="displayFn" style="width: 20%">
+          <md-option *ngFor="let option of filteredOptionsApicultor2 | async" [value]="option">
+            {{ option.getNome() }}
+          </md-option>
+        </md-autocomplete>
+      </div>
+      <div layout="row">
+        <md-icon style="margin-right: 10px;margin-top: 5px;">view_comfy</md-icon>
+         <md-input-container style="width: 20%">
+          <input type="text" mdInput  [mdAutocomplete]="propri1" [formControl]="controlPropriedade2"  placeholder="Propriedade">
+           <md-hint *ngIf="error?.propriedade2" [ngStyle]="{'color': 'red'}" align="start">*Campo obrigatório.</md-hint>
+        </md-input-container>
+        <md-autocomplete #propri1="mdAutocomplete" [displayWith]="displayFn" style="width: 20%">
+          <md-option *ngFor="let option of filteredOptionsPropriedade2 | async" [value]="option">
+            {{ option.getNome() }}
+          </md-option>
+        </md-autocomplete>
+      </div>
+      <md-card-actions layout="row" layout-align="start center">  
+        <button md-raised-button color="primary" style="margin-bottom: 25px;height: 35px;" (click)="mover()">Mover</button>
+        <button md-raised-button color="acent"  [routerLink]="['/home/lista/apiarios']">Voltar</button>
+      </md-card-actions>
+    </div>
+  </md-card-content>
+</md-card>
+<app-mapa style="margin-top: 10px;" [groupLocations]="locations"></app-mapa>

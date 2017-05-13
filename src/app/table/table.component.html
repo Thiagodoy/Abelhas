@@ -1,0 +1,110 @@
+<div layout="row" layout-align="start center" class="pad-left-sm pad-right-sm">
+ <td-search-box *ngIf="filteredData.length > 0 || searchTerm" #searchBox backIcon="arrow_back" class="push-right-sm" placeholder="Pesquisar aqui" (searchDebounce)="search($event)" flex>
+  </td-search-box>
+</div>
+
+<md-divider *ngIf="filteredData.length > 0" ></md-divider>
+
+<td-data-table [selectable]="selectable" [data]="filteredData" [columns]="columns" [multiple]="multiple" [sortable]="sortable"
+  [sortBy]="sortBy" [sortOrder]="sortOrder" (sortChange)="sortTable($event)" (rowSelect)="itemSelected($event)"  (selectAll)="itemAllSelected($event)"  (sortChange)="sort($event)" #table>
+  <!--Template Lista Apiario-->
+  <template tdDataTableTemplate="valido" let-value="value" let-row="row" let-column="column">
+    <div layout="row">
+      <md-icon [style.color]="row[column]  ? 'green' :  'red' ">{{row[column] ? 'check_circle': row[column] ? 'report':'warning' }}</md-icon>
+    </div>
+  </template>
+  <template tdDataTableTemplate="acoes" let-value="value" let-row="row" let-column="column">
+    <div layout="row">
+      <button md-icon-button [mdMenuTriggerFor]="menu">
+              <md-icon>menu</md-icon>
+              </button>
+      <md-menu #menu="mdMenu">
+        <button md-menu-item [disabled]="row['valido']" (click)="acoes('VALIDAR',row)"> <md-icon>check</md-icon> Validar </button>
+        <button md-menu-item (click)="acoes('EDITAR',row)"> <md-icon>mode_edit</md-icon>Editar </button>
+        <button md-menu-item (click)="acoes('EXCLUIR',row)"> <md-icon>delete</md-icon> Excluir </button>
+        <button md-menu-item  (click)="acoes('HISTORICO',row)"> <md-icon>history</md-icon> Histórico </button>
+      </md-menu>
+    </div>
+  </template>
+  <!--Template Lista Apiario-->
+
+  <template tdDataTableTemplate="nome" let-value="value" let-row="row" let-column="column">
+    <div layout="row">
+      <md-icon style="margin-right: 10px;">view_comfy</md-icon><span class="md-body-1">{{value}}</span>
+    </div>
+  </template>
+  <template tdDataTableTemplate="propriedade" let-value="value" let-row="row" let-column="column">
+    <div layout="row">
+      <md-icon style="margin-right: 10px;">label</md-icon><span class="md-body-1">{{row[column]}}</span>
+    </div>
+  </template>
+  <!--Template List Usuário-->
+  <template tdDataTableTemplate="propriedade" let-value="value" let-row="row" let-column="column">
+    <div layout="row">
+      <md-icon style="margin-right: 10px;">room</md-icon><span class="md-body-1">{{row[column]}}</span>
+    </div>
+  </template>
+    <!--<template tdDataTableTemplate="attributes.username" let-value="value" let-row="row" let-column="column">
+    <div layout="row">
+      <md-icon style="margin-right: 10px;">person</md-icon><span class="md-body-1">{{row[column]}}</span>
+    </div>
+  </template>-->
+  <template tdDataTableTemplate="acoes_usuario" let-value="value" let-row="row" let-column="column">
+    <div layout="row">
+      <button md-icon-button [mdMenuTriggerFor]="menuUser">
+              <md-icon>menu</md-icon>
+              </button>
+      <md-menu #menuUser="mdMenu">
+        <button md-menu-item *ngIf="perfil == 'GESTOR' && row.tipo !='GESTOR' && row.tipo !='ASSOCIACAO'" [disabled]="row.habilitado" (click)="acoes('HABILITAR',row)"> <md-icon>check</md-icon>Habilitar</button>
+        <button md-menu-item [disabled]="perfil == 'ASSOCIACAO'" (click)="acoes('EDITAR',row)"> <md-icon>mode_edit</md-icon>Editar</button>
+        <button md-menu-item (click)="acoes('EXCLUIR',row)"> <md-icon>delete</md-icon> Excluir </button>
+      </md-menu>
+    </div>
+  </template>
+  <!--Template List Usuário-->
+  <!--Template de gestão das associações-->
+  <template tdDataTableTemplate="acoes_associacao" let-value="value" let-row="row" let-column="column">
+    <div layout="row">
+      <button md-icon-button [mdMenuTriggerFor]="menuAssociacao">
+              <md-icon>menu</md-icon>
+              </button>
+      <md-menu #menuAssociacao="mdMenu">
+        <button md-menu-item (click)="acoes('EDITAR',row)"> <md-icon>mode_edit</md-icon>Editar </button>
+        <button md-menu-item (click)="acoes('EXCLUIR',row)"> <md-icon>delete</md-icon> Excluir </button>
+      </md-menu>
+    </div>
+  </template>
+  <!--Template de gestão das associações-->
+  <!--Template de gestão das propriedades-->
+  <template tdDataTableTemplate="acoes_propriedade" let-value="value" let-row="row" let-column="column">
+    <div layout="row">
+      <button md-icon-button [mdMenuTriggerFor]="menuPropriedade">
+              <md-icon>menu</md-icon>
+              </button>
+      <md-menu #menuPropriedade="mdMenu">
+        <button md-menu-item (click)="acoes('EDITAR',row)"> <md-icon>mode_edit</md-icon>Editar </button>
+        <button md-menu-item (click)="acoes('EXCLUIR',row)" > <md-icon>delete</md-icon> Excluir </button>
+      </md-menu>
+    </div>
+  </template>
+  <!--Template de gestão das propriedades-->
+  <!--Template de gestão ApicultorAssociação-->
+  <template tdDataTableTemplate="acoes_apicultor_asso" let-value="value" let-row="row" let-column="column">
+    <div layout="row">
+      <button md-icon-button [mdMenuTriggerFor]="menuPropriedade">
+              <md-icon>menu</md-icon>
+              </button>
+      <md-menu #menuPropriedade="mdMenu">
+        <button md-menu-item (click)="acoes('EDITAR',row)"> <md-icon>mode_edit</md-icon>Editar </button>
+        <button md-menu-item (click)="acoes('EXCLUIR',row)" > <md-icon>delete</md-icon> Excluir </button>
+      </md-menu>
+    </div>
+  </template>
+  <!--Template de gestão ApicultorAssociação-->
+</td-data-table>
+<td-paging-bar *ngIf="showPagination && data.length>0" #pagingBar [pageSizes]="[5, 10, 15, 20]" [total]="totalRecords" [pageSize]="paginaTotal" (change)="page($event)">
+  <span td-paging-bar-label hide-xs>Linhas por pagina:</span>
+  <div *ngIf="!((paginaAtual * paginaTotal) >= filteredTotal) " > {{paginaAtual * paginaTotal }} <span hide-xs>de {{filteredTotal}}</span></div>  
+</td-paging-bar>
+<!--
+<td-paging-bar2 *ngIf="showPagination && data.length>0" [pageSizes]="[5, 10, 15, 20]" [total]="totalRecords" (change)="page($event)"></td-paging-bar2>-->

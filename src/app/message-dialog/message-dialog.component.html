@@ -1,0 +1,47 @@
+<div>
+  <div layout="row" layout-align="center center">
+    <md-icon *ngIf="type == 'MESSAGE'" class="icon-message">warning</md-icon>
+    <md-icon *ngIf="type == 'ERRO'" class="icon-error">error</md-icon>
+    <md-icon *ngIf="type == 'SUCCESS'" class="icon-success">check_circle</md-icon>
+  </div>
+  <div layout="row" layout-align="center center">
+    <h1 md-dialog-title style="margin-bottom: 5px">{{ title }}</h1>
+  </div>
+  <div md-dialog-content *ngIf="type != 'TABLE'" [innerHTML]="message"></div>
+  <div md-dialog-content *ngIf="type == 'TABLE'">
+    <md-divider></md-divider>
+    <app-table #table class="width-100" [data]="data" [paginaTotal]="5" [columns]="columns" [uniqueId]="uniqueId" [itensSelecteds]="itensSelected"
+      (itemSelected3)="itensSelecionados($event)" [selectable]="true" [showPagination]="true" [multiple]="multiple" [showSelectionJquery]="true"></app-table>
+  </div>
+  <div *ngIf="type =='EDITAR_ASC'">
+    <div layout="column" [formGroup]="myGroup">
+      <md-input-container class="width-100">
+        <input mdInput placeholder="Associação" type="text"  formControlName="name">
+      </md-input-container>
+      <md-input-container class="width-60">
+        <input mdInput placeholder="Qtd. Pontos" type="number" formControlName="qtdPonto">
+      </md-input-container>
+      <md-input-container class="width-60">
+        <input mdInput placeholder="Qtd. Caixas" type="number" formControlName="qtdCaixa">
+      </md-input-container>
+    </div>
+  </div>
+
+
+
+
+  <div md-dialog-actions layout-align="center center">
+    <div layout="row">
+      <button md-raised-button color="primary" *ngIf="type == 'MESSAGE'" (click)="dialogRef.close(true)" style="margin-left: 16px;">Sim</button>
+      <button md-raised-button color="primary" *ngIf="type == 'EDITAR_ASC'" (click)="alterar()">Alterar</button>
+      <button md-raised-button color="warn" *ngIf="type == 'MESSAGE' || type == 'EDITAR_ASC'" (click)="dialogRef.close(false)"
+        style="margin-left: 80px;">Não</button>
+      <button md-raised-button color="primary" *ngIf="type == 'ERRO' || type == 'SUCCESS'" (click)="dialogRef.close(false)">Ok</button>
+      <button md-raised-button color="primary" class="button-m-right" *ngIf="type == 'TABLE'" [disabled]="listItensSelected.length == 0"
+        (click)="closeTable()">OK</button>
+      <button md-raised-button color="warn" *ngIf="type == 'TABLE'" (click)="closeTable('CANCELAR')">Cancelar</button>
+
+
+    </div>
+  </div>
+</div>
