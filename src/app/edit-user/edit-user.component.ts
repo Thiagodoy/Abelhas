@@ -538,6 +538,15 @@ export class EditUserComponent implements OnInit, OnDestroy {
       ret['email'] = email;
       ret['hasUpdate'] = true;
     }
+
+    if(user.tipo == constantes.GESTOR){
+      if(user.nome !== this.userCurrent.attributes.nomeGestor){
+        ret['nomeGestor'] = user.nome;
+        ret['hasUpdate'] = true;
+      }
+    }
+
+
     return ret;
 
   }
