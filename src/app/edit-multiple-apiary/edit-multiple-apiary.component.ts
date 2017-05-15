@@ -76,7 +76,7 @@ export class EditMultipleApiaryComponent implements OnInit {
         this.listEspecieAbelha = res_3;
         this.listMunicipio = res_4
         this.listApicultor2 = res_2;
-        this.todos()
+        this.todos();
       });
     });
 
@@ -113,14 +113,14 @@ export class EditMultipleApiaryComponent implements OnInit {
 
 
   todos() {
- 
+
     let propriedade = new Propriedade();
     propriedade.setNome('Todos');
     this.listPropriedade.push(propriedade);
 
     let apicultor = new Apicultor();
     apicultor.setNome('Todos');
-    this.listApicultor.push(apicultor)  ;  
+    this.listApicultor.push(apicultor)  ;
 
     let especiAbelha = new EspecieAbelha();
     especiAbelha.setNome('Todos');
@@ -141,18 +141,18 @@ export class EditMultipleApiaryComponent implements OnInit {
         let apiario: Apiario = paran.row;
         let location = apiario.getLocation();
         this.leaflet.removeLocation(location);
-        location.setIcon(LeafletColorMarker.orangeIcon);        
+        location.setIcon(LeafletColorMarker.greenIcon);
         this.leaflet.putLocation(location);
       } else {
         this.listApiarioSelected.concat(paran.rows);
 
-        for (let apiario of paran.rows) {        
+        for (let apiario of paran.rows) {
           let location = apiario.getLocation();
           this.leaflet.removeLocation(location);
-          location.setIcon(LeafletColorMarker.orangeIcon);
-          this.leaflet.putLocation(location);          
+          location.setIcon(LeafletColorMarker.greenIcon);
+          this.leaflet.putLocation(location);
         }
-      }      
+      }
     } else {
 
       if (paran.rows && paran.rows.length == 0) {
@@ -160,13 +160,13 @@ export class EditMultipleApiaryComponent implements OnInit {
         this.locations = this.locations.filter(value => {
           value.setIcon(LeafletColorMarker.blueIcon);
           return value;
-        });        
+        });
       } else {
         let apiario: Apiario = paran.row;
         this.leaflet.removeLocation(apiario.getLocation());
         apiario.getLocation().setIcon(LeafletColorMarker.blueIcon);
-        this.leaflet.putLocation(apiario.getLocation());          
-        this.listApiarioSelected = this.listApiarioSelected.filter((value, index) => { return value.getId() != apiario.getId() });            
+        this.leaflet.putLocation(apiario.getLocation());
+        this.listApiarioSelected = this.listApiarioSelected.filter((value, index) => { return value.getId() != apiario.getId() });
       }
     }
   }
@@ -208,7 +208,7 @@ export class EditMultipleApiaryComponent implements OnInit {
 
   mover() {
     if (this.validar('')) {
-      
+
       if (this.listApiarioSelected.length == 0) {
         let message = '<p>Não existe nenhum apiário selecionado</p>'
         this.dialogService.confirm('Erro', message, 'ERRO', this.view);
@@ -290,12 +290,12 @@ export class EditMultipleApiaryComponent implements OnInit {
       this.parseService.executeQuery(queryApiario).then((result: Apiario[]) => {
         this.zone.run(() => {
           this.listApiarios = result;
-          let tempLocation = [];          
+          let tempLocation = [];
           result.forEach(value => {
-            let location = value.getLocation();            
-            tempLocation.push(location);            
+            let location = value.getLocation();
+            tempLocation.push(location);
           });
-          this.locations = tempLocation;          
+          this.locations = tempLocation;
         })
       });
     } else {

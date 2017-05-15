@@ -5,7 +5,8 @@ import { FormsModule } from '@angular/forms';
 import { HttpModule } from '@angular/http';
 import { MaterialModule } from '@angular/material';
 import { RouterModule } from '@angular/router';
-import { ReactiveFormsModule } from '@angular/forms'
+import { ReactiveFormsModule } from '@angular/forms';
+import {BrowserAnimationsModule} from '@angular/platform-browser/animations';
 
 //Bibliotecas de terceiros
 import { CovalentCoreModule } from '@covalent/core';
@@ -52,7 +53,7 @@ import { OnlyReadComponent } from './only-read/only-read.component';
     LoginComponent,
     TableComponent,
     MessageDialogComponent,
-    DataPickerCustomComponent,    
+    DataPickerCustomComponent,
     EditApiaryComponent,
     MapaComponent,
     ListUserComponent,
@@ -61,7 +62,7 @@ import { OnlyReadComponent } from './only-read/only-read.component';
     EditPropertyComponent,
     ListPropertyComponent,
     DataDeactivationComponent,
-    EditUserComponent,    
+    EditUserComponent,
     HistoricComponent,
     OnlyReadComponent
   ],
@@ -69,7 +70,8 @@ import { OnlyReadComponent } from './only-read/only-read.component';
     BrowserModule,
     FormsModule,
     HttpModule,
-    MaterialModule.forRoot(),
+    MaterialModule,
+    BrowserAnimationsModule,
     RouterModule.forRoot(route),
     CovalentCoreModule.forRoot(),
     ReactiveFormsModule,
