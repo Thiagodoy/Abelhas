@@ -393,7 +393,7 @@ export class EditUserComponent implements OnInit, OnDestroy {
       let result = this.hasUpdateUser();
       if (result.hasUpdate) {
         delete result.hasUpdate;
-        promises.push(this.parseService.runCloud('updateUserPass', result));
+        promises.push(this.parseService.runCloud('updateUser', result));
       }
       parse.Promise.when(promises).then(result => {
         if (result)
@@ -455,7 +455,7 @@ export class EditUserComponent implements OnInit, OnDestroy {
       let result = this.hasUpdateUser();
       if (result.hasUpdate) {
         delete result.hasUpdate;
-        promises.push(this.parseService.runCloud('updateUserPass', result));
+        promises.push(this.parseService.runCloud('updateUser', result));
       }
       parse.Promise.when(promises).then(result => {
         if (result)
@@ -489,7 +489,7 @@ export class EditUserComponent implements OnInit, OnDestroy {
       let result = this.hasUpdateUser()
       if (result.hasUpdate) {
         delete result.hasUpdate;
-        this.parseService.runCloud('updateUserPass', result).then(result => {
+        this.parseService.runCloud('updateUser', result).then(result => {
           if (result) {
             this.dialog.confirm('Sucesso', 'Gestor atualizado com sucesso!', 'SUCCESS', this.view).subscribe(resul => {
               this.routeN.navigate(['home/lista/usuarios']);
