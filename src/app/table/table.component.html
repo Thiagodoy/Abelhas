@@ -91,10 +91,10 @@
   <!--Template de gestão ApicultorAssociação-->
   <ng-template tdDataTableTemplate="acoes_apicultor_asso" let-value="value" let-row="row" let-column="column">
     <div layout="row">
-      <button md-icon-button [mdMenuTriggerFor]="menuPropriedade">
+      <button md-icon-button [mdMenuTriggerFor]="menuApicultorAssociacao">
               <md-icon>menu</md-icon>
               </button>
-      <md-menu #menuPropriedade="mdMenu">
+      <md-menu #menuApicultorAssociacao="mdMenu">
         <button md-menu-item (click)="acoes('EDITAR',row)"> <md-icon>mode_edit</md-icon>Editar </button>
         <button md-menu-item (click)="acoes('EXCLUIR',row)" > <md-icon>delete</md-icon> Excluir </button>
       </md-menu>
