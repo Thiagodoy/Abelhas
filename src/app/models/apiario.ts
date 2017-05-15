@@ -177,4 +177,7 @@ export class Apiario extends Object {
     setExcluded(paran:boolean){
         this.set('excluded',paran);
     }
+    getDataColetaCreate():Date{
+        return this.get('dataColetaCreate');
+    }
 }

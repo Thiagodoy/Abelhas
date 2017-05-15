@@ -103,7 +103,7 @@ export class ListApiaryComponent implements OnInit {
     this.queryApiario.include('especieAbelha');
     this.queryApiario.include('propriedade');
     this.queryApiario.notEqualTo('excluded', true);
-    this.queryApiario.descending('createAt');
+    this.queryApiario.descending('dataColetaCreate');
 
 
 
@@ -120,10 +120,16 @@ export class ListApiaryComponent implements OnInit {
     }
 
     if (this.filter.startDate)
-      this.queryApiario.greaterThanOrEqualTo('createdAt', this.filter.startDate);
+      this.queryApiario.greaterThanOrEqualTo('dataColetaCreate', this.filter.startDate);
 
-    if (this.filter.endDate)
-      this.queryApiario.lessThanOrEqualTo('createdAt', this.filter.endDate);
+    if (this.filter.endDate){
+      let datetemp:Date = this.filter.endDate;
+      datetemp.setHours(23);
+      datetemp.setMinutes(59);
+      datetemp.setSeconds(59);
+
+      this.queryApiario.lessThanOrEqualTo('dataColetaCreate', datetemp);
+    }
 
     if (this.controlStatus.value != 'todos') {
       if (this.controlStatus.value == 'validados')
@@ -162,7 +168,7 @@ export class ListApiaryComponent implements OnInit {
             qtdPontos: pontos,
             qtdCaixas: caixas,
             status: apiario.getStatus(),
-            data: this.momentService.core(apiario.createdAt).format('DD/MM/YYYY HH:mm')
+            data: this.momentService.core(apiario.getDataColetaCreate()).format('DD/MM/YYYY HH:mm')
           }
         } catch (e) {
           console.error('Erro ao montar lista Apiario');
@@ -190,7 +196,7 @@ export class ListApiaryComponent implements OnInit {
               qtdPontos: pontos,
               qtdCaixas: caixas,
               status: ap.getStatus(),
-              data: this.momentService.core(ap.createdAt).format('DD/MM/YYYY HH:mm')
+              data: this.momentService.core(ap.getDataColetaCreate()).format('DD/MM/YYYY HH:mm')
             }
             list3.push(obj);
           } catch (e) {
