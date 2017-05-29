@@ -50,6 +50,7 @@ export class ListApiaryComponent implements OnInit {
     { name: 'propriedadea', label: 'Propriedade' },
     { name: 'municipio', label: 'Municipio' },
     { name: 'qtdCaixas', label: 'Caixas' },
+    { name: 'status', label: 'Status' },
     { name: 'coletadoPor', label: 'Coletado Por' },
     { name: 'data', label: 'Data', format: (value) => { return this.momentService.core(new Date(value)).format('DD/MM/YYYY HH:mm') } },
     { name: 'acoes', label: 'Ações' }];
@@ -168,6 +169,7 @@ export class ListApiaryComponent implements OnInit {
             municipio: apiario.getMunicipio() ? apiario.getMunicipio().getNome() : 'Nenhum Municipio',
             qtdCaixas: apiario.getQtdCaixas() == undefined || apiario.getQtdCaixas() == null ? 0 : apiario.getQtdCaixas(),
             coletadoPor: apiario.getColetadoPor(),
+            status: apiario.getStatus(),
             data: apiario.getDataColetaCreate() ? apiario.getDataColetaCreate().getTime() : apiario.createdAt.getTime()
           }
         } catch (e) {
@@ -196,6 +198,7 @@ export class ListApiaryComponent implements OnInit {
               municipio: ap.getMunicipio() ? ap.getMunicipio().getNome() : 'Nenhum Municipio',
               qtdCaixas: ap.getQtdCaixas() == undefined || ap.getQtdCaixas() == null ? 0 : ap.getQtdCaixas(),
               coletadoPor: ap.getColetadoPor(),
+              status: ap.getStatus(),
               data: ap.getDataColetaCreate() ? ap.getDataColetaCreate().getTime() : ap.createdAt.getTime()
 
             }
@@ -213,6 +216,10 @@ export class ListApiaryComponent implements OnInit {
 
     });
 
+  }
+
+  getStatus(){
+    return '';
   }
 
   getValidadoPor(list) {

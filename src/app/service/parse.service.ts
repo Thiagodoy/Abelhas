@@ -32,9 +32,9 @@ export class ParseService {
 
   constructor(private momentService: MomentService, private zone: NgZone, private dialogService: DialogService, private route: Router) {
     //Define o banco a ser acessado
-    let env = this.getEnviroment(environment.production);
-      this.core.initialize(env.appid);
-    this.core.serverURL = env.url;
+    let env = environment.getEnvironment();
+    this.core.initialize(env.appid || '');
+    this.core.serverURL = env.url || '';
     this.core.masterKey = env.masterKey || '';
 
     // Mapeia as classes que serão utilizadas no parse
