@@ -91,10 +91,6 @@ export class AppComponent implements OnDestroy {
     this.parseService.logout();
     this.sidenav.toggle();
   }
-  expandedEvent(){
-    console.log('TETESTETETET');
-
-  }
 
   ngOnDestroy() {
     this.parseService.loaderEvent.unsubscribe();
