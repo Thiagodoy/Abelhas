@@ -1,3 +1,4 @@
+import { UserWeb } from './../models/user-web';
 import { LeafletColorMarker } from './../leaflet-color-marker';
 import { DialogService } from './../service/dialog.service';
 import { Location } from './../models/location';
@@ -9,10 +10,11 @@ import { EspecieAbelha } from './../models/especie-abelha';
 import { Propriedade } from './../models/propriedade';
 import { Apicultor } from './../models/apicultor';
 import { ParseService } from './../service/parse.service';
-import { Component, OnInit,  NgZone, ViewContainerRef } from '@angular/core';
+import { Component, OnInit, NgZone, ViewContainerRef } from '@angular/core';
 import { Observable } from 'rxjs/Rx';
 import { FormControl, Validators, AbstractControl } from '@angular/forms';
 import { ITdDataTableColumn } from '@covalent/core';
+import Constante from '../constantes';
 import * as parse from 'parse';
 
 
@@ -36,6 +38,7 @@ export class EditMultipleApiaryComponent implements OnInit {
   listMunicipio: Municipio[] = [];
   listApiarios: Apiario[] = []
   listApiarioSelected: Apiario[] = [];
+  listColetadoPor: any[] = [];
   locations: Location[] = [];
 
   controlMunicipio: FormControl = new FormControl('', [Validators.required]);
@@ -44,6 +47,7 @@ export class EditMultipleApiaryComponent implements OnInit {
   controlPropriedade2: FormControl = new FormControl('', Validators.required);
   controlApicultor: FormControl = new FormControl('', Validators.required);
   controlApicultor2: FormControl = new FormControl('', Validators.required);
+  controlColetadoPor: FormControl = new FormControl('', Validators.required);
 
   filteredOptionsMunicipio: Observable<Municipio[]>;
   filteredOptionsEspecieAbelha: Observable<EspecieAbelha[]>;
@@ -51,10 +55,13 @@ export class EditMultipleApiaryComponent implements OnInit {
   filteredOptionsApicultor: Observable<Apicultor[]>;
   filteredOptionsPropriedade2: Observable<Propriedade[]>;
   filteredOptionsApicultor2: Observable<Apicultor[]>;
+  filteredOptionsColetadorPor: Observable<any[]>;
+
+  filtroColetadoPor = false;
 
   error: any = {};
 
-  constructor(private view:ViewContainerRef,private dialogService: DialogService, private parseService: ParseService, private momentService: MomentService, private zone: NgZone, private leaflet: LeafletService) { }
+  constructor(private view: ViewContainerRef, private dialogService: DialogService, private parseService: ParseService, private momentService: MomentService, private zone: NgZone, private leaflet: LeafletService) { }
 
   ngOnInit() {
 
@@ -69,13 +76,52 @@ export class EditMultipleApiaryComponent implements OnInit {
     let promise_3 = this.parseService.findAll(EspecieAbelha);
     let promise_4 = this.parseService.findAll(Municipio);
 
+    let query = this.parseService.createQuery(Apiario);
+    let queryUser = this.parseService.createQuery(UserWeb);
+
+    query.matchesQuery('coletadoPor', queryUser);
+
+    this.parseService.executeQuery(query).then(result => {
+      if (result) {
+        let filter = result.map(v => { return v.id });
+
+
+        this.parseService.runCloud('listUsers').then((r: UserWeb[]) => {
+          if (r) {
+
+            this.listColetadoPor = r.map(value => {
+              let obj = { id: null, nome: null }
+              obj.id = value.id;
+
+              switch (value.attributes.tipo) {
+                case Constante.GESTOR:
+                  obj.nome = value.attributes.nomeGestor;
+                  break;
+
+                case Constante.APICULTOR:
+                  obj.nome = value.attributes.apicultor.attributes.nome;
+                  break;
+
+                case Constante.ASSOCIACAO:
+                  obj.nome = value.attributes.associacao.attributes.nome;
+                  break;
+              }
+              return obj;
+            });
+          }
+        });
+      }
+    });
+
     parse.Promise.when(promise_1, promise_2, promise_3, promise_4).then((res_1, res_2, res_3, res_4) => {
       this.zone.run(() => {
+
         this.listPropriedade = res_1;
         this.listApicultor = res_2;
         this.listEspecieAbelha = res_3;
         this.listMunicipio = res_4
         this.listApicultor2 = res_2;
+
         this.todos();
       });
     });
@@ -109,6 +155,12 @@ export class EditMultipleApiaryComponent implements OnInit {
       .startWith(null)
       .map<string, string>(nome => nome ? nome : '')
       .map((nome => nome ? this.filterPropriedade(nome) : this.listPropriedade.slice()));
+
+
+    this.filteredOptionsColetadorPor = this.controlColetadoPor.valueChanges
+      .startWith(null)
+      .map<string, string>(nome => nome ? nome : '')
+      .map((nome => nome ? this.filterColetado(nome) : this.listColetadoPor.slice()));
   }
 
 
@@ -120,7 +172,7 @@ export class EditMultipleApiaryComponent implements OnInit {
 
     let apicultor = new Apicultor();
     apicultor.setNome('Todos');
-    this.listApicultor.push(apicultor)  ;
+    this.listApicultor.push(apicultor);
 
     let especiAbelha = new EspecieAbelha();
     especiAbelha.setNome('Todos');
@@ -179,14 +231,19 @@ export class EditMultipleApiaryComponent implements OnInit {
     if (type == 'BUSCAR') {
       controlAb.set('municipio', this.controlMunicipio);
       controlAb.set('abelha', this.controlAbelha);
-      controlAb.set('apicultor', this.controlApicultor);
+      if (!this.filtroColetadoPor)
+        controlAb.set('apicultor', this.controlApicultor);
+      else
+        controlAb.set('coletado', this.controlColetadoPor)
+
       controlAb.set('propriedade', this.controlPropriedade);
+
     } else {
       controlAb.set('propriedade2', this.controlPropriedade2);
       controlAb.set('apicultor2', this.controlApicultor2);
     }
 
-    let option = ['municipio', 'abelha', 'apicultor', 'propriedade', 'apicultor2', 'propriedade2'];
+    let option = ['municipio', 'abelha', 'apicultor', 'propriedade', 'apicultor2', 'propriedade2', 'coletado'];
 
     for (let key of option) {
 
@@ -204,6 +261,10 @@ export class EditMultipleApiaryComponent implements OnInit {
       }
     }
     return isvalid;
+  }
+
+  change(event) {
+    this.filtroColetadoPor = event.checked;
   }
 
   mover() {
@@ -262,7 +323,10 @@ export class EditMultipleApiaryComponent implements OnInit {
 
       let queryApicultor = this.parseService.createQuery(Apicultor);
       let apicultor: Apicultor = this.controlApicultor.value;
-      queryApicultor.equalTo('objectId', apicultor.getId());
+
+      if (!this.filtroColetadoPor)
+        queryApicultor.equalTo('objectId', apicultor.getId());
+
 
       let queryAbelha = this.parseService.createQuery(EspecieAbelha);
       let especieAbelha: EspecieAbelha = this.controlAbelha.value;
@@ -276,8 +340,14 @@ export class EditMultipleApiaryComponent implements OnInit {
       let propriedade: Propriedade = this.controlPropriedade.value;
       queryPropriedade.equalTo('objectId', propriedade.getId())
 
-      if (apicultor.getNome().indexOf('Todos') < 0)
+      if (this.filtroColetadoPor) {
+        let queryUser = this.parseService.createQuery(UserWeb);
+        queryUser.equalTo('objectId', this.controlColetadoPor.value.id);
+        queryApiario.matchesQuery('coletadoPor', queryUser);
+      }
+      else if(apicultor.getNome().indexOf('Todos') < 0)
         queryApiario.matchesQuery('apicultor', queryApicultor);
+
       if (especieAbelha.getNome().indexOf('Todos') < 0)
         queryApiario.matchesQuery('especieAbelha', queryAbelha);
       if (propriedade.getNome().indexOf('Todos') < 0)
@@ -285,7 +355,7 @@ export class EditMultipleApiaryComponent implements OnInit {
       if (municipio.getNome().indexOf('Todos') < 0)
         queryApiario.matchesQuery('municipio', queryMunicipio);
 
-      queryApiario.limit(1000);
+      queryApiario.limit(2000);
 
       this.parseService.executeQuery(queryApiario).then((result: Apiario[]) => {
         this.zone.run(() => {
@@ -342,6 +412,16 @@ export class EditMultipleApiaryComponent implements OnInit {
     });
   }
 
+  filterColetado(name: string): any[] {
+    // this.validar('propriedade',this.controlPropriedade.status);
+    return this.listColetadoPor.filter(option => {
+      return new RegExp(name, 'gi').test(option.nome)
+    });
+  }
+
+  displayFn2(object: any): string {
+    return object ? object.nome : '';
+  }
   displayFn(object: parse.Object): string {
     return object ? object.attributes.nome : '';
   }

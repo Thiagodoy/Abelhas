@@ -103,7 +103,7 @@
             </div>-->
             <div layout="row" style="margin-bottom: 20px;">
               <div layout="row" flex="60" style="flex-wrap: wrap;margin-top: 16px">
-                <h4>Motivo mortandade</h4>
+                <h4>Motivo mortalidade</h4>
                 <md-radio-group flex="90">
                   <div layout="row" [formGroup]="motivoMortandade">
                     <div flex="30">
@@ -128,6 +128,17 @@
                 </md-radio-group>
               </div>
             </div>
+             <div layout="row">
+              <div layout="column">
+                <h4>Diálogo com vizinho?</h4>
+              </div>
+              <div layout="row" style="flex-wrap: wrap;margin-top: 16px">
+                <md-radio-group class="example-radio-group" style="margin-left: 15px;" formControlName="dialogoVizinhos">
+                  <md-radio-button name="vizinho" [value]="true">Sim </md-radio-button>
+                  <md-radio-button name="vizinho" [value]="false">Não </md-radio-button>
+                </md-radio-group>
+              </div>
+            </div>
             <div layout="row">
               <div layout="column">
                 <h4>Tem comprovação por análise?</h4>
@@ -141,7 +152,7 @@
             </div>
             <div layout="row" style="margin-bottom: 12px;">
               <div layout="column">
-                <h4>Histórico mortandade?</h4>
+                <h4>Histórico mortalidade?</h4>
               </div>
               <div layout="row" style="flex-wrap: wrap;margin-top: 16px">
                 <md-radio-group class="example-radio-group" style="margin-left: 15px;" formControlName="historicoMortandade">

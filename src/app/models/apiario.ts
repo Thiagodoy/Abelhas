@@ -1,3 +1,4 @@
+import { UserWeb } from './user-web';
 import { LeafletColorMarker } from './../leaflet-color-marker';
 import { Object } from 'parse';
 import { Cultura } from './cultura';
@@ -179,5 +180,11 @@ export class Apiario extends Object {
     }
     getDataColetaCreate():Date{
         return this.get('dataColetaCreate');
+    }
+    getValidadoPor():UserWeb{
+        return this.get('validadoPor');        
+    }
+    getColetadoPor():UserWeb{
+        return this.get('coletadoPor');
     }
 }

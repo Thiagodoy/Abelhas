@@ -32,8 +32,8 @@ export class ParseService {
 
   constructor(private momentService: MomentService, private zone: NgZone, private dialogService: DialogService, private route: Router) {
     //Define o banco a ser acessado
-    let env = environment.getEnvironment();
-    this.core.initialize(env.appid);
+    let env = this.getEnviroment(environment.production);
+      this.core.initialize(env.appid);
     this.core.serverURL = env.url;
     this.core.masterKey = env.masterKey || '';
 
@@ -90,7 +90,7 @@ export class ParseService {
    * @param Classe extende Parse.Object 
    * @param Include campos que podem serm inclusos na query 
    */
-  get<T extends parse.Object>(id: string, paramClass: { new (): T }, include?: string[]): parse.Promise<T> {
+  get<T extends parse.Object>(id: string, paramClass: { new (): T }, include?: string[], useMasterKey?: boolean): parse.Promise<T> {
 
     this.toogleLoading(true);
     let i = this;
@@ -102,7 +102,7 @@ export class ParseService {
       }
     }
 
-    return query.get(id).done((result) => {
+    return query.get(id, { useMasterKey: useMasterKey }).done((result) => {
       i.toogleLoading(false);
       return result;
     }).fail((erro) => {
@@ -172,10 +172,10 @@ export class ParseService {
    * Cria a query para reaizar consultas customizadas
    * @param Classe do Objeto
    */
-  executeQuery(query: parse.Query) {
+  executeQuery(query: parse.Query, useMasterKey?: boolean) {
     let i = this;
     i.toogleLoading(true);
-    return query.find().done((result) => {
+    return query.find({ useMasterKey: useMasterKey }).done((result) => {
       i.toogleLoading(false);
       return result;
     }).fail(erro => {
@@ -294,11 +294,11 @@ export class ParseService {
       i.toogleLoading(false)
     });
   }
-/**
-   * Executa funções no cloud
-   * @param String nome do script
-   * @param Any parametros
-   */
+  /**
+     * Executa funções no cloud
+     * @param String nome do script
+     * @param Any parametros
+     */
   runCloud(script: string, paran?: any) {
     this.toogleLoading(true);
     let i = this;
@@ -374,4 +374,17 @@ export class ParseService {
       this.instance.toogleLoading(false);
     });
   }
+
+  getEnviroment(isProduction) {
+    let environments = [
+      { url: 'https://parsedevabelhas.herokuapp.com/parse', appid: 'myAppId', masterKey: 'myMasterKey' },
+      { url: 'http://localhost:1337/parse', appid: 'myAppDebug', masterKey: 'myMasterKey' }];
+
+    return isProduction ? environments[0] : environments[1]
+
+  }
+
+
+
+
 }

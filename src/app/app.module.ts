@@ -9,7 +9,13 @@ import { ReactiveFormsModule } from '@angular/forms';
 import {BrowserAnimationsModule} from '@angular/platform-browser/animations';
 
 //Bibliotecas de terceiros
-import { CovalentCoreModule } from '@covalent/core';
+import { CovalentLayoutModule, CovalentStepsModule  } from '@covalent/core';
+import { CovalentExpansionPanelModule } from '@covalent/core';
+import { CovalentLoadingModule } from '@covalent/core';
+import { CovalentSearchModule } from '@covalent/core';
+import { CovalentDataTableModule } from '@covalent/core';
+import { CovalentPagingModule } from '@covalent/core';
+
 import { AppComponent } from './app.component';
 import { ListApiaryComponent } from './list-apiary/list-apiary.component';
 import { LoginComponent } from './login/login.component';
@@ -67,13 +73,19 @@ import { OnlyReadComponent } from './only-read/only-read.component';
     OnlyReadComponent
   ],
   imports: [
+    CovalentLayoutModule,
+    CovalentStepsModule,
+    CovalentExpansionPanelModule,
+    CovalentLoadingModule,
+    CovalentSearchModule,
+    CovalentDataTableModule,
+    CovalentPagingModule,
     BrowserModule,
     FormsModule,
     HttpModule,
     MaterialModule,
     BrowserAnimationsModule,
-    RouterModule.forRoot(route),
-    CovalentCoreModule.forRoot(),
+    RouterModule.forRoot(route),    
     ReactiveFormsModule,
     TextMaskModule
 

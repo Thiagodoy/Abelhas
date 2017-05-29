@@ -2,9 +2,14 @@
   <md-card-title>Edição Multipla</md-card-title>
   <md-card-content>
     <div layout="column">
+       <section class="example-section">
+          <md-slide-toggle   [checked]="false" (change)="change($event)" style="margin-bottom:15px;">
+            Coletado Por
+          </md-slide-toggle>
+        </section>
       <div layout="row">
-        <md-icon style="margin-right: 10px;margin-top: 5px;"  [style.color]="error?.municipio ? 'red' :black">view_comfy</md-icon>
-        <md-input-container style="width: 20%" [dividerColor]="accent">
+        <md-icon style="margin-right: 10px;margin-top: 5px;"  [style.color]="error?.municipio ? 'red' :'black'">view_comfy</md-icon>
+        <md-input-container style="width: 20%" >
           <input type="text" mdInput placeholder="Municipio"  [mdAutocomplete]="auto" [formControl]="controlMunicipio">
           <md-hint *ngIf="error?.municipio" [ngStyle]="{'color': 'red'}" align="start">*Campo obrigatório.</md-hint>
         </md-input-container>
@@ -14,8 +19,8 @@
           </md-option>
         </md-autocomplete>        
       </div>
-      <div layout="row">
-        <md-icon style="margin-right: 10px;margin-top: 5px;"  [style.color]="error?.apicultor ? 'red' :black">person</md-icon>
+      <div layout="row" *ngIf="!filtroColetadoPor">
+        <md-icon style="margin-right: 10px;margin-top: 5px;"  [style.color]="error?.apicultor ? 'red' :'black'">person</md-icon>
         <md-input-container style="width: 20%">
           <input type="text" mdInput  [mdAutocomplete]="api" [formControl]="controlApicultor" placeholder="Apicultor">
           <md-hint *ngIf="error?.apicultor" [ngStyle]="{'color': 'red'}" align="start">*Campo obrigatório.</md-hint>
@@ -26,8 +31,20 @@
           </md-option>
         </md-autocomplete>
       </div>
+      <div layout="row" *ngIf="filtroColetadoPor">
+        <md-icon style="margin-right: 10px;margin-top: 5px;"  [style.color]="error?.coletado ? 'red' :'black'">person</md-icon>
+        <md-input-container style="width: 20%">
+          <input type="text" mdInput  [mdAutocomplete]="api2" [formControl]="controlColetadoPor" placeholder="Coletado por">
+          <md-hint *ngIf="error?.coletado" [ngStyle]="{'color': 'red'}" align="start">*Campo obrigatório.</md-hint>
+        </md-input-container>
+        <md-autocomplete #api2="mdAutocomplete" [displayWith]="displayFn2" style="width: 20%">
+          <md-option *ngFor="let option of filteredOptionsColetadorPor | async" [value]="option">
+            {{ option.nome }}
+          </md-option>
+        </md-autocomplete>
+      </div>
       <div layout="row">
-        <md-icon class="md-20" md-list-avatar svgIcon="bee" style="margin-right: 10px;"  [style.color]="error?.abelha ? 'red' :black"></md-icon>
+        <md-icon class="md-20" md-list-avatar svgIcon="bee" style="margin-right: 10px;"  [style.color]="error?.abelha ? 'red' :'black'"></md-icon>
        <md-input-container style="width: 20%">
           <input type="text" mdInput  [mdAutocomplete]="abelha" [formControl]="controlAbelha" placeholder="Especie Abelha">
           <md-hint *ngIf="error?.abelha" [ngStyle]="{'color': 'red'}" align="start">*Campo obrigatório.</md-hint>
@@ -39,7 +56,7 @@
         </md-autocomplete>
       </div>
       <div layout="row">
-        <md-icon style="margin-right: 10px;margin-top: 5px;" [style.color]="error?.propriedade ? 'red' :black">view_comfy</md-icon>
+        <md-icon style="margin-right: 10px;margin-top: 5px;" [style.color]="error?.propriedade ? 'red' :'black'">view_comfy</md-icon>
         <md-input-container style="width: 20%">
           <input type="text" mdInput  [mdAutocomplete]="propri" [formControl]="controlPropriedade" placeholder="Propriedade">
           <md-hint *ngIf="error?.propriedade" [ngStyle]="{'color': 'red'}" align="start">*Campo obrigatório.</md-hint>

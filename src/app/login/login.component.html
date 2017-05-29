@@ -8,8 +8,8 @@
     </md-card-title>
     <md-card-content class="login-content-position" layout="column">
       <form [formGroup]="formLogin" layout="column">
-        <section class="example-section">
-          <md-slide-toggle  [color]="color" [checked]="false" (change)="change($event)">
+        <section>
+          <md-slide-toggle   [checked]="false" (change)="change($event)">
             Associação
           </md-slide-toggle>
         </section>
@@ -31,4 +31,5 @@
       <button [disabled]="!formLogin.valid" (click)="login()" class="login-button" md-raised-button color="accent">Entrar<md-icon style="margin-left: 5px">input</md-icon></button>
     </md-card-actions>
   </md-card>
+  <span style="font-weight:600;color: darkgray">versão {{versao}}</span>
 </div>

@@ -139,11 +139,7 @@ export class EditApiaryComponent implements OnInit, OnDestroy {
         }
         l.push(lt);
         this.locations = l;
-        console.log("LOCATIONS");
-        console.log(this.locations.length);
       });
-
-
     }
   }
 
@@ -151,8 +147,7 @@ export class EditApiaryComponent implements OnInit, OnDestroy {
     this.formApiario.get('apicultor').setValue(this.apiario.getApicultor().getNome());
     this.formApiario.get('propriedade').setValue(this.listPropriedades.filter(value => { return value.id == this.apiario.getPropriedade().id })[0]);
     this.formApiario.get('especieAbelha').setValue(this.listEspecieAbelha.filter(value => { return value.id == this.apiario.getEspecieAbelha().id })[0]);
-    this.formApiario.get('qtdCaixas').setValue(this.apiario.getQtdCaixas());
-    this.formApiario.get('distanciaDeslocamentoCaixas').setValue(this.apiario.getDistanciaDeslocamentoCaixas());
+
     this.apiario.getCulturas().forEach((cultura) => { this.formApiario.get('culturas').get(cultura.id).setValue(true); });
 
     if (this.apiario.getMotivoMortandade())
@@ -162,11 +157,31 @@ export class EditApiaryComponent implements OnInit, OnDestroy {
       this.apiario.getMotivoHistoricoMortandade().forEach((motivo) => { this.formApiario.get('motivoHistoricoMortandade').get(motivo.id).setValue(true); });
 
     this.formApiario.get('observacao').setValue(this.apiario.getObservacao());
-    this.formApiario.get('migratorio').setValue(this.apiario.isMigratorio());
-    this.formApiario.get('existenciaMortalidadeAbelha').setValue(this.apiario.getExistenciaMortalidadeAbelha());
-    this.formApiario.get('comprovadoPorAnalise').setValue(this.apiario.getComprovadoPorAnalise());
-    this.formApiario.get('historicoMortandade').setValue(this.apiario.isHistroricoMortandade());
-    this.formApiario.get('historicoComprovadoPorAnalise').setValue(this.apiario.isHistoricoComprovadoPorAnalise());
+
+    let qtdCaixas = (this.apiario.getQtdCaixas() == undefined || this.apiario.getQtdCaixas() == null) ? 0 : this.apiario.getQtdCaixas();
+    this.formApiario.get('qtdCaixas').setValue(this.apiario.getQtdCaixas());
+
+    let distanciaDeslocamento = (this.apiario.getDistanciaDeslocamentoCaixas() == undefined) ? 0 : this.apiario.getDistanciaDeslocamentoCaixas();
+    this.formApiario.get('distanciaDeslocamentoCaixas').setValue(distanciaDeslocamento);
+
+    let migratorio = (this.apiario.isMigratorio() == null || this.apiario.isMigratorio() == undefined) ? false : true;
+    this.formApiario.get('migratorio').setValue(migratorio);
+
+    let existenciaMortalidadeAbelha = (this.apiario.getExistenciaMortalidadeAbelha() == null || this.apiario.getExistenciaMortalidadeAbelha() == undefined) ? false : true;
+    this.formApiario.get('existenciaMortalidadeAbelha').setValue(existenciaMortalidadeAbelha);
+
+    let comprovado = (this.apiario.getComprovadoPorAnalise() == null || this.apiario.getComprovadoPorAnalise() == undefined) ? false : true;
+    this.formApiario.get('comprovadoPorAnalise').setValue(comprovado);
+
+    let historicoMortandade = (this.apiario.isHistroricoMortandade() == undefined || this.apiario.isHistroricoMortandade() == null) ? false : true;
+    this.formApiario.get('historicoMortandade').setValue(historicoMortandade);
+
+    let historicoComprovadoPorAnalise = (this.apiario.isHistoricoComprovadoPorAnalise() == undefined || this.apiario.isHistoricoComprovadoPorAnalise() == null) ? false : true;
+    this.formApiario.get('historicoComprovadoPorAnalise').setValue(historicoComprovadoPorAnalise);
+
+    let vizinho = (this.apiario.isDialogoVizinhos() == undefined || this.apiario.isDialogoVizinhos == null) ? false : true
+    this.formApiario.get('dialogoVizinhos').setValue(vizinho);
+
   }
 
   createForm(apiario: Apiario) {
@@ -185,7 +200,9 @@ export class EditApiaryComponent implements OnInit, OnDestroy {
       comprovadoPorAnalise: [false],
       historicoMortandade: [false],
       historicoComprovadoPorAnalise: [false],
-      observacao: ['']
+      observacao: [''],
+      dialogoVizinhos: [false]
+
     });
   }
 
@@ -229,9 +246,7 @@ export class EditApiaryComponent implements OnInit, OnDestroy {
     this.mountApiario();
     this.parseService.save(this.apiario).then(res => {
       if (res) {
-        this.dialog.confirm('Sucesso', 'Apiário salvo com sucesso!', 'SUCCESS', null).subscribe(value => {
-          this.routeR.navigate(['home/lista/apiarios']);
-        });
+        this.dialog.confirm('Sucesso', 'Apiário salvo com sucesso!', 'SUCCESS', null);
       }
     });
   }
@@ -251,6 +266,8 @@ export class EditApiaryComponent implements OnInit, OnDestroy {
     this.apiario.setExistenciaMortalidadeAbelha(this.formApiario.get('existenciaMortalidadeAbelha').value);
     this.apiario.setComprovadoPorAnalise(this.formApiario.get('comprovadoPorAnalise').value);
     this.apiario.setHistoricoComprovadoPorAnalise(this.formApiario.get('historicoComprovadoPorAnalise').value);
+    this.apiario.setDialogoVizinhos(this.formApiario.get('dialogoVizinhos').value);
+
 
   }
 
