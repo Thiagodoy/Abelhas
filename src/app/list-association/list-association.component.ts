@@ -13,7 +13,7 @@ import { ITdDataTableColumn } from '@covalent/core';
 export class ListAssociationComponent implements OnInit {
 
 
-  private data: any[] = [];
+  data: any[] = [];
 
   columns: ITdDataTableColumn[] = [
     { name: 'nome', label: 'Nome' },

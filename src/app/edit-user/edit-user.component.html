@@ -3,7 +3,7 @@
     <md-card-title *ngIf="selectedValue != undefined">{{selectedValue }}</md-card-title>
     <md-card-title *ngIf="selectedValue == undefined">Selecione o tipo de usuário que deseja criar: </md-card-title>
     <md-card-content>
-      <form [formGroup]="formUser" novalidate autocomplete="off" (ngSubmit)="salvar()">
+      <form [formGroup]="formUser" novalidate autocomplete="off">
         <div layout="column">
           <div *ngIf="selectedValue =='APICULTOR' || selectedValue == 'ASSOCIACAO' || selectedValue == 'GESTOR'" layout="row">
             <md-icon class="icon-position" [style.color]="formError?.nome ? 'red' :black">person</md-icon>
@@ -139,7 +139,7 @@
               <button md-raised-button color="primary" (click)="adicionarAssociacao($event)">Adicionar Associação</button>
             </div>
             <div layout="row">
-              <app-table #table class="width-100" [data]="listApicultorAssociacao" [columns]="columnsApicultorAssociacao" [paginaTotal]="5"
+              <app-table #table class="width-100" style="margin-bottom: 20px;" [data]="listApicultorAssociacao" [columns]="columnsApicultorAssociacao" [paginaTotal]="5"
                 [selectable]="false" [showPagination]="true" [multiple]="multiple" [showSelectionJquery]="true" (itemSelected2)="editarApicultorAssociacao($event)"
                 [sortable]="true"></app-table>
             </div>

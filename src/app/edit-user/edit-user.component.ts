@@ -614,7 +614,7 @@ export class EditUserComponent implements OnInit, OnDestroy {
     });
   }
 
-  editarApicultorAssociacao(data: any) {
+  editarApicultorAssociacao(data: any) {    
 
     if (data.acao == 'EDITAR') {
       this.dialog.editApicultorAssociacao(data.element, this.view).subscribe((value: ApicultorAssociacao) => {

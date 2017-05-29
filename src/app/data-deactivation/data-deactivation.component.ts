@@ -22,6 +22,7 @@ export class DataDeactivationComponent implements OnInit {
   listApiariosSelecteds: any[];
   dataSelecionada: Date;
   formDesativacao: FormGroup;
+  font: string = 'Roboto,"Helvetica Neue",sans-serif';
   @ViewChild('data') dataCustom: DataPickerCustomComponent;
 
   constructor(private dialogService: DialogService,

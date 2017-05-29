@@ -3,5 +3,6 @@ export default {
     APICULTOR:'APICULTOR',
     GESTOR:'GESTOR',
     CHANGE:'CHANGE',
-    CREATE:'CREATE'
+    CREATE:'CREATE',
+    version:'1.0.1'
 }

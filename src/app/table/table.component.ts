@@ -80,7 +80,7 @@ export class TableComponent implements OnInit, AfterViewInit, OnChanges {
     if (changes['itensSelecteds']) {
       let array = changes['itensSelecteds']['currentValue'];
       for (let i = 0; i < array.length; i++) {
-        this.table.select(array[i], true, new Event('select'));
+        this.table.select(array[i],new Event('select'),i);
       }
     }
 
@@ -112,7 +112,12 @@ export class TableComponent implements OnInit, AfterViewInit, OnChanges {
     this.itemSelectedAll.emit(event);
   }
 
-  acoes(param, object) {
+ openMenu(event:Event){
+   debugger;
+   event.preventDefault();
+   event.stopImmediatePropagation();
+ }
+  acoes( param, object) {    
     this.itemSelected2.emit({ acao: param, element: object || this.itemCurrent });
   }
 

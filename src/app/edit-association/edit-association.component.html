@@ -5,13 +5,13 @@
       <form [formGroup]="formAssociacao">
         <div layout="column">
           <div layout="row">
-            <md-icon class="icon-position" [style.color]="formError?.nome ? 'red' :black">person</md-icon>
+            <md-icon class="icon-position" [style.color]="formError?.nome ? 'red' :'black'">person</md-icon>
             <md-input-container class="width-60">
               <input mdInput placeholder="Nome" formControlName="nome">
             </md-input-container>
           </div>
           <div layout="row">
-            <md-icon class="md-24 icon-position" md-list-avatar svgIcon="cpf" [style.color]="formError?.cpf ? 'red' :black"></md-icon>
+            <md-icon class="md-24 icon-position" md-list-avatar svgIcon="cpf" [style.color]="formError?.cpf ? 'red' :'black'"></md-icon>
             <md-input-container class="width-40">
               <input mdInput placeholder="Cnpj" [textMask]="{mask: cnpj }" formControlName="cpf">
             </md-input-container>
@@ -23,7 +23,7 @@
             </md-input-container>
           </div>
           <div layout="row">
-            <md-icon class="icon-position" [style.color]="formError?.endereco ? 'red' :black">home</md-icon>
+            <md-icon class="icon-position" [style.color]="formError?.endereco ? 'red' :'black'">home</md-icon>
             <md-input-container class>
               <input mdInput placeholder="Endereço" formControlName="endereco">
             </md-input-container>
@@ -35,13 +35,13 @@
             </md-input-container>
           </div>
           <div layout="row">
-            <md-icon class="icon-position" [style.color]="formError?.telefone ? 'red' :black">phone</md-icon>
+            <md-icon class="icon-position" [style.color]="formError?.telefone ? 'red' :'black'">phone</md-icon>
             <md-input-container class="width-30">
               <input mdInput placeholder="Telefone" formControlName="telefone" [textMask]="{mask: maskTelefone }">
             </md-input-container>
           </div>
           <div layout="row">
-            <md-icon style="margin-right: 10px;margin-top: 5px;" [style.color]="formError?.estado ? 'red' :black">view_comfy</md-icon>
+            <md-icon style="margin-right: 10px;margin-top: 5px;" [style.color]="formError?.estado ? 'red' :'black'">view_comfy</md-icon>
             <md-input-container class>
               <input type="text" mdInput [mdAutocomplete]="api" formControlName="estado" placeholder="Estado">
             </md-input-container>
@@ -52,7 +52,7 @@
             </md-autocomplete>
           </div>
           <div layout="row">
-            <md-icon style="margin-right: 10px;margin-top: 5px;" [style.color]="formError?.municipio ? 'red' :black">view_comfy</md-icon>
+            <md-icon style="margin-right: 10px;margin-top: 5px;" [style.color]="formError?.municipio ? 'red' :'black'">view_comfy</md-icon>
             <md-input-container class>
               <input type="text" mdInput [mdAutocomplete]="apii" formControlName="municipio" placeholder="Municipio">
             </md-input-container>
@@ -75,7 +75,7 @@
             </md-input-container>
           </div>
           <div layout="row">
-            <md-icon class="icon-position" [style.color]="formError?.senha ? 'red' :black">lock</md-icon>
+            <md-icon class="icon-position" [style.color]="formError?.senha ? 'red' :'black'">lock</md-icon>
             <div layout="column" class="width-60">
               <md-input-container class>
                 <input mdInput placeholder="Senha" type="password" value="123123123123" formControlName="senha">
@@ -83,7 +83,7 @@
             </div>
           </div>
           <div layout="row">
-            <md-icon class="icon-position" [style.color]="formError?.confirmar_senha ? 'red' :black">lock</md-icon>
+            <md-icon class="icon-position" [style.color]="formError?.confirmar_senha ? 'red' :'black'">lock</md-icon>
             <div layout="column" class="width-60">
               <md-input-container>
                 <input mdInput placeholder="Confirmar senha" type="password" value="123123123123" formControlName="confirmar_senha">
@@ -93,7 +93,7 @@
           </div>
           <h4>Presidente</h4>
           <div layout="row">
-            <md-icon class="icon-position" [style.color]="formError?.contatoPresidenteNome ? 'red' :black">person</md-icon>
+            <md-icon class="icon-position" [style.color]="formError?.contatoPresidenteNome ? 'red' :'black'">person</md-icon>
             <md-input-container class="width-60">
               <input mdInput placeholder="Nome" formControlName="contatoPresidenteNome">
             </md-input-container>

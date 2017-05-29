@@ -13,6 +13,7 @@ import { ITdDataTableColumn } from '@covalent/core';
 import { ParseService } from '../service/parse.service';
 import { MomentService } from '../service/moment.service';
 import { DialogService } from '../service/dialog.service';
+import Constante from '../constantes';
 import * as parse from 'parse';
 
 @Component({
@@ -47,10 +48,10 @@ export class ListApiaryComponent implements OnInit {
     { name: 'especie', label: 'Espécie' },
     { name: 'apicultor', label: 'Apicultor' },
     { name: 'propriedadea', label: 'Propriedade' },
-    { name: 'qtdPontos', label: 'Pontos' },
+    { name: 'municipio', label: 'Municipio' },
     { name: 'qtdCaixas', label: 'Caixas' },
-    { name: 'status', label: 'Status' },
-    { name: 'data', label: 'Data' },
+    { name: 'coletadoPor', label: 'Coletado Por' },
+    { name: 'data', label: 'Data', format: (value) => { return this.momentService.core(new Date(value)).format('DD/MM/YYYY HH:mm') } },
     { name: 'acoes', label: 'Ações' }];
 
   dateFormat: string = 'DD-MM-YYYY';
@@ -102,10 +103,9 @@ export class ListApiaryComponent implements OnInit {
     this.queryApiario.include('apicultor');
     this.queryApiario.include('especieAbelha');
     this.queryApiario.include('propriedade');
+    this.queryApiario.include('municipio');
     this.queryApiario.notEqualTo('excluded', true);
     this.queryApiario.descending('dataColetaCreate');
-
-
 
     if (this.controlApicultor.value != '' && this.controlApicultor.value != null) {
       let queryApicultor = this.serviceParse.createQuery(Apicultor);
@@ -122,8 +122,8 @@ export class ListApiaryComponent implements OnInit {
     if (this.filter.startDate)
       this.queryApiario.greaterThanOrEqualTo('dataColetaCreate', this.filter.startDate);
 
-    if (this.filter.endDate){
-      let datetemp:Date = this.filter.endDate;
+    if (this.filter.endDate) {
+      let datetemp: Date = this.filter.endDate;
       datetemp.setHours(23);
       datetemp.setMinutes(59);
       datetemp.setSeconds(59);
@@ -140,7 +140,7 @@ export class ListApiaryComponent implements OnInit {
 
     this.queryApiario.limit(1000);
 
-    this.serviceParse.executeQuery(this.queryApiario).done((result: Apiario[]) => {
+    this.serviceParse.executeQuery(this.queryApiario, true).done((result: Apiario[]) => {
 
       // Quando o usuario for do tipo associação so carrega o apiarios cujo o apicultor esteja vinculado
       if (this.user.attributes.tipo == 'ASSOCIACAO') {
@@ -165,10 +165,10 @@ export class ListApiaryComponent implements OnInit {
             especie: apiario.getEspecieAbelha().getNome(),
             apicultor: apiario.getApicultor().getNome(),
             propriedadea: apiario.getPropriedade().getNome(),
-            qtdPontos: pontos,
-            qtdCaixas: caixas,
-            status: apiario.getStatus(),
-            data: this.momentService.core(apiario.getDataColetaCreate()).format('DD/MM/YYYY HH:mm')
+            municipio: apiario.getMunicipio() ? apiario.getMunicipio().getNome() : 'Nenhum Municipio',
+            qtdCaixas: apiario.getQtdCaixas() == undefined || apiario.getQtdCaixas() == null ? 0 : apiario.getQtdCaixas(),
+            coletadoPor: apiario.getColetadoPor(),
+            data: apiario.getDataColetaCreate() ? apiario.getDataColetaCreate().getTime() : apiario.createdAt.getTime()
           }
         } catch (e) {
           console.error('Erro ao montar lista Apiario');
@@ -193,10 +193,11 @@ export class ListApiaryComponent implements OnInit {
               especie: ap.getEspecieAbelha().getNome(),
               apicultor: ap.getApicultor().getNome(),
               propriedadea: ap.getPropriedade().getNome(),
-              qtdPontos: pontos,
-              qtdCaixas: caixas,
-              status: ap.getStatus(),
-              data: this.momentService.core(ap.getDataColetaCreate()).format('DD/MM/YYYY HH:mm')
+              municipio: ap.getMunicipio() ? ap.getMunicipio().getNome() : 'Nenhum Municipio',
+              qtdCaixas: ap.getQtdCaixas() == undefined || ap.getQtdCaixas() == null ? 0 : ap.getQtdCaixas(),
+              coletadoPor: ap.getColetadoPor(),
+              data: ap.getDataColetaCreate() ? ap.getDataColetaCreate().getTime() : ap.createdAt.getTime()
+
             }
             list3.push(obj);
           } catch (e) {
@@ -208,10 +209,46 @@ export class ListApiaryComponent implements OnInit {
       }
 
       list = list.concat(list3);
+      this.getValidadoPor(list);
 
-      this.atualiza(list);
     });
 
+  }
+
+  getValidadoPor(list) {
+
+    let filterArray = list.filter((value) => { return value.coletadoPor });
+
+
+    this.serviceParse.runCloud('listUsers').then((result: UserWeb[]) => {
+
+      if (result) {
+        list.forEach(value => {
+
+          if (value.coletadoPor) {
+            let coletadoPor = result.find(f => { return f.id == value.coletadoPor.id });
+            switch (coletadoPor.attributes.tipo) {
+              case Constante.GESTOR:
+                value.coletadoPor = coletadoPor.attributes.nomeGestor;
+                break;
+
+              case Constante.APICULTOR:
+                value.coletadoPor = coletadoPor.attributes.apicultor.attributes.nome;
+                break;
+
+              case Constante.ASSOCIACAO:
+                value.coletadoPor = coletadoPor.attributes.associacao.attributes.nome;
+                break;
+            }
+          } else {
+            value.coletadoPor = 'Nenhuma referência';
+          }
+        });
+        this.zone.run(() => {
+          this.atualiza(list);
+        });
+      }
+    });
   }
 
   selectDate(paran, event) {
@@ -224,6 +261,7 @@ export class ListApiaryComponent implements OnInit {
     } else {
       this.listApiario = [];
     }
+    this.table.refresh();
   }
 
   acoes(param) {
