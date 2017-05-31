@@ -2,7 +2,9 @@ import { ParseService } from './../service/parse.service';
 import { UserWeb } from './../models/user-web';
 import { Component, OnInit,ChangeDetectorRef } from '@angular/core';
 import { FormGroup, FormBuilder, Validators } from '@angular/forms';
-import Constantes from '../constantes';
+const { version: appVersion } = require('../../../package.json');
+
+
 
 @Component({
   selector: 'app-login',
@@ -15,7 +17,7 @@ export class LoginComponent implements OnInit {
   selectedValue: boolean = false;
   cpf = [/\d/, /\d/, /\d/, '.', /\d/, /\d/, /\d/, '.', /\d/, /\d/, /\d/, '-', /\d/, /\d/];
   cnpj = [/\d/, /\d/, '.', /\d/, /\d/, /\d/, '.', /\d/, /\d/, /\d/, '/', /\d/, /\d/, /\d/, /\d/, '-', /\d/, /\d/,];
-  versao = Constantes.version;
+  versao = appVersion;
 
   constructor(private fb: FormBuilder, private parseService: ParseService) { }
 

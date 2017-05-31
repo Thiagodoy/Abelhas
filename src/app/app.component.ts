@@ -21,7 +21,7 @@ export class AppComponent implements OnDestroy {
   nome: string = '';
   @ViewChild('sidenav') sidenav: any;
 
-
+  expand:boolean = true;
   isLogado: boolean = false;
 
   constructor(mdIconRegistry: MdIconRegistry, sanitizer: DomSanitizer, private parseService: ParseService, private loadingService: TdLoadingService, private route: Router) {

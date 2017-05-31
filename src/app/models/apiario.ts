@@ -170,7 +170,8 @@ export class Apiario extends Object {
         this.set('validadoPor',user);
     }
     getStatus():string{
-        return this.get('status');
+
+       return this.isValido() ? 'Modificado pelo Gestor' : 'Não modificado';       
     }
     setDataValidacao(paran:Date){
         this.set('dataValidacao',paran);

@@ -1,7 +1,7 @@
 <md-sidenav-container class="example-container">
   <md-sidenav #sidenav class="example-sidenav">
     <!--Apiarios-->
-    <td-expansion-panel expand="true">
+    <td-expansion-panel [expand]="expand">
       <ng-template td-expansion-panel-label>
         <md-icon class="md-16" md-list-avatar>menu</md-icon>
       </ng-template>
@@ -13,11 +13,9 @@
       <td-expansion-summary>
         <md-list>
           <md-list-item [routerLink]="['home/lista/apiarios']" class="margin-item-menu" (click)="sidenav.toggle()">
-            <md-icon class="md-16" md-list-avatar>folder</md-icon>
             <h4 md-line>Listar Apiarios</h4>
           </md-list-item>
           <md-list-item [routerLink]="['home/edicao/multipla']" class="margin-item-menu" (click)="sidenav.toggle()">
-            <md-icon class="md-16" md-list-avatar>folder</md-icon>
             <h4 md-line>Edição multipla</h4>
           </md-list-item>
         </md-list>
@@ -25,7 +23,7 @@
     </td-expansion-panel>
     <!--Apiarios-->
     <!--Associações-->
-    <td-expansion-panel expand="true">
+    <td-expansion-panel [expand]="expand">
       <ng-template td-expansion-panel-label>
         <md-icon class="md-16" md-list-avatar>menu</md-icon>
       </ng-template>
@@ -37,7 +35,6 @@
       <td-expansion-summary>
         <md-list>
           <md-list-item [routerLink]="['home/associações']" class="margin-item-menu" (click)="sidenav.toggle()">
-            <md-icon class="md-16" md-list-avatar>folder</md-icon>
             <h4 md-line>Listar Associações</h4>
           </md-list-item>
         </md-list>
@@ -45,7 +42,7 @@
     </td-expansion-panel>
     <!--Associações-->
     <!--Propriedades-->
-    <td-expansion-panel expand="true">
+    <td-expansion-panel [expand]="expand">
       <ng-template td-expansion-panel-label>
         <md-icon class="md-16" md-list-avatar>menu</md-icon>
       </ng-template>
@@ -57,7 +54,6 @@
       <td-expansion-summary>
         <md-list>
           <md-list-item [routerLink]="['home/lista/propriedade']" class="margin-item-menu" (click)="sidenav.toggle()">
-            <md-icon class="md-16" md-list-avatar>folder</md-icon>
             <h4 md-line>Listar Propriedades</h4>
           </md-list-item>
         </md-list>
@@ -65,7 +61,7 @@
     </td-expansion-panel>
     <!--Propriedades-->
     <!--Desativacao-->
-    <td-expansion-panel expand="true">
+    <td-expansion-panel [expand]="expand">
       <ng-template td-expansion-panel-label>
         <md-icon class="md-16" md-list-avatar>menu</md-icon>
       </ng-template>
@@ -77,7 +73,6 @@
       <td-expansion-summary>
         <md-list>
           <md-list-item [routerLink]="['home/dados/desativação']" class="margin-item-menu" (click)="sidenav.toggle()">
-            <md-icon class="md-16" md-list-avatar>folder</md-icon>
             <h4 md-line>Dados</h4>
           </md-list-item>
         </md-list>
@@ -85,7 +80,7 @@
     </td-expansion-panel>
     <!--Desativacao-->
     <!--Usuarios-->
-    <td-expansion-panel expand="true">
+    <td-expansion-panel [expand]="expand">
       <ng-template td-expansion-panel-label>
         <md-icon class="md-16" md-list-avatar>menu</md-icon>
       </ng-template>
@@ -97,22 +92,20 @@
       <td-expansion-summary>
         <md-list>
           <md-list-item [routerLink]="['home/lista/usuarios']" class="margin-item-menu" (click)="sidenav.toggle()">
-            <md-icon class="md-16" md-list-avatar>folder</md-icon>
             <h4 md-line>Listar Usuários</h4>
           </md-list-item>
-           <md-list-item [routerLink]="['home/leitura']" class="margin-item-menu" (click)="sidenav.toggle()">
-            <md-icon class="md-16" md-list-avatar>folder</md-icon>
+          <md-list-item [routerLink]="['home/leitura']" class="margin-item-menu" (click)="sidenav.toggle()">
             <h4 md-line>Dados leitura</h4>
           </md-list-item>
         </md-list>
       </td-expansion-summary>
     </td-expansion-panel>
     <!--Usuarios-->
-     <a md-list-item (click)="logout()" style="cursor: pointer">
-       <div layout="row">
-          <md-icon md-list-avatar style="margin-left: 25px">exit_to_app</md-icon>
-          <span >Sair</span>
-       </div>
+    <a md-list-item (click)="logout()" style="cursor: pointer">
+      <div layout="row">
+        <md-icon md-list-avatar style="margin-left: 25px">exit_to_app</md-icon>
+        <span>Sair</span>
+      </div>
     </a>
 
   </md-sidenav>

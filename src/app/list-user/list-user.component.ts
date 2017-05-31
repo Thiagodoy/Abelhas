@@ -53,6 +53,7 @@ export class ListUserComponent implements OnInit {
         let user: any = {};
         user['id'] = us.id;
         user['tipo'] = us.attributes.tipo;
+        user['data'] = us.createdAt.getTime();
 
         if (user.tipo == constantes.APICULTOR) {
           let apicultor: Apicultor = us.attributes.apicultor;
@@ -78,6 +79,8 @@ export class ListUserComponent implements OnInit {
       }
 
     }
+
+    list = list.sort((a,b)=>{return a.data > b.data ? -1 : 1});
     this.listUser = list;
 
   }
@@ -112,6 +115,9 @@ export class ListUserComponent implements OnInit {
         });
         break;
       case 'HABILITAR':
+      this.dialogService.confirm('Confirmar', '<p> Deseja prosseguir com a ativação ?</p>', null, this.view).subscribe((value)=>{
+
+        if(value){
         this.parseService.get(user.id, UserWeb, ['apicultor']).then(result => {
           let apicultor: Apicultor = result.attributes.apicultor;
           apicultor.setTermoParticipacaoProjeto(true);
@@ -130,6 +136,9 @@ export class ListUserComponent implements OnInit {
             }
           });
         });
+
+        }
+      });
         break;
     }
   }
