@@ -30,11 +30,27 @@ export class EditAssociationComponent implements OnInit, OnDestroy {
   formError: any = {};
   dataTermoCompromisso: Date = undefined;
   cnpj = [/\d/, /\d/, '.', /\d/, /\d/, /\d/, '.', /\d/, /\d/, /\d/, '/', /\d/, /\d/, /\d/, /\d/, '-', /\d/, /\d/,];;
-  maskTelefone = ['(', /\d/, /\d/, ')', ' ', /\d/, /\d/, /\d/, /\d/, '-', /\d/, /\d/, /\d/, /\d/];
+  telefone = ['(', /\d/, /\d/, ')', ' ', /\d/, /\d/, /\d/, /\d/, '-', /\d/, /\d/, /\d/, /\d/];
+  celular = ['(', /\d/, /\d/, ')', ' ', /\d/,' ',/\d/, /\d/, /\d/, /\d/, '-', /\d/, /\d/, /\d/, /\d/];
+  maskTelefone:Function = null;
   cep = [/\d/, /\d/, '.', /\d/, /\d/, /\d/, '-', /\d/, /\d/, /\d/];
+  showTermo:boolean = false;
+
+
+
   constructor(private route: Router, private zone: NgZone, private view: ViewContainerRef, private routerA: ActivatedRoute, private parseService: ParseService, private fb: FormBuilder, private dialogService: DialogService) { }
 
   ngOnInit() {
+
+
+    // Verifica se o usuario logado é do perfil Gestor para exibir o Termo
+    this.showTermo = constantes.GESTOR == parse.User.current().attributes.tipo;
+    
+    //Customizando o plugin para identificar quando é celular ou telefone
+    this.maskTelefone = (val)=>{
+      let tamanho = val.replace(/[\(\)\s\D-_]/gi,'').length;
+      return tamanho <= 10 ? this.telefone : this.celular;
+    }
 
     this.createForm(null);
     this.routerA.queryParams.subscribe(res => {
