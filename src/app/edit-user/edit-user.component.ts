@@ -184,14 +184,14 @@ export class EditUserComponent implements OnInit, OnDestroy {
       {
         nome: [null, ValidatorCustom.validateCustomNome()],
         tipo: [this.selectedValue, Validators.required],
-        controlItensSelecionados: [{ value: 'Nenhum item selecionado', disabled: true }],       
+        controlItensSelecionados: [{ value: 'Nenhum item selecionado', disabled: true }],
         endereco: [null, ValidatorCustom.validateCustomEndereco()],
         sigla: [null, ValidatorCustom.validateCustomSigla()],
         bairro: [null],
         celular: [null],
         celular2: [null],
         telefone: [null, ValidatorCustom.validateCustomTelefone()],
-        contatoPresidenteTelefone: [null, ValidatorCustom.validateCustomContatoPresidente()],        
+        contatoPresidenteTelefone: [null, ValidatorCustom.validateCustomContatoPresidente()],
         estado: [null],
         municipio: [null],
         cpf: [null, ValidatorCustom.validateCustomCpfOrCnpj()],
@@ -293,7 +293,7 @@ export class EditUserComponent implements OnInit, OnDestroy {
       } else {
         this.listAssociacoesSelecteds = [];
         this.formUser.get('controlItensSelecionados').setValue('Nenhum item selecionada.')
-      }      
+      }
 
       let municipio = apicultor.getMunicipio();
       this.formUser.get('municipio').setValue(this.listMunicipios.filter(value => { return value.id == municipio.id })[0]);
@@ -316,11 +316,11 @@ export class EditUserComponent implements OnInit, OnDestroy {
       this.formUser.get('acordoCooperacaoAbelha').setValue(associacao.getAcordoCooperacaoAbelha());
 
       if (associacao.getDataTermoCompromisso())
-        this.dataTermoCompromisso = associacao.getDataTermoCompromisso()
+        this.dataTermoCompromisso = associacao.getDataTermoCompromisso();
 
     }
 
-    // atributos da user comum a todos    
+    // atributos da user comum a todos
     Object.keys(user.attributes).forEach(name => {
       if (this.formUser.contains(name))
         this.formUser.get(name).setValue(user.attributes[name]);
@@ -366,7 +366,7 @@ export class EditUserComponent implements OnInit, OnDestroy {
     associacao.setMunicipio(user['municipio']);
     associacao.setEmail(user['email']);
     associacao.setAcordoCooperacaoAbelha(user['acordoCooperacaoAbelha']);
-    associacao.setDataTermoCompromisso(this.dataTermoCompromisso);    
+    associacao.setDataTermoCompromisso(this.dataTermoCompromisso);
 
     if (!this.userCurrent) {
 
@@ -409,14 +409,14 @@ export class EditUserComponent implements OnInit, OnDestroy {
     let user = this.formUser.value;
     let apicultor: Apicultor = this.userCurrent ? this.userCurrent.attributes.apicultor : new Apicultor();
 
-    apicultor.setNome(user['nome']);    
+    apicultor.setNome(user['nome']);
     apicultor.setCelular(user['celular']);
     apicultor.setCelular2(user['celular2']);
     apicultor.setCpf(user['cpf']);
     apicultor.setEmail(user['email']);
     apicultor.setEndereco(user['endereco']);
-    apicultor.setMunicipio(user['municipio']);    
-    apicultor.setQtdCaixasMigratorias(parseInt(user['qtdCaixasMigratorias']));    
+    apicultor.setMunicipio(user['municipio']);
+    apicultor.setQtdCaixasMigratorias(parseInt(user['qtdCaixasMigratorias']));
     apicultor.setRegistroSif(user['registroSif']);
     apicultor.setTelefone(user['telefone']);
     apicultor.setDataTermoCompromisso(this.dataTermoCompromisso);
@@ -607,14 +607,14 @@ export class EditUserComponent implements OnInit, OnDestroy {
           let apicultor: Apicultor = this.userCurrent.attributes.apicultor
           apicultor.setApiculorAssociacao(this.listApicultorAssociacao);
           this.parseService.save(apicultor).then(()=>{
-              this.dialog.confirm('Sucesso', 'Associação realizada com sucesso!', 'SUCCESS', this.view);     
+              this.dialog.confirm('Sucesso', 'Associação realizada com sucesso!', 'SUCCESS', this.view);
           });
         }
       }
     });
   }
 
-  editarApicultorAssociacao(data: any) {    
+  editarApicultorAssociacao(data: any) {
 
     if (data.acao == 'EDITAR') {
       this.dialog.editApicultorAssociacao(data.element, this.view).subscribe((value: ApicultorAssociacao) => {
@@ -648,18 +648,18 @@ export class EditUserComponent implements OnInit, OnDestroy {
   formError: any = {
     nome: null,
     tipo: null,
-    associacao: null,    
+    associacao: null,
     endereco: null,
     sigla: null,
     bairro: null,
     celular: null, //ok
     celular2: null,//ok
     telefone: null, //ok
-    contatoPresidenteTelefone: null,    
+    contatoPresidenteTelefone: null,
     estado: null,
     municipio: null,
     cpf: null, //ok
-    email: null, //ok 
+    email: null, //ok
     senha: null,
     confirmar_senha: null, //USER //implementar validacao customuzada
     registroSif: null,//ok

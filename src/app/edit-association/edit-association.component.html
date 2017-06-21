@@ -104,6 +104,23 @@
               <input mdInput placeholder="Telefone" formControlName="contatoPresidenteTelefone" [textMask]="{mask: maskTelefone }">
             </md-input-container>
           </div>
+           <div class="div-alert">
+
+              <div>
+                <h4>Acordo de Cooperação Abelha</h4>
+                <md-radio-group class="example-radio-group" class="m-left-15" formControlName="acordoCooperacaoAbelha">
+                  <md-radio-button name="sif" [value]="true">Sim </md-radio-button>
+                  <md-radio-button name="sif" [value]="false">Não </md-radio-button>
+                </md-radio-group>
+              </div>
+
+              <div layout="column">
+                <h4 flex="">Validade do termo de compromisso</h4>
+                <app-data-picker-custom (onSelect)="select($event)" [fontFamily]="font" [date]="dataTermoCompromisso" [dateFormat]="'DD-MM-YYYY'"
+                  [placeholder]="'DD/MM/YYYY'" [disabled]="false" class="date-picker-custom date-picker-input">
+                </app-data-picker-custom>
+              </div>
+            </div>
         </div>
       </form>
     </md-card-content>
