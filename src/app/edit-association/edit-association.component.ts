@@ -19,7 +19,6 @@ import constantes from '../constantes'
 })
 export class EditAssociationComponent implements OnInit, OnDestroy {
 
-
   associacao: Associacao;
   user: UserWeb;
   formAssociacao: FormGroup;
@@ -29,6 +28,7 @@ export class EditAssociationComponent implements OnInit, OnDestroy {
   listMunicipioFiltered: Observable<Municipio[]>;
   subscriptionForm: Subscription;
   formError: any = {};
+  dataTermoCompromisso: Date = undefined;
   cnpj = [/\d/, /\d/, '.', /\d/, /\d/, /\d/, '.', /\d/, /\d/, /\d/, '/', /\d/, /\d/, /\d/, /\d/, '-', /\d/, /\d/,];;
   maskTelefone = ['(', /\d/, /\d/, ')', ' ', /\d/, /\d/, /\d/, /\d/, '-', /\d/, /\d/, /\d/, /\d/];
   cep = [/\d/, /\d/, '.', /\d/, /\d/, /\d/, '-', /\d/, /\d/, /\d/];
@@ -65,7 +65,6 @@ export class EditAssociationComponent implements OnInit, OnDestroy {
               this.createForm(this.user ? constantes.CHANGE : constantes.CREATE);
               if (this.user && this.associacao)
                 this.populateForm();
-
             });
 
           });
@@ -114,6 +113,11 @@ export class EditAssociationComponent implements OnInit, OnDestroy {
     this.formAssociacao.get('contatoPresidenteTelefone').setValue(associacao.getContatoPresidenteTelefone());
     this.formAssociacao.get('email').setValue(associacao.getEmail());
     this.formAssociacao.get('cpf').setValue(this.user.getUsername());
+    this.formAssociacao.get('acordoCooperacaoAbelha').setValue(this.associacao.getAcordoCooperacaoAbelha());
+
+     if (this.associacao.getDataTermoCompromisso())
+        this.dataTermoCompromisso = this.associacao.getDataTermoCompromisso();
+
     // this.formAssociacao.get('qtdCaixasFixas').setValue(associacao.getQtdCaixas());
     // this.formAssociacao.get('quantidadePontos').setValue(this.associacao.getQtdPontos());
 
@@ -138,6 +142,8 @@ export class EditAssociationComponent implements OnInit, OnDestroy {
     // associacao.setQtdCaixas(parseInt(this.formAssociacao.get('qtdCaixasFixas').value));
     // associacao.setQtdPontos(parseInt(this.formAssociacao.get('quantidadePontos').value));
     associacao.setTipoRegistro(1);
+    associacao.setDataTermoCompromisso(this.dataTermoCompromisso);
+    associacao.setAcordoCooperacaoAbelha(this.formAssociacao.get('acordoCooperacaoAbelha').value);
 
     return associacao;
 
@@ -162,8 +168,10 @@ export class EditAssociationComponent implements OnInit, OnDestroy {
             return false;
 
           user.set('associacao', associacao);
+          user.set('tipo', 'ASSOCIACAO');
           let session = parse.User.current().attributes.sessionToken;
           this.parseService.signUp(user).then(result => {
+
             if (result) {
               this.dialogService.confirm('Sucesso', 'Associacao criada com sucesso!', 'SUCCESS', this.view).subscribe(() => {
                 this.route.navigate(['home/associações']);
@@ -180,7 +188,7 @@ export class EditAssociationComponent implements OnInit, OnDestroy {
         let result = this.userHasUpdate();
         if (result.hasUpdate) {
           delete result.hasUpdate;
-          promise.push(this.parseService.runCloud('updateUserPass', result));
+          promise.push(this.parseService.runCloud('updateUser', result));
         }
 
         promise.push(this.parseService.save(associacao));
@@ -259,6 +267,7 @@ export class EditAssociationComponent implements OnInit, OnDestroy {
       numeroSif: [],
       contatoPresidenteTelefone: [null,],
       email: [],
+      acordoCooperacaoAbelha:[false],
       confirmar_senha: ['', ValidaCustom.validateCustomSenhaConf(type)],
       senha: ['', ValidaCustom.validateCustomSenha(type)],
       cpf: [null, ValidaCustom.validateCustomCpfOrCnpj()],
@@ -282,5 +291,9 @@ export class EditAssociationComponent implements OnInit, OnDestroy {
       this.changeForm(values);
     });
 
+  }
+
+   select(dateSelected) {
+    this.dataTermoCompromisso = dateSelected;
   }
 }

@@ -29,6 +29,7 @@ export class ListAssociationComponent implements OnInit {
     let query = this.parseService.createQuery(Associacao);
     query.notEqualTo('objectId', 'ZlmHhZ4YHK');
     query.notEqualTo('excluded', true);
+    query.descending('createdAt');
 
     this.parseService.executeQuery(query).then((response: Associacao[]) => {
       this.data = response.map(associacao => {
