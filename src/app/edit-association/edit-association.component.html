@@ -104,8 +104,7 @@
               <input mdInput placeholder="Telefone" formControlName="contatoPresidenteTelefone" [textMask]="{mask: maskTelefone }">
             </md-input-container>
           </div>
-           <div class="div-alert">
-
+           <div class="div-alert" *ngIf="showTermo">
               <div>
                 <h4>Acordo de Cooperação Abelha</h4>
                 <md-radio-group class="example-radio-group" class="m-left-15" formControlName="acordoCooperacaoAbelha">

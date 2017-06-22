@@ -53,7 +53,8 @@ export class EditUserComponent implements OnInit, OnDestroy {
   ];
 
 
-  maskTelefone = ['(', /\d/, /\d/, ')', ' ', /\d/, /\d/, /\d/, /\d/, '-', /\d/, /\d/, /\d/, /\d/];
+  maskTelefone: Function = null;
+  telefone = ['(', /\d/, /\d/, ')', ' ', /\d/, /\d/, /\d/, /\d/, '-', /\d/, /\d/, /\d/, /\d/];
   maskCelular = ['(', /\d/, /\d/, ')', ' ', /\d/, ' ', /\d/, /\d/, /\d/, /\d/, '-', /\d/, /\d/, /\d/, /\d/];
   cpf = [/\d/, /\d/, /\d/, '.', /\d/, /\d/, /\d/, '.', /\d/, /\d/, /\d/, '-', /\d/, /\d/];
   cnpj = [/\d/, /\d/, '.', /\d/, /\d/, /\d/, '.', /\d/, /\d/, /\d/, '/', /\d/, /\d/, /\d/, /\d/, '-', /\d/, /\d/,];
@@ -65,6 +66,15 @@ export class EditUserComponent implements OnInit, OnDestroy {
   ngOnInit() {
 
     this.perfilUsuarioLogado = parse.User.current().attributes.tipo;
+
+    //Customizando o plugin para identificar quando é celular ou telefone
+    this.maskTelefone = (val) => {
+      let tamanho = val.replace(/[\(\)\s\D-_]/gi, '').length;
+      return tamanho <= 10 ? this.telefone : this.maskCelular;
+    }
+
+
+
     this.subscriptionRouter = this.route.queryParams.subscribe(value => {
 
 
@@ -539,8 +549,8 @@ export class EditUserComponent implements OnInit, OnDestroy {
       ret['hasUpdate'] = true;
     }
 
-    if(user.tipo == constantes.GESTOR){
-      if(user.nome !== this.userCurrent.attributes.nomeGestor){
+    if (user.tipo == constantes.GESTOR) {
+      if (user.nome !== this.userCurrent.attributes.nomeGestor) {
         ret['nomeGestor'] = user.nome;
         ret['hasUpdate'] = true;
       }
@@ -606,8 +616,8 @@ export class EditUserComponent implements OnInit, OnDestroy {
         if (this.userCurrent) {
           let apicultor: Apicultor = this.userCurrent.attributes.apicultor
           apicultor.setApiculorAssociacao(this.listApicultorAssociacao);
-          this.parseService.save(apicultor).then(()=>{
-              this.dialog.confirm('Sucesso', 'Associação realizada com sucesso!', 'SUCCESS', this.view);
+          this.parseService.save(apicultor).then(() => {
+            this.dialog.confirm('Sucesso', 'Associação realizada com sucesso!', 'SUCCESS', this.view);
           });
         }
       }
@@ -622,7 +632,7 @@ export class EditUserComponent implements OnInit, OnDestroy {
           let temp: ApicultorAssociacao = this.listApicultorAssociacao.find(v => { return value.id == v.id });
           temp.setQtdCaixas(value.getQtdCaixas());
           temp.setQtdPontos(value.getQtdPontos());
-          this.parseService.save(temp).done(value=>{
+          this.parseService.save(temp).done(value => {
             this.dialog.confirm('Sucesso', 'Dados atualizado com sucesso!', 'SUCCESS', this.view);
           });
           this.table.refresh();
@@ -630,7 +640,7 @@ export class EditUserComponent implements OnInit, OnDestroy {
       });
     } else {
       this.listApicultorAssociacao = this.listApicultorAssociacao.filter(v => { return v.attributes.associacao.id != data.element.attributes.associacao.id });
-      this.parseService.destroy(data.element).done(()=>{
+      this.parseService.destroy(data.element).done(() => {
         this.dialog.confirm('Sucesso', 'Dados excluido com sucesso!', 'SUCCESS', this.view);
       });
 
