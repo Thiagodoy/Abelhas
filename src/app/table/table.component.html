@@ -57,7 +57,7 @@
       <md-menu #menuUser="mdMenu" (onMenuOpen)="openMenu($event)">
         <button md-menu-item *ngIf="perfil == 'GESTOR' && row.tipo !='GESTOR' && row.tipo !='ASSOCIACAO'" [disabled]="row.habilitado" (click)="acoes('HABILITAR',row)"> <md-icon>check</md-icon>Habilitar</button>
         <button md-menu-item [disabled]="perfil == 'ASSOCIACAO'" (click)="acoes('EDITAR',row)"> <md-icon>mode_edit</md-icon>Editar</button>
-        <button md-menu-item (click)="acoes('EXCLUIR',row)"> <md-icon>delete</md-icon> Excluir </button>
+        <button md-menu-item *ngIf="!(row.status == 'Desativado')" (click)="acoes('EXCLUIR',row)"> <md-icon>delete</md-icon> Desabilitar </button>
       </md-menu>
     </div>
   </ng-template>
