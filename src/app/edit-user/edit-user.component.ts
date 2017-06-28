@@ -209,7 +209,7 @@ export class EditUserComponent implements OnInit, OnDestroy {
         senha: [null, ValidatorCustom.validateCustomSenha(paran)],
         confirmar_senha: [null, ValidatorCustom.validateCustomSenhaConf(paran)],
         registroSif: [false],
-        qtdCaixasMigratorias: [null, ValidatorCustom.validateCustomqtdCaixasMigratorias()],
+        qtdCaixasMigratorias: [null],
         compartilhaDado: [false],
         termoParticipacaoProjeto: [false],
         acordoCooperacaoAbelha: [false]
@@ -386,6 +386,7 @@ export class EditUserComponent implements OnInit, OnDestroy {
 
         let userNew = this.createUser();
         userNew.set('associacao', result);
+        userNew.set('excluded', false);
 
         let session = parse.User.current().getSessionToken();
         this.parseService.signUp(userNew).then(result => {
@@ -447,6 +448,8 @@ export class EditUserComponent implements OnInit, OnDestroy {
 
         let newUser = this.createUser();
         newUser.set('apicultor', result);
+        newUser.set('excluded', false);
+
         let session = parse.User.current().getSessionToken();
         this.parseService.signUp(newUser).then(result => {
 
@@ -487,6 +490,7 @@ export class EditUserComponent implements OnInit, OnDestroy {
       userWeb.set('nomeGestor', user['nome']);
       userWeb.set('tipo', user['tipo']);
       userWeb.set('email', user['email']);
+      userWeb.set('excluded', false);
       let session = parse.User.current().getSessionToken();
       this.parseService.signUp(userWeb).then(resul => {
         this.dialog.confirm('Sucesso', 'Gestor criado com sucesso!', 'SUCCESS', this.view).subscribe(resul => {

@@ -26,16 +26,16 @@ export class ListUserComponent implements OnInit {
   ];
 
   listUser: any[] = [];
-  perfil:string;
+  perfil: string;
   @ViewChild('table') table: TableComponent;
 
   constructor(private view: ViewContainerRef, private parseService: ParseService, private zone: NgZone, private route: Router, private dialogService: DialogService) {
     this.perfil = parse.User.current().attributes.tipo;
-   }
+  }
 
   ngOnInit() {
 
-    this.parseService.runCloud('listUsers').then((result: UserWeb[]) => {
+    this.parseService.runCloud('listUsers', { noInclude: true }).then((result: UserWeb[]) => {
       this.zone.run(() => {
         this.mountListUser(result);
       });
@@ -45,6 +45,7 @@ export class ListUserComponent implements OnInit {
   mountListUser(resul: UserWeb[]) {
 
     let list = []
+    // resul = resul.filter((user)=> {return user.attributes.excluded != true});
 
     for (let us of resul) {
 
@@ -71,6 +72,10 @@ export class ListUserComponent implements OnInit {
           user['nome'] = us.attributes.nomeGestor;
           user['status'] = 'Ativo';
         }
+
+        if (us.attributes.excluded)
+          user['status'] = 'Desativado';
+
         list.push(user);
 
       } catch (erro) {
@@ -80,7 +85,7 @@ export class ListUserComponent implements OnInit {
 
     }
 
-    list = list.sort((a,b)=>{return a.data > b.data ? -1 : 1});
+    list = list.sort((a, b) => { return a.data > b.data ? -1 : 1 });
     this.listUser = list;
 
   }
@@ -90,7 +95,7 @@ export class ListUserComponent implements OnInit {
       case 'EDITAR':
         let queryParam = { user: user.id, type: user.tipo };
 
-        if (user.tipo == constantes.GESTOR){
+        if (user.tipo == constantes.GESTOR) {
           queryParam['email'] = user.email;
         }
 
@@ -100,45 +105,51 @@ export class ListUserComponent implements OnInit {
         this.dialogService.confirm('Confirmar exclusão', '<p> Deseja prosseguir com a exclusão do dado?</p>', null, this.view).subscribe((value) => {
           if (value) {
             this.parseService.get(user.id, UserWeb).then(result => {
-              result.attributes.excluded = true;
-              this.parseService.save(result).then(result1 => {
-                if (result)
+
+              let updateUser = { objectId: result.id, excluded: true };
+
+              this.parseService.runCloud('updateUser', updateUser).then(result1 => {
+                if (result1)
                   this.zone.run(() => {
                     this.dialogService.confirm('Sucesso', '<p> Usuário excluido com sucesso!</p>', 'SUCCESS', this.view);
-                    let user = this.listUser.find(value => { return value.id == result1.id });
+                    let user = this.listUser.find(value => { return value.id == result.id });
                     let index = this.listUser.indexOf(user);
                     this.listUser = this.listUser.slice(index, 1);
-                  })
+                  });
               });
             });
           }
         });
         break;
       case 'HABILITAR':
-      this.dialogService.confirm('Confirmar', '<p> Deseja prosseguir com a ativação ?</p>', null, this.view).subscribe((value)=>{
+        if (user.tipo == constantes.APICULTOR) {
+          this.dialogService.confirm('Confirmar', '<p> Deseja prosseguir com a ativação ?</p>', null, this.view).subscribe((value) => {
 
-        if(value){
-        this.parseService.get(user.id, UserWeb, ['apicultor']).then(result => {
-          let apicultor: Apicultor = result.attributes.apicultor;
-          apicultor.setTermoParticipacaoProjeto(true);
-          this.parseService.save(apicultor).then(result1 => {
-            if (result1) {
-              this.zone.run(() => {
-                let userTemp = this.listUser.find(value => { return value.id == user.id });
-                userTemp.habilitado = true;
-                userTemp.status = 'Ativo';
-                let index = this.listUser.indexOf(userTemp);
-                this.listUser.slice(index, 1);
-                this.listUser.push(userTemp);
-                this.table.refresh();
-                this.dialogService.confirm('Sucesso', '<p> Apicultor Ativado com sucesso!</p>', 'SUCCESS', this.view);
+            if (value) {
+              this.parseService.get(user.id, UserWeb, ['apicultor']).then(result => {
+                let apicultor: Apicultor = result.attributes.apicultor;
+                apicultor.setTermoParticipacaoProjeto(true);
+                this.parseService.save(apicultor).then(result1 => {
+                  if (result1) {
+                    this.zone.run(() => {
+                      let userTemp = this.listUser.find(value => { return value.id == user.id });
+                      userTemp.habilitado = true;
+                      userTemp.status = 'Ativo';
+                      let index = this.listUser.indexOf(userTemp);
+                      this.listUser.slice(index, 1);
+                      this.listUser.push(userTemp);
+                      this.table.refresh();
+                      this.dialogService.confirm('Sucesso', '<p> Apicultor Ativado com sucesso!</p>', 'SUCCESS', this.view);
+                    });
+                  }
+                });
               });
+
             }
           });
-        });
-
         }
-      });
+        let updateUser = { objectId: user.id, excluded: false };
+              this.parseService.runCloud('updateUser', updateUser);
         break;
     }
   }

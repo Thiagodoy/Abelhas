@@ -185,6 +185,7 @@ export class EditAssociationComponent implements OnInit, OnDestroy {
 
           user.set('associacao', associacao);
           user.set('tipo', 'ASSOCIACAO');
+          user.set('excluded', false);
           let session = parse.User.current().attributes.sessionToken;
           this.parseService.signUp(user).then(result => {
 
