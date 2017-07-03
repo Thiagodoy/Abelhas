@@ -63,11 +63,9 @@ export class ListAssociationComponent implements OnInit {
               let queryUser = this.parseService.createQuery(UserWeb);
               queryUser.matchesQuery('associacao',queryAssociacao);
 
-              
-                
             let promise_1 =  this.parseService.executeQuery(queryUser).then((result:UserWeb[])=>{
                  let user:UserWeb = result[0];
-                 let userUpdate = {objectId:user.id, excluded:true};
+                 let userUpdate = {objectId:user.id, excluded:true,username:user.id};
                  this.parseService.runCloud('updateUser',userUpdate);
               });
 
@@ -82,7 +80,7 @@ export class ListAssociationComponent implements OnInit {
                     });
                   });
               });
-            });          
+            });
           }
         });
         break;

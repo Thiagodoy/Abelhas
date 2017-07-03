@@ -22,7 +22,7 @@ export class OnlyReadComponent implements OnInit {
   listCultura: any[] = [];
   listMortande: any[] = [];
   columns: ITdDataTableColumn[] = [
-    { name: 'nome', label: 'Nome' }
+    { name: 'nome_xx', label: 'Nome' }
   ];
   constructor(private parseServise: ParseService) { }
 
@@ -37,11 +37,11 @@ export class OnlyReadComponent implements OnInit {
     promise.push(this.parseServise.findAll(Mortandade));
 
     parse.Promise.when(promise).then(result => {
-      this.listAtividade = result[0].map((value: AtividadeApicula) => { return { nome: value.getNome() } });
-      this.listEspecieAbelha = result[1].map((value: EspecieAbelha) => { return { nome: value.getNome() } });
-      this.listMotivoDesativacao = result[2].map((value: MotivoDesativacaoApiario) => { return { nome: value.getNome() } });
-      this.listCultura = result[3].map((value: Cultura) => { return { nome: value.getNome() } });;
-      this.listMortande = result[4].map((value: Mortandade) => { return { nome: value.getNome() } });
+      this.listAtividade = result[0].map((value: AtividadeApicula) => { return { nome_xx: value.getNome() } });
+      this.listEspecieAbelha = result[1].map((value: EspecieAbelha) => { return { nome_xx: value.getNome() } });
+      this.listMotivoDesativacao = result[2].map((value: MotivoDesativacaoApiario) => { return { nome_xx: value.getNome() } });
+      this.listCultura = result[3].map((value: Cultura) => { return { nome_xx: value.getNome() } });;
+      this.listMortande = result[4].map((value: Mortandade) => { return { nome_xx: value.getNome() } });
     });
   }
 

@@ -27,6 +27,13 @@
     </div>
   </ng-template>
   <!--Template Lista Apiario-->
+
+   <ng-template tdDataTableTemplate="nome_xx" let-value="value" let-row="row" let-column="column">
+    <div layout="row">
+      <md-icon style="margin-right: 10px;">view_comfy</md-icon><span class="md-body-1">{{value}}</span>
+    </div>
+  </ng-template>
+
  <!--Template List Usuário-->
   <ng-template tdDataTableTemplate="nome" let-value="value" let-row="row" let-column="column">
     <div layout="row">

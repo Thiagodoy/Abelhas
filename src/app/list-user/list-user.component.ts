@@ -45,7 +45,9 @@ export class ListUserComponent implements OnInit {
   mountListUser(resul: UserWeb[]) {
 
     let list = []
-    // resul = resul.filter((user)=> {return user.attributes.excluded != true});
+
+    // Filtra todos os usuários que foram excluidos
+    resul = resul.filter((user)=> {return user.attributes.excluded != true});
 
     for (let us of resul) {
 
@@ -100,29 +102,36 @@ export class ListUserComponent implements OnInit {
         }
 
         this.route.navigate(['home/editar/usuario'], { queryParams: queryParam });
-        break;
+      break;
       case 'EXCLUIR':
         this.dialogService.confirm('Confirmar exclusão', '<p> Deseja prosseguir com a exclusão do dado?</p>', null, this.view).subscribe((value) => {
           if (value) {
-            this.parseService.get(user.id, UserWeb).then(result => {
+            this.parseService.get(user.id, UserWeb,['apicultor','associacao']).then(result => {
+              let updateUser = { objectId: result.id, excluded: true, username:result.id };
+              let promises = [];
 
-              let updateUser = { objectId: result.id, excluded: true };
+              if(user.tipo == constantes.ASSOCIACAO){
+                let associacao:Associacao = result.attributes.associacao;
+                associacao.setExcluded(true);
+                promises.push(this.parseService.save(associacao));
+              }
 
-              this.parseService.runCloud('updateUser', updateUser).then(result1 => {
-                if (result1)
+              promises.push(this.parseService.runCloud('updateUser', updateUser));
+              parse.Promise.when(promises).then((response)=>{
+                 if (response)
                   this.zone.run(() => {
                     this.dialogService.confirm('Sucesso', '<p> Usuário excluido com sucesso!</p>', 'SUCCESS', this.view);
                     let user = this.listUser.find(value => { return value.id == result.id });
                     let index = this.listUser.indexOf(user);
-                    this.listUser = this.listUser.slice(index, 1);
+                    this.listUser = this.listUser.splice(index, 1);
                   });
               });
             });
           }
         });
-        break;
+      break;
       case 'HABILITAR':
-        if (user.tipo == constantes.APICULTOR) {
+
           this.dialogService.confirm('Confirmar', '<p> Deseja prosseguir com a ativação ?</p>', null, this.view).subscribe((value) => {
 
             if (value) {
@@ -136,7 +145,7 @@ export class ListUserComponent implements OnInit {
                       userTemp.habilitado = true;
                       userTemp.status = 'Ativo';
                       let index = this.listUser.indexOf(userTemp);
-                      this.listUser.slice(index, 1);
+                      this.listUser.splice(index, 1);
                       this.listUser.push(userTemp);
                       this.table.refresh();
                       this.dialogService.confirm('Sucesso', '<p> Apicultor Ativado com sucesso!</p>', 'SUCCESS', this.view);
@@ -144,12 +153,8 @@ export class ListUserComponent implements OnInit {
                   }
                 });
               });
-
             }
           });
-        }
-        let updateUser = { objectId: user.id, excluded: false };
-              this.parseService.runCloud('updateUser', updateUser);
         break;
     }
   }
