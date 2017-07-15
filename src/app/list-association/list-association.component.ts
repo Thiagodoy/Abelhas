@@ -1,9 +1,11 @@
 import { Router } from '@angular/router';
 import { DialogService } from './../service/dialog.service';
 import { Associacao } from './../models/associacao';
+import { UserWeb } from './../models/user-web';
 import { ParseService } from './../service/parse.service';
 import { Component, OnInit, ViewContainerRef, NgZone } from '@angular/core';
 import { ITdDataTableColumn } from '@covalent/core';
+import * as parse from 'parse';
 
 @Component({
   selector: 'app-list-association',
@@ -54,7 +56,21 @@ export class ListAssociationComponent implements OnInit {
         this.dialogService.confirm('Confirmar exclusão', menssagem, null, this.view).subscribe((value) => {
 
           if (value) {
-            this.parseService.get(param.element.id, Associacao).then(result => {
+
+              let queryAssociacao  = this.parseService.createQuery(Associacao);
+              queryAssociacao.equalTo('objectId',param.element.id);
+
+              let queryUser = this.parseService.createQuery(UserWeb);
+              queryUser.matchesQuery('associacao',queryAssociacao);
+
+            let promise_1 =  this.parseService.executeQuery(queryUser).then((result:UserWeb[])=>{
+                 let user:UserWeb = result[0];
+                 let userUpdate = {objectId:user.id, excluded:true,username:user.id};
+                 this.parseService.runCloud('updateUser',userUpdate);
+              });
+
+
+            let promise_2 = this.parseService.get(param.element.id, Associacao).then(result => {
               result.setExcluded(true);
               this.parseService.save(result).then(result1 => {
                 if (result1)

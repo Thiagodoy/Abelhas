@@ -317,11 +317,12 @@ export class ParseService {
      * @param Objeto extend Parse.Object
      * @returns Promise<any>
      */
-  save<T extends parse.Object>(object: T): parse.Promise<T> {
+  save<T extends parse.Object>(object: T, masterKey?:boolean): parse.Promise<T> {
     let instance = this;
     instance.toogleLoading(true);
 
     return object.save(null, {
+      useMasterKey: masterKey,
       success: function (s) {
         instance.toogleLoading(false);
         return s;
@@ -374,17 +375,5 @@ export class ParseService {
       this.instance.toogleLoading(false);
     });
   }
-
-  getEnviroment(isProduction) {
-    let environments = [
-      { url: 'https://parsedevabelhas.herokuapp.com/parse', appid: 'myAppId', masterKey: 'myMasterKey' },
-      { url: 'http://localhost:1337/parse', appid: 'myAppDebug', masterKey: 'myMasterKey' }];
-
-    return isProduction ? environments[0] : environments[1]
-
-  }
-
-
-
 
 }
