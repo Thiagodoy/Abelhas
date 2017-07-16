@@ -30,6 +30,9 @@ export class ParseService {
   private instance: ParseService = undefined;
   private limitQuery: number = 1000;
 
+  // Cache
+  listUser:any[];
+
   constructor(private momentService: MomentService, private zone: NgZone, private dialogService: DialogService, private route: Router) {
     //Define o banco a ser acessado
     let env = environment.getEnvironment();
@@ -342,11 +345,10 @@ export class ParseService {
    */
   destroy(object: Parse.Object) {
     let instance = this;
-    instance.toogleLoading(true);
-    return object.destroy().fail((erro) => {
-      instance.toogleLoading(false);
-      instance.showErrorPopUp(erro);
-    }).done(() => {
+    instance.toogleLoading(true); 
+    
+
+    return object.destroy().done(() => {
       instance.toogleLoading(false);
     });
   }
