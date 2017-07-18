@@ -57,6 +57,7 @@ export class ListUserComponent implements OnInit {
         user['id'] = us.id;
         user['tipo'] = us.attributes.tipo;
         user['data'] = us.createdAt.getTime();
+        user[`username`] = us.getUsername();
 
         if (user.tipo == constantes.APICULTOR) {
           let apicultor: Apicultor = us.attributes.apicultor;
@@ -87,8 +88,8 @@ export class ListUserComponent implements OnInit {
 
     }
 
-    list = list.sort((a, b) => { return a.data > b.data ? -1 : 1 });
-    this.listUser = list;
+    list = list.sort((a, b) => { return a.data > b.data ? -1 : 1 });    
+    this.parseService.listUser = this.listUser = list;
 
   }
   acoes(param) {

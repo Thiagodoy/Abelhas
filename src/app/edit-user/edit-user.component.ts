@@ -380,11 +380,18 @@ export class EditUserComponent implements OnInit, OnDestroy {
 
     if (!this.userCurrent) {
 
+
+      let userNew = this.createUser();
+      
+      if (!!this.userCadastrado(userNew.getUsername())) {
+        this.dialog.confirm('Erro', ' Usuário já cadastrado!', 'ERRO', this.view)
+        return false;
+      }
+
       this.parseService.save(associacao).then(result => {
 
         if (!result) return false;
 
-        let userNew = this.createUser();
         userNew.set('associacao', result);
         userNew.set('excluded', false);
 
@@ -436,6 +443,16 @@ export class EditUserComponent implements OnInit, OnDestroy {
 
     if (!this.userCurrent) {
 
+
+      let newUser = this.createUser();
+
+      
+
+      if (!!this.userCadastrado(newUser.getUsername())) {
+        this.dialog.confirm('Erro', ' Usuário já cadastrado!', 'ERRO', this.view)
+        return false;
+      }
+
       apicultor.setApiculorAssociacao(this.listApicultorAssociacao);
 
       this.parseService.save(apicultor).then(result => {
@@ -445,8 +462,6 @@ export class EditUserComponent implements OnInit, OnDestroy {
         for (let ap of this.listApicultorAssociacao) {
           this.parseService.save(ap);
         }
-
-        let newUser = this.createUser();
         newUser.set('apicultor', result);
         newUser.set('excluded', false);
 
@@ -472,7 +487,7 @@ export class EditUserComponent implements OnInit, OnDestroy {
       }
       parse.Promise.when(promises).then(result => {
         if (result)
-          this.dialog.confirm('Sucesso', 'Apicultor atualizado com sucesso!', 'SUCCESS', this.view).subscribe(resul => {
+          this.dialog.confirm('Erro', 'Apicultor atualizado com sucesso!', 'SUCCESS', this.view).subscribe(resul => {
             this.routeN.navigate(['home/lista/usuarios']);
           });
       });
@@ -491,6 +506,13 @@ export class EditUserComponent implements OnInit, OnDestroy {
       userWeb.set('tipo', user['tipo']);
       userWeb.set('email', user['email']);
       userWeb.set('excluded', false);
+
+
+      if (!!this.userCadastrado(userWeb.getUsername())) {
+        this.dialog.confirm('Erro', ' Usuário já cadastrado!', 'ERRO', this.view)
+        return false;
+      }
+
       let session = parse.User.current().getSessionToken();
       this.parseService.signUp(userWeb).then(resul => {
         this.dialog.confirm('Sucesso', 'Gestor criado com sucesso!', 'SUCCESS', this.view).subscribe(resul => {
@@ -656,7 +678,14 @@ export class EditUserComponent implements OnInit, OnDestroy {
       }
     }
   }
+  userCadastrado(username) {
+    let temp = this.parseService.listUser.find((o) => {
+      if (o['username'].indexOf(username) >= 0)
+        return o;
+    });
 
+    return temp != null;
+  }
 
 
   formError: any = {

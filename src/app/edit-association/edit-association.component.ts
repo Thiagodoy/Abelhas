@@ -31,10 +31,10 @@ export class EditAssociationComponent implements OnInit, OnDestroy {
   dataTermoCompromisso: Date = undefined;
   cnpj = [/\d/, /\d/, '.', /\d/, /\d/, /\d/, '.', /\d/, /\d/, /\d/, '/', /\d/, /\d/, /\d/, /\d/, '-', /\d/, /\d/,];;
   telefone = ['(', /\d/, /\d/, ')', ' ', /\d/, /\d/, /\d/, /\d/, '-', /\d/, /\d/, /\d/, /\d/];
-  celular = ['(', /\d/, /\d/, ')', ' ', /\d/,' ',/\d/, /\d/, /\d/, /\d/, '-', /\d/, /\d/, /\d/, /\d/];
-  maskTelefone:Function = null;
+  celular = ['(', /\d/, /\d/, ')', ' ', /\d/, ' ', /\d/, /\d/, /\d/, /\d/, '-', /\d/, /\d/, /\d/, /\d/];
+  maskTelefone: Function = null;
   cep = [/\d/, /\d/, '.', /\d/, /\d/, /\d/, '-', /\d/, /\d/, /\d/];
-  showTermo:boolean = false;
+  showTermo: boolean = false;
 
 
 
@@ -45,10 +45,10 @@ export class EditAssociationComponent implements OnInit, OnDestroy {
 
     // Verifica se o usuario logado é do perfil Gestor para exibir o Termo
     this.showTermo = constantes.GESTOR == parse.User.current().attributes.tipo;
-    
+
     //Customizando o plugin para identificar quando é celular ou telefone
-    this.maskTelefone = (val)=>{
-      let tamanho = val.replace(/[\(\)\s\D-_]/gi,'').length;
+    this.maskTelefone = (val) => {
+      let tamanho = val.replace(/[\(\)\s\D-_]/gi, '').length;
       return tamanho <= 10 ? this.telefone : this.celular;
     }
 
@@ -57,10 +57,15 @@ export class EditAssociationComponent implements OnInit, OnDestroy {
 
       let promiseEstado = this.parseService.findAll(Estado);
       let promiseMunicipio = this.parseService.findAll(Municipio);
+      let promiseAllUser = this.parseService.runCloud('listUsers', { noInclude: true });
+      
+      parse.Promise.when([promiseEstado, promiseMunicipio, promiseAllUser]).then(response => {
+        
 
-      parse.Promise.when([promiseEstado, promiseMunicipio]).then(response => {
         this.listEstados = response[0];
         this.listMunicipio = response[1];
+        this.parseService.listUser = response[2];
+
         if (res.associacao) {
           let query = this.parseService.createQuery(Associacao);
           query.equalTo('objectId', res.associacao);
@@ -131,8 +136,8 @@ export class EditAssociationComponent implements OnInit, OnDestroy {
     this.formAssociacao.get('cpf').setValue(this.user.getUsername());
     this.formAssociacao.get('acordoCooperacaoAbelha').setValue(this.associacao.getAcordoCooperacaoAbelha());
 
-     if (this.associacao.getDataTermoCompromisso())
-        this.dataTermoCompromisso = this.associacao.getDataTermoCompromisso();
+    if (this.associacao.getDataTermoCompromisso())
+      this.dataTermoCompromisso = this.associacao.getDataTermoCompromisso();
 
     // this.formAssociacao.get('qtdCaixasFixas').setValue(associacao.getQtdCaixas());
     // this.formAssociacao.get('quantidadePontos').setValue(this.associacao.getQtdPontos());
@@ -179,6 +184,11 @@ export class EditAssociationComponent implements OnInit, OnDestroy {
         user.setPassword(this.formAssociacao.get('senha').value);
         user.setEmail(this.formAssociacao.get('email').value, {});
 
+        if (!!this.userCadastrado(user.getUsername())) {
+          this.dialogService.confirm('Erro', ' Usuário já cadastrado!', 'ERRO', this.view);
+          return false;
+        }
+
         this.parseService.save(associacao).then(result => {
           if (!result)
             return false;
@@ -218,6 +228,16 @@ export class EditAssociationComponent implements OnInit, OnDestroy {
         });
       }
     }
+  }
+
+  userCadastrado(username) {
+
+    let temp = this.parseService.listUser.find((o) => {
+      if (o.getUsername().indexOf(username) >= 0)
+        return o;
+    });
+
+    return temp != null;
   }
 
   userHasUpdate(): any {
@@ -284,7 +304,7 @@ export class EditAssociationComponent implements OnInit, OnDestroy {
       numeroSif: [],
       contatoPresidenteTelefone: [null,],
       email: [],
-      acordoCooperacaoAbelha:[false],
+      acordoCooperacaoAbelha: [false],
       confirmar_senha: ['', ValidaCustom.validateCustomSenhaConf(type)],
       senha: ['', ValidaCustom.validateCustomSenha(type)],
       cpf: [null, ValidaCustom.validateCustomCpfOrCnpj()],
@@ -310,7 +330,7 @@ export class EditAssociationComponent implements OnInit, OnDestroy {
 
   }
 
-   select(dateSelected) {
+  select(dateSelected) {
     this.dataTermoCompromisso = dateSelected;
   }
 }
