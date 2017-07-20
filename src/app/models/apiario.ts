@@ -12,7 +12,7 @@ import * as parse from 'parse';
 
 export class Apiario extends Object {
     constructor() {
-        super('Apiario');        
+        super('Apiario');
     }
     getId(): string {
         return this.id;
@@ -171,7 +171,7 @@ export class Apiario extends Object {
     }
     getStatus():string{
 
-       return this.isValido() ? 'Modificado pelo Gestor' : 'Não modificado';       
+       return this.isValido() ? 'Modificado pelo Gestor' : 'Não modificado';
     }
     setDataValidacao(paran:Date){
         this.set('dataValidacao',paran);
@@ -179,11 +179,14 @@ export class Apiario extends Object {
     setExcluded(paran:boolean){
         this.set('excluded',paran);
     }
+    isExcluded():boolean{
+        return this.get('excluded');
+    }
     getDataColetaCreate():Date{
         return this.get('dataColetaCreate');
     }
     getValidadoPor():UserWeb{
-        return this.get('validadoPor');        
+        return this.get('validadoPor');
     }
     getColetadoPor():UserWeb{
         return this.get('coletadoPor');
