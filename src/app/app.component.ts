@@ -60,31 +60,7 @@ export class AppComponent implements OnDestroy {
         this.isLogado = user.isLogado;
       }
     });
-
-    if (this.parseService.core.User.current()) {
-
-
-      let res = this.parseService.core.User.current();
-      this.perfil = res.attributes.tipo;
-      this.isLogado = true;
-
-      if (res.attributes.tipo === 'GESTOR') {
-        this.nome = res.attributes.nomeGestor;
-      }
-
-      if (res.attributes.tipo === 'APICULTOR') {
-        let apicultor: Apicultor = res.attributes.apicultor;
-        this.nome = apicultor.getNome();
-      }
-
-      if (res.attributes.tipo === 'ASSOCIACAO') {
-        let associacao: Associacao = res.attributes.associacao;
-        this.nome = associacao.getNome();
-      }
-
-     this.route.navigate(['home/lista/apiarios']);
-
-    }
+    
   }
 
   logout() {

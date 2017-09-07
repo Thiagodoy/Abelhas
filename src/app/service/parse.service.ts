@@ -76,7 +76,7 @@ export class ParseService {
       }
     }
 
-    return query.find(options).done(result => {
+    return query.find<T>(options).done(result => {
 
       i.toogleLoading(false);
       return result;
@@ -324,7 +324,7 @@ export class ParseService {
     let instance = this;
     instance.toogleLoading(true);
 
-    return object.save(null, {
+    return object.save<T>(null, {
       useMasterKey: masterKey,
       success: function (s) {
         instance.toogleLoading(false);
