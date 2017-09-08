@@ -19,10 +19,12 @@
               <md-icon>menu</md-icon>
               </button>
       <md-menu #menu="mdMenu">
-        <button md-menu-item [disabled]="row['valido']" (click)="acoes('VALIDAR',row)"> <md-icon>check</md-icon> Validar </button>
-        <button md-menu-item (click)="acoes('EDITAR',row)"> <md-icon>mode_edit</md-icon>Editar </button>
-        <button md-menu-item (click)="acoes('EXCLUIR',row)"> <md-icon>delete</md-icon> Excluir </button>
-        <button md-menu-item  (click)="acoes('HISTORICO',row)"> <md-icon>history</md-icon> Histórico </button>
+        <button md-menu-item *ngIf="!row['excluded']" [disabled]="row['valido']" (click)="acoes('VALIDAR',row)"> <md-icon>check</md-icon> Validar </button>
+        <button md-menu-item *ngIf="!row['excluded']" (click)="acoes('EDITAR',row)"> <md-icon>mode_edit</md-icon>Editar </button>
+        <button md-menu-item *ngIf="!row['excluded']"(click)="acoes('EXCLUIR',row)"> <md-icon>delete</md-icon> Excluir </button>
+        <button md-menu-item *ngIf="!row['excluded']" (click)="acoes('HISTORICO',row)"> <md-icon>history</md-icon> Histórico </button>
+        <button md-menu-item *ngIf="row['excluded']" (click)="acoes('ATIVAR',row)"> <md-icon>autorenew</md-icon> Ativar </button>
+
       </md-menu>
     </div>
   </ng-template>

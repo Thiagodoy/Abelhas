@@ -135,6 +135,8 @@ export class ListApiaryComponent implements OnInit {
     if (this.controlStatus.value != 'todos') {
       if (this.controlStatus.value == 'validados')
         this.queryApiario.equalTo('valido', true);
+      else if(this.controlStatus.value == 'desativado')
+         this.queryApiario.equalTo('excluded', true);
       else
         this.queryApiario.notEqualTo('valido', true);
     }
@@ -170,6 +172,7 @@ export class ListApiaryComponent implements OnInit {
             qtdCaixas: apiario.getQtdCaixas() == undefined || apiario.getQtdCaixas() == null ? 0 : apiario.getQtdCaixas(),
             coletadoPor: apiario.getColetadoPor(),
             status: apiario.getStatus(),
+            excluded: apiario.isExcluded(),
             data: apiario.getDataColetaCreate() ? apiario.getDataColetaCreate().getTime() : apiario.createdAt.getTime()
           }
         } catch (e) {
@@ -199,6 +202,7 @@ export class ListApiaryComponent implements OnInit {
               qtdCaixas: ap.getQtdCaixas() == undefined || ap.getQtdCaixas() == null ? 0 : ap.getQtdCaixas(),
               coletadoPor: ap.getColetadoPor(),
               status: ap.getStatus(),
+              excluded: ap.isExcluded(),
               data: ap.getDataColetaCreate() ? ap.getDataColetaCreate().getTime() : ap.createdAt.getTime()
 
             }
@@ -300,6 +304,23 @@ export class ListApiaryComponent implements OnInit {
       case 'HISTORICO':
         this.route.navigate(['home/historic'], { queryParams: { apiario: param.element.id } });
         break;
+      case 'ATIVAR':
+        this.serviceParse.get(param.element.id,Apiario).then(response=>{
+           if(response){
+             response.setExcluded(false);
+             this.serviceParse.save(response).then(response1=>{
+              if(response1){
+                this.zone.run(()=>{
+                   this.dialogService.confirm('Sucesso', 'Apiario reativado com sucesso!', 'SUCCESS', this.viewContainerRef);
+                    this.listApiario = this.listApiario.filter((value) => {
+                        return param.element.id != value.id;
+                      });
+                });
+              }
+             })
+           }
+        });
+      break;
       case 'VALIDAR':
         menssagem = '<p>Tem certeza que deseja validar este dado?</p>' + '<p>Este procedimento não poderá ser revertido!</p>';
         this.dialogService.confirm('Confirmar validação', menssagem, null, this.viewContainerRef).subscribe((value) => {
