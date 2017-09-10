@@ -53,7 +53,7 @@ export class TableComponent implements OnInit, AfterViewInit, OnChanges {
         Jquery(el.currentTarget).addClass('td-data-table-clicked');
       });
     }
-    this.table.uniqueId = this.uniqueId;
+   // this.table.uniqueId = this.uniqueId;
   }
 
   ngOnChanges(changes: SimpleChanges) {

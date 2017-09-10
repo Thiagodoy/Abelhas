@@ -16,6 +16,7 @@ import { DialogService } from '../service/dialog.service';
 import Constante from '../constantes';
 import * as parse from 'parse';
 
+
 @Component({
   selector: 'app-list-apiary',
   templateUrl: './list-apiary.component.html',

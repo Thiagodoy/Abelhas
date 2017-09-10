@@ -4,6 +4,7 @@ import { Injectable } from "@angular/core";
 
 import "rxjs/add/operator/map";
 import "rxjs/add/operator/mergeMap";
+import * as L from 'leaflet'
 
 @Injectable()
 export class GeocodeService {
