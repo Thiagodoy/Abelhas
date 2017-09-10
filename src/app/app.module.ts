@@ -16,6 +16,9 @@ import { CovalentSearchModule } from '@covalent/core';
 import { CovalentDataTableModule } from '@covalent/core';
 import { CovalentPagingModule } from '@covalent/core';
 
+//Workaround 
+import 'rxjs/add/operator/startWith';
+
 import { AppComponent } from './app.component';
 import { ListApiaryComponent } from './list-apiary/list-apiary.component';
 import { LoginComponent } from './login/login.component';
