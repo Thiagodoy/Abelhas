@@ -397,7 +397,7 @@ export class EditUserComponent implements OnInit, OnDestroy {
 
         let session = parse.User.current().getSessionToken();
         this.parseService.signUp(userNew).then(result => {
-          this.dialog.confirm('Sucesso', 'Associação Criada com sucesso!', 'SUCCESS', this.view).subscribe(resul => {
+          this.dialog.confirm('Sucesso', 'Associação criada com sucesso!', 'SUCCESS', this.view).subscribe(resul => {
             this.routeN.navigate(['home/lista/usuarios']);
           });
           this.parseService.become(session);
@@ -487,7 +487,7 @@ export class EditUserComponent implements OnInit, OnDestroy {
       }
       parse.Promise.when(promises).then(result => {
         if (result)
-          this.dialog.confirm('Erro', 'Apicultor atualizado com sucesso!', 'SUCCESS', this.view).subscribe(resul => {
+          this.dialog.confirm('Sucesso', 'Apicultor atualizado com sucesso!', 'SUCCESS', this.view).subscribe(resul => {
             this.routeN.navigate(['home/lista/usuarios']);
           });
       });

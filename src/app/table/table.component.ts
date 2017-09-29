@@ -36,6 +36,7 @@ export class TableComponent implements OnInit, AfterViewInit, OnChanges {
   filteredTotal: number = this.data.length;
   paginaInicial: number = 1;
   paginaAtual: number = 1;
+  pageSize:number = 5
 
   itemCurrent: any;
   searchTerm: string;
