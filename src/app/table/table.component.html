@@ -111,8 +111,13 @@
   </ng-template>
   <!--Template de gestão ApicultorAssociação-->
 </td-data-table>
-<td-paging-bar *ngIf="showPagination && data.length>0" #pagingBar [pageSizes]="[5, 10, 15, 20]" [total]="totalRecords" [pageSize]="paginaTotal" (change)="page($event)">
+<td-paging-bar *ngIf="showPagination && data.length>0" #pagingBar [pageSize]="pageSize" [total]="paginaTotal" (change)="page($event)">
   <span td-paging-bar-label hide-xs>Linhas por pagina:</span>
+  <md-select [style.width.px]="50" [(ngModel)]="pageSize">
+    <md-option *ngFor="let size of [5, 10, 15, 20]" [value]="size">
+      {{size}}
+    </md-option>
+  </md-select>
   <div *ngIf="!((paginaAtual * paginaTotal) >= filteredTotal) " > {{paginaAtual * paginaTotal }} <span hide-xs>de {{filteredTotal}}</span></div>
 </td-paging-bar>
 <!--
