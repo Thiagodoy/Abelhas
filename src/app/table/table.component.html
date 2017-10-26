@@ -5,119 +5,119 @@
 
 <md-divider *ngIf="filteredData.length > 0" ></md-divider>
 
-<td-data-table [selectable]="selectable" [data]="filteredData" [columns]="columns" [multiple]="multiple" [sortable]="sortable"
+<td-data-table [selectable]="selectable" [data]="filteredData" style="width: 100%" [columns]="columns" [multiple]="multiple" [sortable]="sortable"
   [sortBy]="sortBy" [sortOrder]="sortOrder" (sortChange)="sortTable($event)" (rowSelect)="itemSelected($event)"  (selectAll)="itemAllSelected($event)"  (sortChange)="sort($event)" #table>
   <!--Template Lista Apiario-->
   <ng-template tdDataTableTemplate="valido" let-value="value" let-row="row" let-column="column">
     <div layout="row">
-      <md-icon [style.color]="row[column]  ? 'green' :  'red' ">{{row[column] ? 'check_circle': row[column] ? 'report':'warning' }}</md-icon>
+      <mat-icon [style.color]="row[column]  ? 'green' :  'red' ">{{row[column] ? 'check_circle': row[column] ? 'report':'warning' }}</mat-icon>
     </div>
   </ng-template>
   <ng-template tdDataTableTemplate="acoes" let-value="value" let-row="row" let-column="column">
     <div layout="row">
-      <button md-icon-button [mdMenuTriggerFor]="menu">
-              <md-icon>menu</md-icon>
+      <button mat-button [matMenuTriggerFor]="menu">
+              <mat-icon>menu</mat-icon>
               </button>
-      <md-menu #menu="mdMenu">
-        <button md-menu-item *ngIf="!row['excluded']" [disabled]="row['valido']" (click)="acoes('VALIDAR',row)"> <md-icon>check</md-icon> Validar </button>
-        <button md-menu-item *ngIf="!row['excluded']" (click)="acoes('EDITAR',row)"> <md-icon>mode_edit</md-icon>Editar </button>
-        <button md-menu-item *ngIf="!row['excluded']"(click)="acoes('EXCLUIR',row)"> <md-icon>delete</md-icon> Excluir </button>
-        <button md-menu-item *ngIf="!row['excluded']" (click)="acoes('HISTORICO',row)"> <md-icon>history</md-icon> Histórico </button>
-        <button md-menu-item *ngIf="row['excluded']" (click)="acoes('ATIVAR',row)"> <md-icon>autorenew</md-icon> Ativar </button>
+      <mat-menu #menu="matMenu">
+        <button mat-menu-item *ngIf="!row['excluded']" [disabled]="row['valido']" (click)="acoes('VALIDAR',row)"> <mat-icon>check</mat-icon> Validar </button>
+        <button mat-menu-item *ngIf="!row['excluded']" (click)="acoes('EDITAR',row)"> <mat-icon>mode_edit</mat-icon>Editar </button>
+        <button mat-menu-item *ngIf="!row['excluded']"(click)="acoes('EXCLUIR',row)"> <mat-icon>delete</mat-icon> Excluir </button>
+        <button mat-menu-item *ngIf="!row['excluded']" (click)="acoes('HISTORICO',row)"> <mat-icon>history</mat-icon> Histórico </button>
+        <button mat-menu-item *ngIf="row['excluded']" (click)="acoes('ATIVAR',row)"> <mat-icon>autorenew</mat-icon> Ativar </button>
 
-      </md-menu>
+      </mat-menu>
     </div>
   </ng-template>
   <!--Template Lista Apiario-->
 
    <ng-template tdDataTableTemplate="nome_xx" let-value="value" let-row="row" let-column="column">
     <div layout="row">
-      <md-icon style="margin-right: 10px;">view_comfy</md-icon><span class="md-body-1">{{value}}</span>
+      <mat-icon style="margin-right: 10px;">view_comfy</mat-icon><span class="md-body-1">{{value}}</span>
     </div>
   </ng-template>
 
  <!--Template List Usuário-->
   <ng-template tdDataTableTemplate="nome" let-value="value" let-row="row" let-column="column">
     <div layout="row">
-      <md-icon style="margin-right: 10px;">person</md-icon><span class="md-body-1">{{value}}</span>
+      <mat-icon style="margin-right: 10px;">person</mat-icon><span class="md-body-1">{{value}}</span>
     </div>
   </ng-template>
   <ng-template tdDataTableTemplate="propriedade" let-value="value" let-row="row" let-column="column">
     <div layout="row">
-      <md-icon style="margin-right: 10px;">label</md-icon><span class="md-body-1">{{row[column]}}</span>
+      <mat-icon style="margin-right: 10px;">label</mat-icon><span class="md-body-1">{{row[column]}}</span>
     </div>
   </ng-template>
   <!--Template List Usuário-->
   <ng-template tdDataTableTemplate="propriedade" let-value="value" let-row="row" let-column="column">
     <div layout="row">
-      <md-icon style="margin-right: 10px;">room</md-icon><span class="md-body-1">{{row[column]}}</span>
+      <mat-icon style="margin-right: 10px;">room</mat-icon><span class="md-body-1">{{row[column]}}</span>
     </div>
   </ng-template>
     <!--<template tdDataTableTemplate="attributes.username" let-value="value" let-row="row" let-column="column">
     <div layout="row">
-      <md-icon style="margin-right: 10px;">person</md-icon><span class="md-body-1">{{row[column]}}</span>
+      <mat-icon style="margin-right: 10px;">person</mat-icon><span class="md-body-1">{{row[column]}}</span>
     </div>
   </template>-->
   <ng-template tdDataTableTemplate="acoes_usuario" let-value="value" let-row="row" let-column="column">
     <div layout="row">
-      <button md-icon-button [mdMenuTriggerFor]="menuUser" >
-              <md-icon>menu</md-icon>
+      <button mat-button [matMenuTriggerFor]="menuUser" >
+              <mat-icon>menu</mat-icon>
               </button>
-      <md-menu #menuUser="mdMenu" (onMenuOpen)="openMenu($event)">
-        <button md-menu-item *ngIf="perfil == 'GESTOR' && row.tipo !='GESTOR' && row.tipo !='ASSOCIACAO'" [disabled]="row.habilitado" (click)="acoes('HABILITAR',row)"> <md-icon>check</md-icon>Habilitar</button>
-        <button md-menu-item [disabled]="perfil == 'ASSOCIACAO'" (click)="acoes('EDITAR',row)"> <md-icon>mode_edit</md-icon>Editar</button>
-        <button md-menu-item *ngIf="!(row.status == 'Desativado')" (click)="acoes('EXCLUIR',row)"> <md-icon>delete</md-icon> Desabilitar </button>
-      </md-menu>
+      <mat-menu #menuUser="matMenu" (onMenuOpen)="openMenu($event)">
+        <button mat-menu-item *ngIf="perfil == 'GESTOR' && row.tipo !='GESTOR' && row.tipo !='ASSOCIACAO'" [disabled]="row.habilitado" (click)="acoes('HABILITAR',row)"> <mat-icon>check</mat-icon>Habilitar</button>
+        <button mat-menu-item [disabled]="perfil == 'ASSOCIACAO'" (click)="acoes('EDITAR',row)"> <mat-icon>mode_edit</mat-icon>Editar</button>
+        <button mat-menu-item *ngIf="!(row.status == 'Desativado')" (click)="acoes('EXCLUIR',row)"> <mat-icon>delete</mat-icon> Desabilitar </button>
+      </mat-menu>
     </div>
   </ng-template>
   <!--Template List Usuário-->
   <!--Template de gestão das associações-->
   <ng-template tdDataTableTemplate="acoes_associacao" let-value="value" let-row="row" let-column="column">
     <div layout="row">
-      <button md-icon-button [mdMenuTriggerFor]="menuAssociacao">
-              <md-icon>menu</md-icon>
+      <button mat-button [matMenuTriggerFor]="menuAssociacao">
+              <mat-icon>menu</mat-icon>
               </button>
-      <md-menu #menuAssociacao="mdMenu">
-        <button md-menu-item (click)="acoes('EDITAR',row)"> <md-icon>mode_edit</md-icon>Editar </button>
-        <button md-menu-item (click)="acoes('EXCLUIR',row)"> <md-icon>delete</md-icon> Excluir </button>
-      </md-menu>
+      <mat-menu #menuAssociacao="matMenu">
+        <button mat-menu-item (click)="acoes('EDITAR',row)"> <mat-icon>mode_edit</mat-icon>Editar </button>
+        <button mat-menu-item (click)="acoes('EXCLUIR',row)"> <mat-icon>delete</mat-icon> Excluir </button>
+      </mat-menu>
     </div>
   </ng-template>
   <!--Template de gestão das associações-->
   <!--Template de gestão das propriedades-->
   <ng-template tdDataTableTemplate="acoes_propriedade" let-value="value" let-row="row" let-column="column">
     <div layout="row">
-      <button md-icon-button [mdMenuTriggerFor]="menuPropriedade">
+      <button mat-button [matMenuTriggerFor]="menuPropriedade">
               <md-icon>menu</md-icon>
               </button>
-      <md-menu #menuPropriedade="mdMenu">
-        <button md-menu-item (click)="acoes('EDITAR',row)"> <md-icon>mode_edit</md-icon>Editar </button>
-        <button md-menu-item (click)="acoes('EXCLUIR',row)" > <md-icon>delete</md-icon> Excluir </button>
-      </md-menu>
+      <mat-menu #menuPropriedade="matMenu">
+        <button mat-menu-item (click)="acoes('EDITAR',row)"> <mat-icon>mode_edit</mat-icon>Editar </button>
+        <button mat-menu-item (click)="acoes('EXCLUIR',row)" > <mat-icon>delete</mat-icon> Excluir </button>
+      </mat-menu>
     </div>
   </ng-template>
   <!--Template de gestão das propriedades-->
   <!--Template de gestão ApicultorAssociação-->
   <ng-template tdDataTableTemplate="acoes_apicultor_asso" let-value="value" let-row="row" let-column="column">
     <div layout="row">
-      <button md-icon-button [mdMenuTriggerFor]="menuApicultorAssociacao">
-              <md-icon>menu</md-icon>
-              </button>
-      <md-menu #menuApicultorAssociacao="mdMenu">
-        <button md-menu-item (click)="acoes('EDITAR',row)"> <md-icon>mode_edit</md-icon>Editar </button>
-        <button md-menu-item (click)="acoes('EXCLUIR',row)" > <md-icon>delete</md-icon> Excluir </button>
-      </md-menu>
+      <button mat-button [matMenuTriggerFor]="menuApicultorAssociacao">
+          <mat-icon>menu</mat-icon>
+      </button>
+      <mat-menu #menuApicultorAssociacao="matMenu">
+        <button mat-menu-item (click)="acoes('EDITAR',row)"> <mat-icon>mode_edit</mat-icon>Editar </button>
+        <button mat-menu-item (click)="acoes('EXCLUIR',row)" > <mat-icon>delete</mat-icon> Excluir </button>
+      </mat-menu>
     </div>
   </ng-template>
   <!--Template de gestão ApicultorAssociação-->
 </td-data-table>
 <td-paging-bar *ngIf="showPagination && data.length>0" #pagingBar [pageSize]="pageSize" [total]="paginaTotal" (change)="page($event)">
   <span td-paging-bar-label hide-xs>Linhas por pagina:</span>
-  <md-select [style.width.px]="50" [(ngModel)]="pageSize">
-    <md-option *ngFor="let size of [5, 10, 15, 20]" [value]="size">
+  <mat-select [style.width.px]="50" [(ngModel)]="pageSize">
+    <mat-option *ngFor="let size of [5, 10, 15, 20]" [value]="size">
       {{size}}
-    </md-option>
-  </md-select>
+    </mat-option>
+  </mat-select>
   <div *ngIf="!((paginaAtual * paginaTotal) >= filteredTotal) " > {{paginaAtual * paginaTotal }} <span hide-xs>de {{filteredTotal}}</span></div>
 </td-paging-bar>
 <!--

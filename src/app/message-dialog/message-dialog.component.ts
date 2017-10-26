@@ -3,7 +3,7 @@ import { FormControl, FormGroup } from '@angular/forms';
 import { TableComponent } from './../table/table.component';
 
 import { Component, OnInit } from '@angular/core';
-import { MdDialogRef } from '@angular/material';
+import { MatDialogRef } from '@angular/material';
 import { ITdDataTableColumn } from '@covalent/core';
 
 @Component({
@@ -22,6 +22,7 @@ export class MessageDialogComponent implements OnInit {
   columns: ITdDataTableColumn[] = [];
   uniqueId: string = 'id'
   multiple: boolean;
+  selectedRows:any[] = [];
 
   
   qtdPonto:FormControl  = new FormControl();
@@ -31,7 +32,7 @@ export class MessageDialogComponent implements OnInit {
   apicultorAssociacao:ApicultorAssociacao;
 
 
-  constructor(public dialogRef: MdDialogRef<MessageDialogComponent>) { }
+  constructor(public dialogRef: MatDialogRef<MessageDialogComponent>) { }
 
   ngOnInit() { 
     

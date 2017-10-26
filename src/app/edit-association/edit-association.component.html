@@ -1,116 +1,116 @@
 <div layout="row" layout-align="center center">
-  <md-card style="width: 33%">
-    <md-card-title>Editar Associação</md-card-title>
-    <md-card-content>
+  <mat-card style="width: 33%">
+    <mat-card-title>Editar Associação</mat-card-title>
+    <mat-card-content>
       <form [formGroup]="formAssociacao">
         <div layout="column">
           <div layout="row">
-            <md-icon class="icon-position" [style.color]="formError?.nome ? 'red' :'black'">person</md-icon>
-            <md-input-container class="width-60">
+            <mat-icon class="icon-position" [style.color]="formError?.nome ? 'red' :'black'">person</mat-icon>
+            <mat-input-container class="width-60">
               <input mdInput placeholder="Nome" formControlName="nome">
-            </md-input-container>
+            </mat-input-container>
           </div>
           <div layout="row">
-            <md-icon class="md-24 icon-position" md-list-avatar svgIcon="cpf" [style.color]="formError?.cpf ? 'red' :'black'"></md-icon>
-            <md-input-container class="width-40">
+            <mat-icon class="mat-24 icon-position" mat-list-avatar svgIcon="cpf" [style.color]="formError?.cpf ? 'red' :'black'"></mat-icon>
+            <mat-input-container class="width-40">
               <input mdInput placeholder="Cnpj" [textMask]="{mask: cnpj }" formControlName="cpf">
-            </md-input-container>
+            </mat-input-container>
           </div>
           <div layout="row">
-            <md-icon class="icon-position">font_download</md-icon>
-            <md-input-container class>
+            <mat-icon class="icon-position">font_download</mat-icon>
+            <mat-input-container class>
               <input mdInput placeholder="Sigla" formControlName="sigla">
-            </md-input-container>
+            </mat-input-container>
           </div>
           <div layout="row">
-            <md-icon class="icon-position" [style.color]="formError?.endereco ? 'red' :'black'">home</md-icon>
-            <md-input-container class>
+            <mat-icon class="icon-position" [style.color]="formError?.endereco ? 'red' :'black'">home</mat-icon>
+            <mat-input-container class>
               <input mdInput placeholder="Endereço" formControlName="endereco">
-            </md-input-container>
+            </mat-input-container>
           </div>
           <div layout="row">
-            <md-icon class="icon-position">home</md-icon>
-            <md-input-container class>
+            <mat-icon class="icon-position">home</mat-icon>
+            <mat-input-container class>
               <input mdInput placeholder="Bairro" formControlName="bairro">
-            </md-input-container>
+            </mat-input-container>
           </div>
           <div layout="row">
-            <md-icon class="icon-position" [style.color]="formError?.telefone ? 'red' :'black'">phone</md-icon>
-            <md-input-container class="width-30">
+            <mat-icon class="icon-position" [style.color]="formError?.telefone ? 'red' :'black'">phone</mat-icon>
+            <mat-input-container class="width-30">
               <input mdInput placeholder="Telefone" formControlName="telefone" [textMask]="{mask: maskTelefone }">
-            </md-input-container>
+            </mat-input-container>
           </div>
           <div layout="row">
-            <md-icon style="margin-right: 10px;margin-top: 5px;" [style.color]="formError?.estado ? 'red' :'black'">view_comfy</md-icon>
-            <md-input-container class>
-              <input type="text" mdInput [mdAutocomplete]="api" formControlName="estado" placeholder="Estado">
-            </md-input-container>
-            <md-autocomplete #api="mdAutocomplete" [displayWith]="displayFn" class>
-              <md-option *ngFor="let estado of listEstadosFiltered | async" [value]="estado">
+            <mat-icon style="margin-right: 10px;margin-top: 5px;" [style.color]="formError?.estado ? 'red' :'black'">view_comfy</mat-icon>
+            <mat-input-container class>
+              <input type="text" mdInput [matAutocomplete]="api" formControlName="estado" placeholder="Estado">
+            </mat-input-container>
+            <mat-autocomplete #api="matAutocomplete" [displayWith]="displayFn" class>
+              <mat-option *ngFor="let estado of listEstadosFiltered | async" [value]="estado">
                 {{ estado.getNome() }}
-              </md-option>
-            </md-autocomplete>
+              </mat-option>
+            </mat-autocomplete>
           </div>
           <div layout="row">
-            <md-icon style="margin-right: 10px;margin-top: 5px;" [style.color]="formError?.municipio ? 'red' :'black'">view_comfy</md-icon>
-            <md-input-container class>
-              <input type="text" mdInput [mdAutocomplete]="apii" formControlName="municipio" placeholder="Municipio">
-            </md-input-container>
-            <md-autocomplete #apii="mdAutocomplete" [displayWith]="displayFn" class>
-              <md-option *ngFor="let municipio of listMunicipioFiltered | async" [value]="municipio">
+            <mat-icon style="margin-right: 10px;margin-top: 5px;" [style.color]="formError?.municipio ? 'red' :'black'">view_comfy</mat-icon>
+            <mat-input-container class>
+              <input type="text" mdInput [matAutocomplete]="apii" formControlName="municipio" placeholder="Municipio">
+            </mat-input-container>
+            <mat-autocomplete #apii="matAutocomplete" [displayWith]="displayFn" class>
+              <mat-option *ngFor="let municipio of listMunicipioFiltered | async" [value]="municipio">
                 {{ municipio.getNome() }}
-              </md-option>
-            </md-autocomplete>
+              </mat-option>
+            </mat-autocomplete>
           </div>
           <div layout="row">
-            <md-icon class="icon-position">home</md-icon>
-            <md-input-container class="width-30">
+            <mat-icon class="icon-position">home</mat-icon>
+            <mat-input-container class="width-30">
               <input mdInput placeholder="Cep" formControlName="cep" [textMask]="{mask: cep }">
-            </md-input-container>
+            </mat-input-container>
           </div>
           <div layout="row">
-            <md-icon class="icon-position">email</md-icon>
-            <md-input-container class>
+            <mat-icon class="icon-position">email</mat-icon>
+            <mat-input-container class>
               <input mdInput placeholder="Email" formControlName="email">
-            </md-input-container>
+            </mat-input-container>
           </div>
           <div layout="row">
-            <md-icon class="icon-position" [style.color]="formError?.senha ? 'red' :'black'">lock</md-icon>
+            <mat-icon class="icon-position" [style.color]="formError?.senha ? 'red' :'black'">lock</mat-icon>
             <div layout="column" class="width-60">
-              <md-input-container class>
+              <mat-input-container class>
                 <input mdInput placeholder="Senha" type="password" value="123123123123" formControlName="senha">
-              </md-input-container>
+              </mat-input-container>
             </div>
           </div>
           <div layout="row">
-            <md-icon class="icon-position" [style.color]="formError?.confirmar_senha ? 'red' :'black'">lock</md-icon>
+            <mat-icon class="icon-position" [style.color]="formError?.confirmar_senha ? 'red' :'black'">lock</mat-icon>
             <div layout="column" class="width-60">
-              <md-input-container>
+              <mat-input-container>
                 <input mdInput placeholder="Confirmar senha" type="password" value="123123123123" formControlName="confirmar_senha">
-              </md-input-container>
+              </mat-input-container>
               <div *ngIf="formError?.confirmar_senha" class="alert-danger">{{formError?.confirmar_senha.confirmar_senha.no_match}}</div>
             </div>
           </div>
           <h4>Presidente</h4>
           <div layout="row">
-            <md-icon class="icon-position" [style.color]="formError?.contatoPresidenteNome ? 'red' :'black'">person</md-icon>
-            <md-input-container class="width-60">
+            <mat-icon class="icon-position" [style.color]="formError?.contatoPresidenteNome ? 'red' :'black'">person</mat-icon>
+            <mat-input-container class="width-60">
               <input mdInput placeholder="Nome" formControlName="contatoPresidenteNome">
-            </md-input-container>
+            </mat-input-container>
           </div>
           <div layout="row">
-            <md-icon class="icon-position">phone</md-icon>
-            <md-input-container class="width-30">
+            <mat-icon class="icon-position">phone</mat-icon>
+            <mat-input-container class="width-30">
               <input mdInput placeholder="Telefone" formControlName="contatoPresidenteTelefone" [textMask]="{mask: maskTelefone }">
-            </md-input-container>
+            </mat-input-container>
           </div>
            <div class="div-alert" *ngIf="showTermo">
               <div>
                 <h4>Acordo de Cooperação Abelha</h4>
-                <md-radio-group class="example-radio-group" class="m-left-15" formControlName="acordoCooperacaoAbelha">
-                  <md-radio-button name="sif" [value]="true">Sim </md-radio-button>
-                  <md-radio-button name="sif" [value]="false">Não </md-radio-button>
-                </md-radio-group>
+                <mat-radio-group class="example-radio-group" class="m-left-15" formControlName="acordoCooperacaoAbelha">
+                  <mat-radio-button name="sif" [value]="true">Sim </mat-radio-button>
+                  <mat-radio-button name="sif" [value]="false">Não </mat-radio-button>
+                </mat-radio-group>
               </div>
 
               <div layout="column">
@@ -122,10 +122,10 @@
             </div>
         </div>
       </form>
-    </md-card-content>
-    <md-card-actions layout="row" layout-align="start center">
-      <button md-raised-button color="primary" (click)="salvar()" [disabled]="!formAssociacao.valid">{{associacao ? 'Atualizar' : 'Salvar'}}</button>
-      <button md-raised-button color="primary" color="warn" [routerLink]="['/home/associações']">Voltar</button>
-    </md-card-actions>
-  </md-card>
+    </mat-card-content>
+    <mat-card-actions layout="row" layout-align="start center">
+      <button mat-raised-button color="primary" (click)="salvar()" [disabled]="!formAssociacao.valid">{{associacao ? 'Atualizar' : 'Salvar'}}</button>
+      <button mat-raised-button color="primary" color="warn" [routerLink]="['/home/associações']">Voltar</button>
+    </mat-card-actions>
+  </mat-card>
 </div>

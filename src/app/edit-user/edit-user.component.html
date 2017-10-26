@@ -1,142 +1,142 @@
 <div layout="row" layout-align="center center">
-  <md-card style="width: 40%">
-    <md-card-title *ngIf="selectedValue != undefined">{{selectedValue }}</md-card-title>
-    <md-card-title *ngIf="selectedValue == undefined">Selecione o tipo de usuário que deseja criar: </md-card-title>
-    <md-card-content>
+  <mat-card style="width: 40%">
+    <mat-card-title *ngIf="selectedValue != undefined">{{selectedValue }}</mat-card-title>
+    <mat-card-title *ngIf="selectedValue == undefined">Selecione o tipo de usuário que deseja criar: </mat-card-title>
+    <mat-card-content>
       <form [formGroup]="formUser" novalidate autocomplete="off">
         <div layout="column">
           <div *ngIf="selectedValue =='APICULTOR' || selectedValue == 'ASSOCIACAO' || selectedValue == 'GESTOR'" layout="row">
-            <md-icon class="icon-position" [style.color]="formError?.nome ? 'red' :black">person</md-icon>
-            <md-input-container class="width-60">
-              <input mdInput placeholder="Nome" formControlName="nome">
-            </md-input-container>
+            <mat-icon class="icon-position" [style.color]="formError?.nome ? 'red' :black">person</mat-icon>
+            <mat-form-field  class="width-60">
+              <input matInput placeholder="Nome" formControlName="nome">
+            </mat-form-field >
           </div>
           <div layout="row" class="m-top-15">
-            <md-icon class="md-20 icon-position" md-list-avatar svgIcon="edit_profile"></md-icon>
-            <md-select placeholder="Perfil" name="perfil" class="width-40" formControlName="tipo">
-              <md-option *ngFor="let perfil of perfis" [value]="perfil.value">
+            <mat-icon class="mat-20 icon-position" mat-list-avatar svgIcon="edit_profile"></mat-icon>
+            <mat-select placeholder="Perfil" name="perfil" class="width-40" formControlName="tipo">
+              <mat-option *ngFor="let perfil of perfis" [value]="perfil.value">
                 {{perfil.nome}}
-              </md-option>
-            </md-select>
+              </mat-option>
+            </mat-select>
           </div>
           <div *ngIf="selectedValue =='ASSOCIACAO'" layout="row" class="m-top-15">
-            <md-icon class="icon-position" [style.color]="formError?.sigla ? 'red' :black">font_download</md-icon>
-            <md-input-container class="width-60">
-              <input mdInput placeholder="Sigla" formControlName="sigla">
-            </md-input-container>
+            <mat-icon class="icon-position" [style.color]="formError?.sigla ? 'red' :black">font_download</mat-icon>
+            <mat-form-field  class="width-60">
+              <input matInput placeholder="Sigla" formControlName="sigla">
+            </mat-form-field >
           </div>        
          
           <div *ngIf="selectedValue =='APICULTOR' || selectedValue == 'ASSOCIACAO'" layout="row">
-            <md-icon class="icon-position" [style.color]="formError?.endereco ? 'red' :black">home</md-icon>
-            <md-input-container class="width-60">
-              <input mdInput placeholder="Endereço" value="Av. Sylvio Marcondes, Adalberto Roxo" formControlName="endereco">
-            </md-input-container>
+            <mat-icon class="icon-position" [style.color]="formError?.endereco ? 'red' :black">home</mat-icon>
+            <mat-form-field  class="width-60">
+              <input matInput placeholder="Endereço" value="Av. Sylvio Marcondes, Adalberto Roxo" formControlName="endereco">
+            </mat-form-field >
           </div>
            <div *ngIf="selectedValue == 'ASSOCIACAO'" layout="row">
-            <md-icon class="icon-position" [style.color]="formError?.bairro ? 'red' :black">home</md-icon>
-            <md-input-container class="width-60">
-              <input mdInput placeholder="Bairro" value="Av. Sylvio Marcondes, Adalberto Roxo" formControlName="bairro">
-            </md-input-container>
+            <mat-icon class="icon-position" [style.color]="formError?.bairro ? 'red' :black">home</mat-icon>
+            <mat-form-field  class="width-60">
+              <input matInput placeholder="Bairro" value="Av. Sylvio Marcondes, Adalberto Roxo" formControlName="bairro">
+            </mat-form-field >
           </div>
           <div *ngIf="selectedValue =='APICULTOR'" layout="row">
-            <md-icon class="icon-position" [style.color]="formError?.celular ? 'red' :black">phone_android</md-icon>
-            <md-input-container class="width-30">
-              <input mdInput placeholder="Celular 1" [textMask]="{mask: maskCelular}" formControlName="celular">
-            </md-input-container>
+            <mat-icon class="icon-position" [style.color]="formError?.celular ? 'red' :black">phone_android</mat-icon>
+            <mat-form-field  class="width-30">
+              <input matInput placeholder="Celular 1" [textMask]="{mask: maskCelular}" formControlName="celular">
+            </mat-form-field >
           </div>
           <div *ngIf="selectedValue =='APICULTOR'" layout="row">
-            <md-icon class="icon-position" [style.color]="formError?.celular2 ? 'red' :black">phone_android</md-icon>
-            <md-input-container class="width-30">
-              <input mdInput placeholder="Celular 2" [textMask]="{mask: maskCelular}" formControlName="celular2">
-            </md-input-container>
+            <mat-icon class="icon-position" [style.color]="formError?.celular2 ? 'red' :black">phone_android</mat-icon>
+            <mat-form-field  class="width-30">
+              <input matInput placeholder="Celular 2" [textMask]="{mask: maskCelular}" formControlName="celular2">
+            </mat-form-field >
           </div>
           <div *ngIf="selectedValue =='APICULTOR' || selectedValue == 'ASSOCIACAO'" layout="row">
-            <md-icon class="icon-position" [style.color]="formError?.telefone ? 'red' :black">phone</md-icon>
-            <md-input-container class="width-30">
-              <input mdInput placeholder="Telefone" [textMask]="{mask: maskTelefone}" formControlName="telefone">
-            </md-input-container>
+            <mat-icon class="icon-position" [style.color]="formError?.telefone ? 'red' :black">phone</mat-icon>
+            <mat-form-field  class="width-30">
+              <input matInput placeholder="Telefone" [textMask]="{mask: maskTelefone}" formControlName="telefone">
+            </mat-form-field >
           </div>
           <div *ngIf="selectedValue == 'ASSOCIACAO'" layout="row">
-            <md-icon class="icon-position" [style.color]="formError?.contatoPresidenteTelefone ? 'red' :black">phone</md-icon>
-            <md-input-container class="width-60">
-              <input mdInput placeholder="Contato Presidente" [textMask]="{mask: maskTelefone}" formControlName="contatoPresidenteTelefone">
-            </md-input-container>
+            <mat-icon class="icon-position" [style.color]="formError?.contatoPresidenteTelefone ? 'red' :black">phone</mat-icon>
+            <mat-form-field  class="width-60">
+              <input matInput placeholder="Contato Presidente" [textMask]="{mask: maskTelefone}" formControlName="contatoPresidenteTelefone">
+            </mat-form-field >
           </div>
 
           <div layout="row" *ngIf="selectedValue =='APICULTOR'">
-            <md-icon class="icons-group" [style.color]="formError?.estado ? 'red' :black">view_comfy</md-icon>
-            <md-input-container class="width-40">
-              <input type="text" mdInput [mdAutocomplete]="api" formControlName="estado" placeholder="Estado">
-            </md-input-container>
-            <md-autocomplete #api="mdAutocomplete" [displayWith]="displayFn" class="width-60">
-              <md-option *ngFor="let estado of listEstadosFiltered | async" [value]="estado">
+            <mat-icon class="icons-group" [style.color]="formError?.estado ? 'red' :black">view_comfy</mat-icon>
+            <mat-form-field  class="width-40">
+              <input type="text" matInput [matAutocomplete]="api" formControlName="estado" placeholder="Estado">
+            </mat-form-field >
+            <mat-autocomplete #api="matAutocomplete" [displayWith]="displayFn" class="width-60">
+              <mat-option *ngFor="let estado of listEstadosFiltered | async" [value]="estado">
                 {{ estado.getNome() }}
-              </md-option>
-            </md-autocomplete>
+              </mat-option>
+            </mat-autocomplete>
           </div>
           <div layout="row" *ngIf="selectedValue =='APICULTOR' || selectedValue == 'ASSOCIACAO'">
-            <md-icon class="icons-group" [style.color]="formError?.municipio ? 'red' :black">view_comfy</md-icon>
-            <md-input-container class="width-40">
-              <input type="text" mdInput [mdAutocomplete]="apii" formControlName="municipio" placeholder="Municipio">
-            </md-input-container>
-            <md-autocomplete #apii="mdAutocomplete" [displayWith]="displayFn" class="width-60">
-              <md-option *ngFor="let municipio of listMunicipioFiltered | async" [value]="municipio">
+            <mat-icon class="icons-group" [style.color]="formError?.municipio ? 'red' :black">view_comfy</mat-icon>
+            <mat-form-field  class="width-40">
+              <input type="text" matInput [matAutocomplete]="apii" formControlName="municipio" placeholder="Municipio">
+            </mat-form-field >
+            <mat-autocomplete #apii="matAutocomplete" [displayWith]="displayFn" class="width-60">
+              <mat-option *ngFor="let municipio of listMunicipioFiltered | async" [value]="municipio">
                 {{ municipio.getNome() }}
-              </md-option>
-            </md-autocomplete>
+              </mat-option>
+            </mat-autocomplete>
           </div>
           <div *ngIf="selectedValue =='APICULTOR' || selectedValue == 'ASSOCIACAO' || selectedValue == 'GESTOR'" layout="row">
-            <md-icon class="md-24 icon-position" md-list-avatar svgIcon="cpf" [style.color]="formError?.cpf ? 'red' :black"></md-icon>
-            <md-input-container class="width-40">
-              <input mdInput [placeholder]="selectedValue == 'ASSOCIACAO' ? 'Cnpj' : 'Cpf'" [textMask]="{mask: selectedValue == 'ASSOCIACAO' ? cnpj : cpf }" formControlName="cpf">
-            </md-input-container>
+            <mat-icon class="mat-24 icon-position" mat-list-avatar svgIcon="cpf" [style.color]="formError?.cpf ? 'red' :black"></mat-icon>
+            <mat-form-field  class="width-40">
+              <input matInput [placeholder]="selectedValue == 'ASSOCIACAO' ? 'Cnpj' : 'Cpf'" [textMask]="{mask: selectedValue == 'ASSOCIACAO' ? cnpj : cpf }" formControlName="cpf">
+            </mat-form-field >
           </div>
           <div *ngIf="selectedValue =='APICULTOR' || selectedValue == 'ASSOCIACAO' || selectedValue == 'GESTOR'" layout="row">
-            <md-icon class="icon-position" [style.color]="formError?.email ? 'red' :black">email</md-icon>
-            <md-input-container class="width-60">
-              <input mdInput placeholder="Email" value="example@example.com.br" formControlName="email">
-            </md-input-container>
+            <mat-icon class="icon-position" [style.color]="formError?.email ? 'red' :black">email</mat-icon>
+            <mat-form-field  class="width-60">
+              <input matInput placeholder="Email" value="example@example.com.br" formControlName="email">
+            </mat-form-field >
           </div>
           <div *ngIf="selectedValue =='APICULTOR' || selectedValue == 'ASSOCIACAO' || selectedValue == 'GESTOR'" layout="row">
-            <md-icon class="icon-position" [style.color]="formError?.senha ? 'red' :black">lock</md-icon>
+            <mat-icon class="icon-position" [style.color]="formError?.senha ? 'red' :black">lock</mat-icon>
             <div layout="column" class="width-40">
-              <md-input-container>
-                <input mdInput placeholder="Senha" type="password"  formControlName="senha">
-              </md-input-container>
+              <mat-form-field >
+                <input matInput placeholder="Senha" type="password"  formControlName="senha">
+              </mat-form-field >
             </div>
           </div>
           <div *ngIf="selectedValue =='APICULTOR' || selectedValue == 'ASSOCIACAO' || selectedValue == 'GESTOR'" layout="row">
-            <md-icon class="icon-position" [style.color]="formError?.confirmar_senha ? 'red' :black">lock</md-icon>
+            <mat-icon class="icon-position" [style.color]="formError?.confirmar_senha ? 'red' :black">lock</mat-icon>
             <div layout="column" class="width-40">
-              <md-input-container >
-                <input mdInput placeholder="Confirmar senha" type="password"  formControlName="confirmar_senha">
-              </md-input-container>
+              <mat-form-field  >
+                <input matInput placeholder="Confirmar senha" type="password"  formControlName="confirmar_senha">
+              </mat-form-field >
               <div *ngIf="formError?.confirmar_senha" class="alert-danger">{{formError?.confirmar_senha.confirmar_senha.no_match}}</div>
             </div>
           </div>
           <div *ngIf="selectedValue =='APICULTOR'" layout="row">
-            <md-icon class="icon-position" [style.color]="formError?.qtdCaixasMigratorias ? 'red' :black">filter_none</md-icon>
+            <mat-icon class="icon-position" [style.color]="formError?.qtdCaixasMigratorias ? 'red' :black">filter_none</mat-icon>
             <div layout="column" class="width-100">
-              <md-input-container class="width-60">
-                <input mdInput placeholder="Quantidades de caixas migratórias" value="25" formControlName="qtdCaixasMigratorias">
-                <span md-suffix>unidades.</span>
-              </md-input-container>
+              <mat-form-field  class="width-60">
+                <input matInput placeholder="Quantidades de caixas migratórias" value="25" formControlName="qtdCaixasMigratorias">
+                <span mat-suffix>unidades.</span>
+              </mat-form-field >
               <div *ngIf="formError?.qtdCaixasMigratorias" class="alert-danger">*{{formError?.qtdCaixasMigratorias.qtdCaixasMigratorias.require}}</div>
             </div>
           </div>
           <div *ngIf="selectedValue =='APICULTOR'" layout="column">
             <div flex="" class="m-bottom-20">
               <h3>Registro SIF</h3>
-              <md-radio-group class="example-radio-group" class="m-left-15" formControlName="registroSif">
-                <md-radio-button name="sif" [value]="true">Sim </md-radio-button>
-                <md-radio-button name="sif" [value]="false">Não </md-radio-button>
-              </md-radio-group>
+              <mat-radio-group class="example-radio-group" class="m-left-15" formControlName="registroSif">
+                <mat-radio-button name="sif" [value]="true">Sim </mat-radio-button>
+                <mat-radio-button name="sif" [value]="false">Não </mat-radio-button>
+              </mat-radio-group>
             </div>
           </div>
           <!--tabela ApicultorAssociação-->
           <div *ngIf="selectedValue =='APICULTOR'">
             <div layout="row" layout-align="center center">
-              <button md-raised-button color="primary" (click)="adicionarAssociacao($event)">Adicionar Associação</button>
+              <button mat-raised-button color="primary" (click)="adicionarAssociacao($event)">Adicionar Associação</button>
             </div>
             <div layout="row">
               <app-table #table class="width-100" style="margin-bottom: 20px;" [data]="listApicultorAssociacao" [columns]="columnsApicultorAssociacao" [paginaTotal]="5"
@@ -149,25 +149,25 @@
             <div class="div-alert" *ngIf="selectedValue =='APICULTOR' || selectedValue =='ASSOCIACAO'">
               <div *ngIf="selectedValue =='APICULTOR'">
                 <h4>Assinatura do Termo de Participação do Projeto</h4>
-                <md-radio-group class="example-radio-group" class="m-left-15" formControlName="termoParticipacaoProjeto">
-                  <md-radio-button name="sif" [value]="true" selected>Sim </md-radio-button>
-                  <md-radio-button name="sif" [value]="false">Não </md-radio-button>
-                </md-radio-group>
+                <mat-radio-group class="example-radio-group" class="m-left-15" formControlName="termoParticipacaoProjeto">
+                  <mat-radio-button name="sif" [value]="true" selected>Sim </mat-radio-button>
+                  <mat-radio-button name="sif" [value]="false">Não </mat-radio-button>
+                </mat-radio-group>
               </div>
               <div *ngIf="selectedValue =='APICULTOR'">
                 <h4>Compartilhamento de dados</h4>
-                <md-radio-group class="example-radio-group" class="m-left-15" formControlName="compartilhaDado">
-                  <md-radio-button name="sif" [value]="true">Sim </md-radio-button>
-                  <md-radio-button name="sif" [value]="false" selected>Não </md-radio-button>
-                </md-radio-group>
+                <mat-radio-group class="example-radio-group" class="m-left-15" formControlName="compartilhaDado">
+                  <mat-radio-button name="sif" [value]="true">Sim </mat-radio-button>
+                  <mat-radio-button name="sif" [value]="false" selected>Não </mat-radio-button>
+                </mat-radio-group>
               </div>
 
               <div *ngIf="selectedValue =='ASSOCIACAO'">
                 <h4>Acordo de Cooperação Abelha</h4>
-                <md-radio-group class="example-radio-group" class="m-left-15" formControlName="acordoCooperacaoAbelha">
-                  <md-radio-button name="sif" [value]="true">Sim </md-radio-button>
-                  <md-radio-button name="sif" [value]="false">Não </md-radio-button>
-                </md-radio-group>
+                <mat-radio-group class="example-radio-group" class="m-left-15" formControlName="acordoCooperacaoAbelha">
+                  <mat-radio-button name="sif" [value]="true">Sim </mat-radio-button>
+                  <mat-radio-button name="sif" [value]="false">Não </mat-radio-button>
+                </mat-radio-group>
               </div>
 
               <div *ngIf="selectedValue =='ASSOCIACAO' || selectedValue =='APICULTOR'" layout="column">
@@ -180,10 +180,10 @@
           </div>
         </div>
       </form>
-    </md-card-content>
-    <md-card-actions layout="row" layout-align="start center">
-      <button md-raised-button type="submit" [disabled]="!formUser.valid" color="primary" (click)="salvar()">{{typeAction == 'CREATE' ? 'Salvar' : 'Atualizar'}}</button>
-      <button md-raised-button color="warn" [routerLink]="['/home/lista/usuarios']">Cancelar</button>
-    </md-card-actions>
-  </md-card>
+    </mat-card-content>
+    <mat-card-actions layout="row" layout-align="start center">
+      <button mat-raised-button type="submit" [disabled]="!formUser.valid" color="primary" (click)="salvar()">{{typeAction == 'CREATE' ? 'Salvar' : 'Atualizar'}}</button>
+      <button mat-raised-button color="warn" [routerLink]="['/home/lista/usuarios']">Cancelar</button>
+    </mat-card-actions>
+  </mat-card>
 </div>

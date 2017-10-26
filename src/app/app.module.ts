@@ -3,7 +3,7 @@ import { BrowserModule } from '@angular/platform-browser';
 import { NgModule } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { HttpModule } from '@angular/http';
-import { MaterialModule } from '@angular/material';
+import {CustomMaterialModule} from './custom-material/custom-material.module'
 import { RouterModule } from '@angular/router';
 import { ReactiveFormsModule } from '@angular/forms';
 import {BrowserAnimationsModule} from '@angular/platform-browser/animations';
@@ -86,7 +86,9 @@ import { OnlyReadComponent } from './only-read/only-read.component';
     BrowserModule,
     FormsModule,
     HttpModule,
-    MaterialModule,
+    CustomMaterialModule,
+    
+    // MaterialModule,
     BrowserAnimationsModule,
     RouterModule.forRoot(route),    
     ReactiveFormsModule,
