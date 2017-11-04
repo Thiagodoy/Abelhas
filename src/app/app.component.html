@@ -13,10 +13,10 @@
       <td-expansion-summary>
         <mat-list>
           <mat-list-item [routerLink]="['home/lista/apiarios']" class="margin-item-menu" (click)="sidenav.toggle()">
-            <h4 mat-line>Listar Apiarios</h4>
+            <div mat-line>Listar Apiarios</div>
           </mat-list-item>
           <mat-list-item [routerLink]="['home/edicao/multipla']" class="margin-item-menu" (click)="sidenav.toggle()">
-            <h4 mat-line>Edição multipla</h4>
+            <div mat-line>Edição multipla</div>
           </mat-list-item>
         </mat-list>
       </td-expansion-summary>
@@ -35,7 +35,7 @@
       <td-expansion-summary>
         <mat-list>
           <mat-list-item [routerLink]="['home/associações']" class="margin-item-menu" (click)="sidenav.toggle()">
-            <h4 mat-line>Listar Associações</h4>
+            <div mat-line>Listar Associações</div>
           </mat-list-item>
         </mat-list>
       </td-expansion-summary>
@@ -54,7 +54,7 @@
       <td-expansion-summary>
         <mat-list>
           <mat-list-item [routerLink]="['home/lista/propriedade']" class="margin-item-menu" (click)="sidenav.toggle()">
-            <h4 mat-line>Listar Propriedades</h4>
+            <div mat-line>Listar Propriedades</div>
           </mat-list-item>
         </mat-list>
       </td-expansion-summary>
@@ -73,7 +73,7 @@
       <td-expansion-summary>
         <mat-list>
           <mat-list-item [routerLink]="['home/dados/desativação']" class="margin-item-menu" (click)="sidenav.toggle()">
-            <h4 mat-line>Dados</h4>
+            <div mat-line>Dados</div>
           </mat-list-item>
         </mat-list>
       </td-expansion-summary>
@@ -92,10 +92,10 @@
       <td-expansion-summary>
         <mat-list>
           <mat-list-item [routerLink]="['home/lista/usuarios']" class="margin-item-menu" (click)="sidenav.toggle()">
-            <h4 mat-line>Listar Usuários</h4>
+            <div mat-line>Listar Usuários</div>
           </mat-list-item>
           <mat-list-item [routerLink]="['home/leitura']" class="margin-item-menu" (click)="sidenav.toggle()">
-            <h4 mat-line>Dados leitura</h4>
+            <div mat-line>Dados leitura</div>
           </mat-list-item>
         </mat-list>
       </td-expansion-summary>
@@ -103,7 +103,7 @@
     <!--Usuarios-->
     <a mat-list-item (click)="logout()" style="cursor: pointer">
       <div layout="row">
-        <mat-icon mat-list-avatar style="margin-left: 25px">exit_to_app</mat-icon>
+        <mat-icon mat-list-avatar style="margin-left: 16px">exit_to_app</mat-icon>
         <span>Sair</span>
       </div>
     </a>

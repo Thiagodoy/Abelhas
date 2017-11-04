@@ -9,10 +9,10 @@
         </section>
       <div layout="row">
         <mat-icon style="margin-right: 10px;margin-top: 5px;"  [style.color]="error?.municipio ? 'red' :'black'">view_comfy</mat-icon>
-        <mat-input-container style="width: 20%" >
-          <input type="text" mdInput placeholder="Municipio"  [matAutocomplete]="auto" [formControl]="controlMunicipio">
+        <mat-form-field style="width: 20%" >
+          <input type="text" matInput placeholder="Municipio"  [matAutocomplete]="auto" [formControl]="controlMunicipio">
           <mat-hint *ngIf="error?.municipio" [ngStyle]="{'color': 'red'}" align="start">*Campo obrigatório.</mat-hint>
-        </mat-input-container>
+        </mat-form-field>
         <mat-autocomplete #auto="matAutocomplete" [displayWith]="displayFn" style="width: 20%">
           <mat-option *ngFor="let option of filteredOptionsMunicipio | async" [value]="option">
             {{ option.getNome() }}
@@ -21,10 +21,10 @@
       </div>
       <div layout="row" *ngIf="!filtroColetadoPor">
         <mat-icon style="margin-right: 10px;margin-top: 5px;"  [style.color]="error?.apicultor ? 'red' :'black'">person</mat-icon>
-        <mat-input-container style="width: 20%">
-          <input type="text" mdInput  [matAutocomplete]="api" [formControl]="controlApicultor" placeholder="Apicultor">
+        <mat-form-field style="width: 20%">
+          <input type="text" matInput  [matAutocomplete]="api" [formControl]="controlApicultor" placeholder="Apicultor">
           <mat-hint *ngIf="error?.apicultor" [ngStyle]="{'color': 'red'}" align="start">*Campo obrigatório.</mat-hint>
-        </mat-input-container>
+        </mat-form-field>
         <mat-autocomplete #api="matAutocomplete" [displayWith]="displayFn" style="width: 20%">
           <mat-option *ngFor="let option of filteredOptionsApicultor | async" [value]="option">
             {{ option.getNome() }}
@@ -33,10 +33,10 @@
       </div>
       <div layout="row" *ngIf="filtroColetadoPor">
         <mat-icon style="margin-right: 10px;margin-top: 5px;"  [style.color]="error?.coletado ? 'red' :'black'">person</mat-icon>
-        <mat-input-container style="width: 20%">
-          <input type="text" mdInput  [matAutocomplete]="api2" [formControl]="controlColetadoPor" placeholder="Coletado por">
+        <mat-form-field style="width: 20%">
+          <input type="text" matInput  [matAutocomplete]="api2" [formControl]="controlColetadoPor" placeholder="Coletado por">
           <mat-hint *ngIf="error?.coletado" [ngStyle]="{'color': 'red'}" align="start">*Campo obrigatório.</mat-hint>
-        </mat-input-container>
+        </mat-form-field>
         <mat-autocomplete #api2="matAutocomplete" [displayWith]="displayFn2" style="width: 20%">
           <mat-option *ngFor="let option of filteredOptionsColetadorPor | async" [value]="option">
             {{ option.nome }}
@@ -45,10 +45,10 @@
       </div>
       <div layout="row">
         <mat-icon class="mat-20" mat-list-avatar svgIcon="bee" style="margin-right: 10px;"  [style.color]="error?.abelha ? 'red' :'black'"></mat-icon>
-       <mat-input-container style="width: 20%">
-          <input type="text" mdInput  [matAutocomplete]="abelha" [formControl]="controlAbelha" placeholder="Especie Abelha">
+       <mat-form-field style="width: 20%">
+          <input type="text" matInput  [matAutocomplete]="abelha" [formControl]="controlAbelha" placeholder="Especie Abelha">
           <mat-hint *ngIf="error?.abelha" [ngStyle]="{'color': 'red'}" align="start">*Campo obrigatório.</mat-hint>
-        </mat-input-container>
+        </mat-form-field>
         <mat-autocomplete #abelha="matAutocomplete" [displayWith]="displayFn" style="width: 20%">
           <mat-option *ngFor="let option of filteredOptionsEspecieAbelha | async" [value]="option">
             {{ option.getNome() }}
@@ -57,10 +57,10 @@
       </div>
       <div layout="row">
         <mat-icon style="margin-right: 10px;margin-top: 5px;" [style.color]="error?.propriedade ? 'red' :'black'">view_comfy</mat-icon>
-        <mat-input-container style="width: 20%">
-          <input type="text" mdInput  [matAutocomplete]="propri" [formControl]="controlPropriedade" placeholder="Propriedade">
+        <mat-form-field style="width: 20%">
+          <input type="text" matInput  [matAutocomplete]="propri" [formControl]="controlPropriedade" placeholder="Propriedade">
           <mat-hint *ngIf="error?.propriedade" [ngStyle]="{'color': 'red'}" align="start">*Campo obrigatório.</mat-hint>
-        </mat-input-container>
+        </mat-form-field>
         <mat-autocomplete #propri="matAutocomplete" [displayWith]="displayFn" style="width: 20%">
           <mat-option *ngFor="let option of filteredOptionsPropriedade | async" [value]="option">
             {{ option.getNome() }}
@@ -79,10 +79,10 @@
     
       <div layout="row">
         <mat-icon style="margin-right: 10px;margin-top: 5px;">person</mat-icon>
-         <mat-input-container style="width: 20%">
-          <input type="text" mdInput  [matAutocomplete]="api1" [formControl]="controlApicultor2" placeholder="Apicultor">
+         <mat-form-field style="width: 20%">
+          <input type="text" matInput  [matAutocomplete]="api1" [formControl]="controlApicultor2" placeholder="Apicultor">
            <mat-hint *ngIf="error?.apicultor2" [ngStyle]="{'color': 'red'}" align="start">*Campo obrigatório.</mat-hint>
-        </mat-input-container>
+        </mat-form-field>
         <mat-autocomplete #api1="matAutocomplete" [displayWith]="displayFn" style="width: 20%">
           <mat-option *ngFor="let option of filteredOptionsApicultor2 | async" [value]="option">
             {{ option.getNome() }}
@@ -91,10 +91,10 @@
       </div>
       <div layout="row">
         <mat-icon style="margin-right: 10px;margin-top: 5px;">view_comfy</mat-icon>
-         <mat-input-container style="width: 20%">
-          <input type="text" mdInput  [matAutocomplete]="propri1" [formControl]="controlPropriedade2"  placeholder="Propriedade">
+         <mat-form-field style="width: 20%">
+          <input type="text" matInput  [matAutocomplete]="propri1" [formControl]="controlPropriedade2"  placeholder="Propriedade">
            <mat-hint *ngIf="error?.propriedade2" [ngStyle]="{'color': 'red'}" align="start">*Campo obrigatório.</mat-hint>
-        </mat-input-container>
+        </mat-form-field>
         <mat-autocomplete #propri1="matAutocomplete" [displayWith]="displayFn" style="width: 20%">
           <mat-option *ngFor="let option of filteredOptionsPropriedade2 | async" [value]="option">
             {{ option.getNome() }}

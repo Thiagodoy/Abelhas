@@ -14,9 +14,9 @@
         <form [formGroup]="formApiario">
           <div layout="column">
             <div layout="column" layout-align="space-between start">
-              <mat-input-container class="example-full-width" style="margin-bottom: 20px;width: 40%">
-                <input mdInput placeholder="Apicultor" formControlName="apicultor">
-              </mat-input-container>
+              <mat-form-field class="example-full-width" style="margin-bottom: 20px;width: 40%">
+                <input matInput placeholder="Apicultor" formControlName="apicultor">
+              </mat-form-field>
               <mat-select placeholder="Propriedade" name="propriedade" style="width: 40%;margin-bottom: 20px;" formControlName="propriedade">
                 <mat-option *ngFor="let propri of listPropriedades" [value]="propri">
                   {{propri.getNome()}}
@@ -66,14 +66,14 @@
             </div>
             <div layout="row">
               <div layout="column" layout-align="space-between start" style="width: 100%">
-                <mat-input-container class="example-full-width" style="width: 40%">
-                  <input mdInput placeholder="Quantidade de caixas" type="number" formControlName="qtdCaixas">
+                <mat-form-field class="example-full-width" style="width: 40%">
+                  <input matInput placeholder="Quantidade de caixas" type="number" formControlName="qtdCaixas">
                   <span mat-suffix>unidades.</span>
-                </mat-input-container>
-                <mat-input-container class="example-full-width" style="width: 40%">
-                  <input mdInput placeholder="Distancia deslocamento de caixa" type="number" formControlName="distanciaDeslocamentoCaixas">
+                </mat-form-field>
+                <mat-form-field class="example-full-width" style="width: 40%">
+                  <input matInput placeholder="Distancia deslocamento de caixa" type="number" formControlName="distanciaDeslocamentoCaixas">
                   <span mat-suffix>metros.</span>
-                </mat-input-container>
+                </mat-form-field>
               </div>
             </div>
             <div layout="row">
@@ -208,9 +208,9 @@
             </div>
             <div layout="column">
               <div flex="">
-                <mat-input-container style="width: 40%">
-                  <textarea mdInput placeholder="Observação" formControlName="observacao"></textarea>
-                </mat-input-container>
+                <mat-form-field style="width: 40%">
+                  <textarea matInput placeholder="Observação" formControlName="observacao"></textarea>
+                </mat-form-field>
               </div>
             </div>
           </div>

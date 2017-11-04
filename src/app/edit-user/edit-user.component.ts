@@ -13,7 +13,7 @@ import { FormGroup, FormBuilder, Validators } from '@angular/forms';
 import { UserWeb } from './../models/user-web';
 import { Subscription, Observable } from 'rxjs/Rx';
 import { ActivatedRoute, Router } from '@angular/router';
-import { Component, OnInit, OnDestroy, ViewContainerRef, ViewChild } from '@angular/core';
+import { Component, OnInit, OnDestroy, ViewContainerRef, ViewChild, NgZone,ChangeDetectorRef } from '@angular/core';
 import ValidatorCustom from './validator/validator-custom';
 import constantes from '../constantes';
 
@@ -61,8 +61,9 @@ export class EditUserComponent implements OnInit, OnDestroy {
 
 
 
-  constructor(private route: ActivatedRoute, private routeN: Router, private builder: FormBuilder, private parseService: ParseService, private dialog: DialogService, private view: ViewContainerRef) { }
+  constructor(private forceChange:ChangeDetectorRef,private zone: NgZone, private route: ActivatedRoute, private routeN: Router, private builder: FormBuilder, private parseService: ParseService, private dialog: DialogService, private view: ViewContainerRef) { }
 
+ 
   ngOnInit() {
 
     this.perfilUsuarioLogado = parse.User.current().attributes.tipo;
@@ -108,6 +109,9 @@ export class EditUserComponent implements OnInit, OnDestroy {
       }
 
       parse.Promise.when(promises).then((result: any[]) => {
+
+        //this.zone.run(()=>{
+
         this.listAssociacao = result[0];
         this.listEstados = result[1];
         this.listMunicipios = result[2];
@@ -118,7 +122,10 @@ export class EditUserComponent implements OnInit, OnDestroy {
             this.userCurrent.setEmail(email, {});
 
           this.mountForm(this.userCurrent);
+
+
         }
+        // });
       });
     });
   }
@@ -261,14 +268,17 @@ export class EditUserComponent implements OnInit, OnDestroy {
           this.formUser.get(name).setValue(apicultor.attributes[name]);
       });
 
+      this.zone.run(() => {
+        this.listApicultorAssociacao = apicultor.getApiculorAssociacao() ? apicultor.getApiculorAssociacao() : [];
+        for (let ap of this.listApicultorAssociacao) {
+          this.parseService.get(ap.id, ApicultorAssociacao).then(result => {
+            ap = result;
+          });
+        }
+        
+      });
 
-      this.listApicultorAssociacao = apicultor.getApiculorAssociacao() ? apicultor.getApiculorAssociacao() : [];
 
-      for (let ap of this.listApicultorAssociacao) {
-        this.parseService.get(ap.id, ApicultorAssociacao).then(result => {
-          ap = result;
-        });
-      }
 
       let registroSif = apicultor.getRegistroSif();
       if (registroSif == undefined || registroSif == null)
@@ -342,6 +352,16 @@ export class EditUserComponent implements OnInit, OnDestroy {
       this.formUser.get('nome').setValue(user.attributes.nomeGestor);
 
     this.formUser.get('cpf').setValue(user.getUsername());
+
+
+      setTimeout(()=>{
+        if(this.table)
+          this.table.refresh()
+          console.log('refresh');
+          this.forceChange.detectChanges();
+          
+      },4000);
+
   }
 
   salvar() {
@@ -382,7 +402,7 @@ export class EditUserComponent implements OnInit, OnDestroy {
 
 
       let userNew = this.createUser();
-      
+
       if (!!this.userCadastrado(userNew.getUsername())) {
         this.dialog.confirm('Erro', ' Usuário já cadastrado!', 'ERRO', this.view)
         return false;
@@ -446,7 +466,7 @@ export class EditUserComponent implements OnInit, OnDestroy {
 
       let newUser = this.createUser();
 
-      
+
 
       if (!!this.userCadastrado(newUser.getUsername())) {
         this.dialog.confirm('Erro', ' Usuário já cadastrado!', 'ERRO', this.view)
@@ -608,7 +628,7 @@ export class EditUserComponent implements OnInit, OnDestroy {
     let columns: ITdDataTableColumn[] = [
       { name: 'nome', label: 'Nome' },
       { name: 'sigla', label: 'Sigla' },
-      { name: 'email', label: 'Email' },
+      // { name: 'email', label: 'Email' },
       { name: 'telefone', label: 'Telefone' },
     ];
 

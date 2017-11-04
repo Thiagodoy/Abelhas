@@ -6,45 +6,45 @@
         <div layout="column">
           <div layout="row">
             <mat-icon class="icon-position" [style.color]="formError?.nome ? 'red' :'black'">person</mat-icon>
-            <mat-input-container class="width-60">
-              <input mdInput placeholder="Nome" formControlName="nome">
-            </mat-input-container>
+            <mat-form-field class="width-60">
+              <input matInput placeholder="Nome" formControlName="nome">
+            </mat-form-field>
           </div>
           <div layout="row">
             <mat-icon class="mat-24 icon-position" mat-list-avatar svgIcon="cpf" [style.color]="formError?.cpf ? 'red' :'black'"></mat-icon>
-            <mat-input-container class="width-40">
-              <input mdInput placeholder="Cnpj" [textMask]="{mask: cnpj }" formControlName="cpf">
-            </mat-input-container>
+            <mat-form-field class="width-40">
+              <input matInput placeholder="Cnpj" [textMask]="{mask: cnpj }" formControlName="cpf">
+            </mat-form-field>
           </div>
           <div layout="row">
             <mat-icon class="icon-position">font_download</mat-icon>
-            <mat-input-container class>
-              <input mdInput placeholder="Sigla" formControlName="sigla">
-            </mat-input-container>
+            <mat-form-field class>
+              <input matInput placeholder="Sigla" formControlName="sigla">
+            </mat-form-field>
           </div>
           <div layout="row">
             <mat-icon class="icon-position" [style.color]="formError?.endereco ? 'red' :'black'">home</mat-icon>
-            <mat-input-container class>
-              <input mdInput placeholder="Endereço" formControlName="endereco">
-            </mat-input-container>
+            <mat-form-field class>
+              <input matInput placeholder="Endereço" formControlName="endereco">
+            </mat-form-field>
           </div>
           <div layout="row">
             <mat-icon class="icon-position">home</mat-icon>
-            <mat-input-container class>
-              <input mdInput placeholder="Bairro" formControlName="bairro">
-            </mat-input-container>
+            <mat-form-field class>
+              <input matInput placeholder="Bairro" formControlName="bairro">
+            </mat-form-field>
           </div>
           <div layout="row">
             <mat-icon class="icon-position" [style.color]="formError?.telefone ? 'red' :'black'">phone</mat-icon>
-            <mat-input-container class="width-30">
-              <input mdInput placeholder="Telefone" formControlName="telefone" [textMask]="{mask: maskTelefone }">
-            </mat-input-container>
+            <mat-form-field class="width-30">
+              <input matInput placeholder="Telefone" formControlName="telefone" [textMask]="{mask: maskTelefone }">
+            </mat-form-field>
           </div>
           <div layout="row">
             <mat-icon style="margin-right: 10px;margin-top: 5px;" [style.color]="formError?.estado ? 'red' :'black'">view_comfy</mat-icon>
-            <mat-input-container class>
-              <input type="text" mdInput [matAutocomplete]="api" formControlName="estado" placeholder="Estado">
-            </mat-input-container>
+            <mat-form-field class>
+              <input type="text" matInput [matAutocomplete]="api" formControlName="estado" placeholder="Estado">
+            </mat-form-field>
             <mat-autocomplete #api="matAutocomplete" [displayWith]="displayFn" class>
               <mat-option *ngFor="let estado of listEstadosFiltered | async" [value]="estado">
                 {{ estado.getNome() }}
@@ -53,9 +53,9 @@
           </div>
           <div layout="row">
             <mat-icon style="margin-right: 10px;margin-top: 5px;" [style.color]="formError?.municipio ? 'red' :'black'">view_comfy</mat-icon>
-            <mat-input-container class>
-              <input type="text" mdInput [matAutocomplete]="apii" formControlName="municipio" placeholder="Municipio">
-            </mat-input-container>
+            <mat-form-field class>
+              <input type="text" matInput [matAutocomplete]="apii" formControlName="municipio" placeholder="Municipio">
+            </mat-form-field>
             <mat-autocomplete #apii="matAutocomplete" [displayWith]="displayFn" class>
               <mat-option *ngFor="let municipio of listMunicipioFiltered | async" [value]="municipio">
                 {{ municipio.getNome() }}
@@ -64,45 +64,45 @@
           </div>
           <div layout="row">
             <mat-icon class="icon-position">home</mat-icon>
-            <mat-input-container class="width-30">
-              <input mdInput placeholder="Cep" formControlName="cep" [textMask]="{mask: cep }">
-            </mat-input-container>
+            <mat-form-field class="width-30">
+              <input matInput placeholder="Cep" formControlName="cep" [textMask]="{mask: cep }">
+            </mat-form-field>
           </div>
           <div layout="row">
             <mat-icon class="icon-position">email</mat-icon>
-            <mat-input-container class>
-              <input mdInput placeholder="Email" formControlName="email">
-            </mat-input-container>
+            <mat-form-field class>
+              <input matInput placeholder="Email" formControlName="email">
+            </mat-form-field>
           </div>
           <div layout="row">
             <mat-icon class="icon-position" [style.color]="formError?.senha ? 'red' :'black'">lock</mat-icon>
             <div layout="column" class="width-60">
-              <mat-input-container class>
-                <input mdInput placeholder="Senha" type="password" value="123123123123" formControlName="senha">
-              </mat-input-container>
+              <mat-form-field class>
+                <input matInput placeholder="Senha" type="password" value="123123123123" formControlName="senha">
+              </mat-form-field>
             </div>
           </div>
           <div layout="row">
             <mat-icon class="icon-position" [style.color]="formError?.confirmar_senha ? 'red' :'black'">lock</mat-icon>
             <div layout="column" class="width-60">
-              <mat-input-container>
-                <input mdInput placeholder="Confirmar senha" type="password" value="123123123123" formControlName="confirmar_senha">
-              </mat-input-container>
+              <mat-form-field>
+                <input matInput placeholder="Confirmar senha" type="password" value="123123123123" formControlName="confirmar_senha">
+              </mat-form-field>
               <div *ngIf="formError?.confirmar_senha" class="alert-danger">{{formError?.confirmar_senha.confirmar_senha.no_match}}</div>
             </div>
           </div>
           <h4>Presidente</h4>
           <div layout="row">
             <mat-icon class="icon-position" [style.color]="formError?.contatoPresidenteNome ? 'red' :'black'">person</mat-icon>
-            <mat-input-container class="width-60">
-              <input mdInput placeholder="Nome" formControlName="contatoPresidenteNome">
-            </mat-input-container>
+            <mat-form-field class="width-60">
+              <input matInput placeholder="Nome" formControlName="contatoPresidenteNome">
+            </mat-form-field>
           </div>
           <div layout="row">
             <mat-icon class="icon-position">phone</mat-icon>
-            <mat-input-container class="width-30">
-              <input mdInput placeholder="Telefone" formControlName="contatoPresidenteTelefone" [textMask]="{mask: maskTelefone }">
-            </mat-input-container>
+            <mat-form-field class="width-30">
+              <input matInput placeholder="Telefone" formControlName="contatoPresidenteTelefone" [textMask]="{mask: maskTelefone }">
+            </mat-form-field>
           </div>
            <div class="div-alert" *ngIf="showTermo">
               <div>

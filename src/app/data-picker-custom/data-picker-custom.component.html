@@ -4,7 +4,7 @@
                     'background-color': altInputStyle ? accentColor : colors['white'],
                     'border': altInputStyle ? '' : '1px solid #dadada'}" (click)="onInputClick()" [(ngModel)]="inputText"
       readonly="true">
-    <md-icon class="button-clear" *ngIf="date" (click)="clearDate()">clear</md-icon>
+    <mat-icon class="button-clear" *ngIf="date" (click)="clearDate()">clear</mat-icon>
   </div>
   <div class="datepicker__calendar" *ngIf="showCalendar">
     <div class="datepicker__calendar__nav">

@@ -6,9 +6,9 @@
         <div layout="column">
           <div layout="row">
              <mat-icon class="icon-position">view_comfy</mat-icon>
-            <mat-input-container style="width: 40%">
+            <mat-form-field style="width: 40%">
               <input matInput placeholder="Apiario" value="Nenhum item selecionado" formControlName="controlItensSelecionados">
-            </mat-input-container>
+            </mat-form-field>
             <button mat-raised-button color="primary" style="height: 35px;margin-left: 24px;" (click)="search()"><mat-icon>search</mat-icon> Pesquisar</button>
           </div>
           <div layout="row" style="margin-top: 20px;">
@@ -26,9 +26,9 @@
             </app-data-picker-custom>
           </div>
           <div layout="row">
-            <mat-input-container style="width: 40%;margin-top:10px;">
+            <mat-form-field style="width: 40%;margin-top:10px;">
               <textarea matInput placeholder="Observação" formControlName="observacao"></textarea>
-            </mat-input-container>
+            </mat-form-field>
           </div>
         </div>
       </form>

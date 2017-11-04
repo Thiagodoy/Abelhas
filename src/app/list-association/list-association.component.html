@@ -1,11 +1,11 @@
-<md-card>
-  <md-card-title>Associações</md-card-title>
-  <md-card-content>
+<mat-card>
+  <mat-card-title>Associações</mat-card-title>
+  <mat-card-content>
     <div layout="row" layout-align="end center">
-      <button md-raised-button [routerLink]="['/home/editar/associação']" color="primary" style="margin-bottom: 25px;height: 35px;"> <md-icon>add</md-icon> Adicionar</button>
+      <button mat-raised-button [routerLink]="['/home/editar/associação']" color="primary" style="margin-bottom: 25px;height: 35px;"> <mat-icon>add</mat-icon> Adicionar</button>
     </div>
       <app-table style="width: 100%" [data]="data" [columns]="columns" [selectable]="false" [showPagination]="true" [multiple]="false"
         [showSelectionJquery]="true" (itemSelected2)="acoes($event)"></app-table>
-  </md-card-content>
-</md-card>
+  </mat-card-content>
+</mat-card>
 

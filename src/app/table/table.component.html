@@ -3,10 +3,10 @@
   </td-search-box>
 </div>
 
-<md-divider *ngIf="filteredData.length > 0" ></md-divider>
+<mat-divider *ngIf="filteredData.length > 0" ></mat-divider>
 
 <td-data-table [selectable]="selectable" [data]="filteredData" style="width: 100%" [columns]="columns" [multiple]="multiple" [sortable]="sortable"
-  [sortBy]="sortBy" [sortOrder]="sortOrder" (sortChange)="sortTable($event)" (rowSelect)="itemSelected($event)"  (selectAll)="itemAllSelected($event)"  (sortChange)="sort($event)" #table>
+  [sortBy]="sortBy" [sortOrder]="sortOrder" (sortChange)="sortTable($event)" (rowSelect)="itemSelected($event)"  [(ngModel)]="selectedRows"  (selectAll)="itemAllSelected($event)"  (sortChange)="sort($event)" #table>
   <!--Template Lista Apiario-->
   <ng-template tdDataTableTemplate="valido" let-value="value" let-row="row" let-column="column">
     <div layout="row">
@@ -88,7 +88,7 @@
   <ng-template tdDataTableTemplate="acoes_propriedade" let-value="value" let-row="row" let-column="column">
     <div layout="row">
       <button mat-button [matMenuTriggerFor]="menuPropriedade">
-              <md-icon>menu</md-icon>
+              <mat-icon>menu</mat-icon>
               </button>
       <mat-menu #menuPropriedade="matMenu">
         <button mat-menu-item (click)="acoes('EDITAR',row)"> <mat-icon>mode_edit</mat-icon>Editar </button>
@@ -111,14 +111,15 @@
   </ng-template>
   <!--Template de gestão ApicultorAssociação-->
 </td-data-table>
-<td-paging-bar *ngIf="showPagination && data.length>0" #pagingBar [pageSize]="pageSize" [total]="paginaTotal" (change)="page($event)">
-  <span td-paging-bar-label hide-xs>Linhas por pagina:</span>
+<td-paging-bar *ngIf="showPagination && data.length>0"  #pagingBar [pageSize]="pageSize" [total]="data.length" (change)="page($event)">
+  <span  hide-xs>Linhas por pagina:</span>
   <mat-select [style.width.px]="50" [(ngModel)]="pageSize">
     <mat-option *ngFor="let size of [5, 10, 15, 20]" [value]="size">
       {{size}}
     </mat-option>
   </mat-select>
-  <div *ngIf="!((paginaAtual * paginaTotal) >= filteredTotal) " > {{paginaAtual * paginaTotal }} <span hide-xs>de {{filteredTotal}}</span></div>
+  <span>{{pagingBar.range}} <span hide-xs>de {{pagingBar.total}}</span></span>
+  <!-- <div *ngIf="!((paginaAtual * paginaTotal) >= filteredTotal) " > {{paginaAtual * paginaTotal }} <span hide-xs>de {{filteredTotal}}</span></div> -->
 </td-paging-bar>
 <!--
 <td-paging-bar2 *ngIf="showPagination && data.length>0" [pageSizes]="[5, 10, 15, 20]" [total]="totalRecords" (change)="page($event)"></td-paging-bar2>-->

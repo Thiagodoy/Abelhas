@@ -18,6 +18,9 @@ export class DialogService {
     config.viewContainerRef = viewContainerRef;
     config.disableClose = true;
 
+    if(type == 'TABLE')
+      config.width = '800px';
+
     dialogRef = this.dialog.open(MessageDialogComponent, config);
 
     dialogRef.componentInstance.title = title;

@@ -6,15 +6,15 @@
         <div layout="column">
           <div layout="row">
             <mat-icon class="icon-position">label</mat-icon>
-            <mat-input-container style="width: 60%">
-              <input mdInput placeholder="Nome" formControlName="nome">
-            </mat-input-container>
+            <mat-form-field style="width: 60%">
+              <input matInput placeholder="Nome" formControlName="nome">
+            </mat-form-field>
           </div>
           <div layout="row">
             <mat-icon class="icon-position">room</mat-icon>
-            <mat-input-container style="width: 60%">
-              <input mdInput placeholder="Rota de acesso" value="1APR_E" formControlName="rotaAcesso">
-            </mat-input-container>
+            <mat-form-field style="width: 60%">
+              <input matInput placeholder="Rota de acesso" value="1APR_E" formControlName="rotaAcesso">
+            </mat-form-field>
           </div>
           <!--<div layout="row" style="margin-top: 15px;">
             <mat-icon class="icon-position">view_comfy</mat-icon>
@@ -26,9 +26,9 @@
           </div>           -->
           <div layout="row">
             <mat-icon style="margin-right: 10px;margin-top: 5px;">view_comfy</mat-icon>
-            <mat-input-container style="width: 60%">
-              <input type="text" mdInput [matAutocomplete]="api" formControlName="municipio" placeholder="Municipio">
-            </mat-input-container>
+            <mat-form-field style="width: 60%">
+              <input type="text" matInput [matAutocomplete]="api" formControlName="municipio" placeholder="Municipio">
+            </mat-form-field>
             <mat-autocomplete #api="matAutocomplete" [displayWith]="displayFn" style="width: 60%">
               <mat-option *ngFor="let municipio of ListfilteredMunicipio | async" [value]="municipio">
                 {{ municipio.getNome() }}
@@ -37,9 +37,9 @@
           </div>
           <div layout="row" style=" margin-top: 10px">
             <mat-icon class="icon-position">view_comfy</mat-icon>
-            <mat-input-container style="width: 40%">
-              <input mdInput placeholder="Apicultores" value="Nenhum item selecionado" formControlName="controlItensSelecionados">
-            </mat-input-container>
+            <mat-form-field style="width: 40%">
+              <input matInput placeholder="Apicultores" value="Nenhum item selecionado" formControlName="controlItensSelecionados">
+            </mat-form-field>
             <a mat-raised-button color="primary" style="height: 35px;margin-left: 24px;" (click)="search($event)">
               <mat-icon>visibility</mat-icon>
             </a>

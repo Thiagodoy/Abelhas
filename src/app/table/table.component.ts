@@ -36,7 +36,9 @@ export class TableComponent implements OnInit, AfterViewInit, OnChanges {
   filteredTotal: number = this.data.length;
   paginaInicial: number = 1;
   paginaAtual: number = 1;
-  pageSize:number = 5
+  pageSize:number = 10 ;
+  pagingEvent: IPageChangeEvent;
+  selectedRows: any[] = [];
 
   itemCurrent: any;
   searchTerm: string;
@@ -61,6 +63,8 @@ export class TableComponent implements OnInit, AfterViewInit, OnChanges {
 
 
     this.filteredData = this.data;
+    this.selectedRows = [];
+
     if (!this.data) {
       return;
     }
@@ -79,12 +83,16 @@ export class TableComponent implements OnInit, AfterViewInit, OnChanges {
 
     // Seleciona itens na tabela
     if (changes['itensSelecteds']) {
-      let array = changes['itensSelecteds']['currentValue'];
-      for (let i = 0; i < array.length; i++) {
-        this.table.select(array[i],new Event('select'),i);
-      }
+      
+      this.table.selectable = true;
+      let array = changes['itensSelecteds']['currentValue'];      
+      this.data.forEach(v=>{      
+        array.forEach(element => {      
+          if(v.id == element.id)
+            this.selectedRows.push(v);
+        });
+      });     
     }
-
     if (this.table)
       this.table.refresh();
   }
@@ -101,20 +109,19 @@ export class TableComponent implements OnInit, AfterViewInit, OnChanges {
   refresh() {
     this.table.refresh();
   }
-
   sortTable(event) { }
 
   itemSelected(event) {
     this.itemCurrent = event;
-    this.itemSelected3.emit(event);
+    // this.itemSelected3.emit(event);    
+    this.itemSelected3.emit(this.selectedRows);    
   }
 
   itemAllSelected(event) {
     this.itemSelectedAll.emit(event);
   }
 
- openMenu(event:Event){
-   debugger;
+ openMenu(event:Event){   
    event.preventDefault();
    event.stopImmediatePropagation();
  }
@@ -122,10 +129,13 @@ export class TableComponent implements OnInit, AfterViewInit, OnChanges {
     this.itemSelected2.emit({ acao: param, element: object || this.itemCurrent });
   }
 
-  page(pagingEvent: IPageChangeEvent): void {
-    this.paginaInicial = pagingEvent.fromRow;
-    this.paginaAtual = pagingEvent.page;
-    this.paginaTotal = pagingEvent.pageSize;
+  page(event: IPageChangeEvent): void {
+    
+    this.pagingEvent = event;
+
+    // this.paginaInicial = pagingEvent.fromRow;
+    // this.paginaAtual = pagingEvent.page;
+    // this.paginaTotal = pagingEvent.pageSize;
     this.filter();
   }
   search(searchTerm: string): void {
@@ -143,9 +153,7 @@ export class TableComponent implements OnInit, AfterViewInit, OnChanges {
     newData = this._dataTableService.filterData(newData, this.searchTerm, true);
     this.filteredTotal = newData.length;
     newData = this._dataTableService.sortData(newData, this.sortBy, this.sortOrder);
-    newData = this._dataTableService.pageData(newData, this.paginaInicial, this.paginaAtual * this.paginaTotal);
-    this.filteredData = newData;
-
-    console.log(this.filteredData.length);
+    newData = this._dataTableService.pageData(newData, this.pagingEvent.fromRow, this.pagingEvent.page * this.pagingEvent.pageSize);
+    this.filteredData = newData;   
   }
 }

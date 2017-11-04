@@ -44,22 +44,24 @@ export class MessageDialogComponent implements OnInit {
 
   itensSelecionados(paran) {
 
-    if (paran.selected) {
-      if (paran.row) {
-        if (!this.multiple)
-          this.listItensSelected.pop();
-        this.listItensSelected.push(paran.row);
-      } else {
-        this.listItensSelected.concat(paran.rows);
-      }
-    } else {
+    this.listItensSelected = paran;
 
-      if (paran.rows && paran.rows.length == 0) {
-        this.listItensSelected = [];
-      } else {
-        this.listItensSelected = this.listItensSelected.filter((value, index) => { return value.id != paran.row.id });
-      }
-    }
+    // if (paran.selected) {
+    //   if (paran.row) {
+    //     if (!this.multiple)
+    //       this.listItensSelected.pop();
+    //     this.listItensSelected.push(paran.row);
+    //   } else {
+    //     this.listItensSelected.concat(paran.rows);
+    //   }
+    // } else {
+
+    //   if (paran.rows && paran.rows.length == 0) {
+    //     this.listItensSelected = [];
+    //   } else {
+    //     this.listItensSelected = this.listItensSelected.filter((value, index) => { return value.id != paran.row.id });
+    //   }
+    // }
 
     console.log(this.listItensSelected.length);
   }

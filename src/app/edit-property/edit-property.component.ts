@@ -127,8 +127,7 @@ export class EditPropertyComponent implements OnInit {
 
     let columns: ITdDataTableColumn[] = [
       { name: 'nome', label: 'Nome' },
-      { name: 'cpf', label: 'Cpf' },
-      { name: 'email', label: 'Email' },
+      { name: 'cpf', label: 'Cpf' },  
       { name: 'municipio', label: 'Municipio' },
     ];
 
@@ -175,7 +174,7 @@ export class EditPropertyComponent implements OnInit {
     //Ordena para exibir asa associacoes selecionadas nas primeiras posicoes
     api = api.sort((a, b) => { return api2.find(value => { return value.id == a.id }) ? -1 : 1; });
 
-    this.dialog.confirm('Escolha as associações', '', 'TABLE', this.view, api, columns, api2, true).subscribe((value) => {
+    this.dialog.confirm('Escolha os Apicultores', '', 'TABLE', this.view, api, columns, api2, true).subscribe((value) => {
 
       if (value.length > 0) {
         this.listApicultoresSelected = value;

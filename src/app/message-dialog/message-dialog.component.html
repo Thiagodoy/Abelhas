@@ -1,14 +1,14 @@
-<div>
+<div style="width: 600px">
   <div layout="row" layout-align="center center">
     <mat-icon *ngIf="type == 'MESSAGE'" class="icon-message">warning</mat-icon>
     <mat-icon *ngIf="type == 'ERRO'" class="icon-error">error</mat-icon>
     <mat-icon *ngIf="type == 'SUCCESS'" class="icon-success">check_circle</mat-icon>
   </div>
   <div layout="row" layout-align="center center">
-    <h1 mat-dialog-title style="margin-bottom: 5px">{{ title }}</h1>
+    <!-- <h1 mat-dialog-title style="margin-bottom: 5px">{{ title }}</h1> -->
+    <div mat-dialog-content *ngIf="type != 'TABLE'" [innerHTML]="message"></div>
   </div>
-  <div mat-dialog-content *ngIf="type != 'TABLE'" [innerHTML]="message"></div>
-  <div mat-dialog-content *ngIf="type == 'TABLE'">
+  <div mat-dialog-content *ngIf="type == 'TABLE'" class="width-100">
     <mat-divider></mat-divider>
     <app-table #table class="width-100" [data]="data" [paginaTotal]="5" [columns]="columns" [uniqueId]="uniqueId" [itensSelecteds]="itensSelected"
       (itemSelected3)="itensSelecionados($event)" [selectable]="true" [showPagination]="true" [multiple]="multiple" [showSelectionJquery]="true"></app-table>
