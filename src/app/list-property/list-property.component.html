@@ -1,11 +1,11 @@
-<md-card>
-  <md-card-title>Propriedades</md-card-title>
-  <md-card-content>
+<mat-card>
+  <mat-card-title>Propriedades</mat-card-title>
+  <mat-card-content>
     <div layout="row" layout-align="end center">
-      <button md-raised-button color="primary" style="margin-bottom: 25px;height: 35px;" [routerLink]="['/home/editar/propriedade']"> <md-icon>add</md-icon> Adicionar</button>
+      <button mat-raised-button color="primary" style="margin-bottom: 25px;height: 35px;" [routerLink]="['/home/editar/propriedade']"> <mat-icon>add</mat-icon> Adicionar</button>
     </div>
       <app-table style="width: 100%" [data]="listPropriedade" [columns]="columns" [selectable]="false" [showPagination]="true" [multiple]="false" (itemSelected2)="acoes($event)"
         [showSelectionJquery]="true"></app-table>
-  </md-card-content>
-</md-card>
+  </mat-card-content>
+</mat-card>
 

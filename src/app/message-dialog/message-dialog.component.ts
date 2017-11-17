@@ -3,7 +3,7 @@ import { FormControl, FormGroup } from '@angular/forms';
 import { TableComponent } from './../table/table.component';
 
 import { Component, OnInit } from '@angular/core';
-import { MdDialogRef } from '@angular/material';
+import { MatDialogRef } from '@angular/material';
 import { ITdDataTableColumn } from '@covalent/core';
 
 @Component({
@@ -22,6 +22,7 @@ export class MessageDialogComponent implements OnInit {
   columns: ITdDataTableColumn[] = [];
   uniqueId: string = 'id'
   multiple: boolean;
+  selectedRows:any[] = [];
 
   
   qtdPonto:FormControl  = new FormControl();
@@ -31,7 +32,7 @@ export class MessageDialogComponent implements OnInit {
   apicultorAssociacao:ApicultorAssociacao;
 
 
-  constructor(public dialogRef: MdDialogRef<MessageDialogComponent>) { }
+  constructor(public dialogRef: MatDialogRef<MessageDialogComponent>) { }
 
   ngOnInit() { 
     
@@ -43,22 +44,24 @@ export class MessageDialogComponent implements OnInit {
 
   itensSelecionados(paran) {
 
-    if (paran.selected) {
-      if (paran.row) {
-        if (!this.multiple)
-          this.listItensSelected.pop();
-        this.listItensSelected.push(paran.row);
-      } else {
-        this.listItensSelected.concat(paran.rows);
-      }
-    } else {
+    this.listItensSelected = paran;
 
-      if (paran.rows && paran.rows.length == 0) {
-        this.listItensSelected = [];
-      } else {
-        this.listItensSelected = this.listItensSelected.filter((value, index) => { return value.id != paran.row.id });
-      }
-    }
+    // if (paran.selected) {
+    //   if (paran.row) {
+    //     if (!this.multiple)
+    //       this.listItensSelected.pop();
+    //     this.listItensSelected.push(paran.row);
+    //   } else {
+    //     this.listItensSelected.concat(paran.rows);
+    //   }
+    // } else {
+
+    //   if (paran.rows && paran.rows.length == 0) {
+    //     this.listItensSelected = [];
+    //   } else {
+    //     this.listItensSelected = this.listItensSelected.filter((value, index) => { return value.id != paran.row.id });
+    //   }
+    // }
 
     console.log(this.listItensSelected.length);
   }

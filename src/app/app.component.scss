@@ -107,6 +107,12 @@
     cursor: pointer;
 }
 
+
+div[mat-line]{
+    margin-left: 50px;
+}
+
+
 /* 100% Image Width on Smaller Screens */
 @media only screen and (max-width: 500px){
     .modal-content {

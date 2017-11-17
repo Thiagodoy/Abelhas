@@ -1,50 +1,50 @@
-<md-card class="m-20">
-  <md-card-title>Dados Leitura</md-card-title>
+<mat-card class="m-20">
+  <mat-card-title>Dados Leitura</mat-card-title>
 
-  <md-card-content>
+  <mat-card-content>
 
     <div layout="row">
       <div flex="50">
-        <md-card class="m-20">
-          <md-card-title>Mortandades</md-card-title>
+        <mat-card class="m-20">
+          <mat-card-title>Mortandades</mat-card-title>
           <app-table  #table class="width-95 margin-left-5" [data]="listMortande" [paginaTotal]="5" [columns]="columns" [selectable]="false"
             [showPagination]="'true'" [sortable]="true"></app-table>
-        </md-card>
+        </mat-card>
       </div>
       <div flex="50">
-        <md-card class="m-20">
-          <md-card-title>Culturas</md-card-title>
+        <mat-card class="m-20">
+          <mat-card-title>Culturas</mat-card-title>
           <app-table #table class="width-95 margin-left-5" [data]="listCultura" [paginaTotal]="5" [columns]="columns" [selectable]="false" [showPagination]="'true'"
             [sortable]="true"></app-table>
-        </md-card>
+        </mat-card>
       </div>
     </div>
     <div layout="row">
       <div flex="50">
-        <md-card class="m-20">
-          <md-card-title>Motivos Desativação</md-card-title>
+        <mat-card class="m-20">
+          <mat-card-title>Motivos Desativação</mat-card-title>
           <app-table #table class="width-95 margin-left-5" [data]="listMotivoDesativacao" [paginaTotal]="5" [columns]="columns" [selectable]="false"
             [showPagination]="'true'" [sortable]="true"></app-table>
-        </md-card>
+        </mat-card>
       </div>
       <div flex="50">
-        <md-card class="m-20">
-          <md-card-title>Especie Abelha</md-card-title>
+        <mat-card class="m-20">
+          <mat-card-title>Especie Abelha</mat-card-title>
           <app-table #table class="width-95 margin-left-5" [data]="listEspecieAbelha" [paginaTotal]="5" [columns]="columns" [selectable]="false"
             [showPagination]="'true'" [sortable]="true"></app-table>
-        </md-card>
+        </mat-card>
       </div>
     </div>
     <div layout="row">
       <div flex="50">
-        <md-card class="m-20">
-          <md-card-title>Atividade Apicula</md-card-title>
+        <mat-card class="m-20">
+          <mat-card-title>Atividade Apicula</mat-card-title>
           <app-table #table class="width-95 margin-left-5" [data]="listAtividade" [paginaTotal]="5" [columns]="columns" [selectable]="false" [showPagination]="'true'"
             [sortable]="true"></app-table>
-        </md-card>
+        </mat-card>
       </div>
       <div flex="50">
       </div>
     </div>
-  </md-card-content>
-</md-card>
+  </mat-card-content>
+</mat-card>

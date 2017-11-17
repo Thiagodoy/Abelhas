@@ -3,7 +3,7 @@ import { Apicultor } from './models/apicultor';
 import { Router } from '@angular/router';
 import { route } from './route/route';
 import { Component, OnDestroy, ViewChild } from '@angular/core';
-import { MdIconRegistry } from '@angular/material';
+import { MatIconRegistry } from '@angular/material';
 import { TdLoadingService } from '@covalent/core'
 import { DomSanitizer } from '@angular/platform-browser';
 import { EditApiaryComponent } from './edit-apiary/edit-apiary.component';
@@ -24,7 +24,7 @@ export class AppComponent implements OnDestroy {
   expand:boolean = true;
   isLogado: boolean = false;
 
-  constructor(mdIconRegistry: MdIconRegistry, sanitizer: DomSanitizer, private parseService: ParseService, private loadingService: TdLoadingService, private route: Router) {
+  constructor(mdIconRegistry: MatIconRegistry, sanitizer: DomSanitizer, private parseService: ParseService, private loadingService: TdLoadingService, private route: Router) {
     // Aplicação de icons customizados
     mdIconRegistry.addSvgIcon('bee', sanitizer.bypassSecurityTrustResourceUrl('assets/bee.svg'));
     mdIconRegistry.addSvgIcon('cpf', sanitizer.bypassSecurityTrustResourceUrl('assets/id-card.svg'));

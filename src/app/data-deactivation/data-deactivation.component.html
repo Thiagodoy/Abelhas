@@ -1,41 +1,41 @@
 <div layout="row" layout-align="center center">
-  <md-card style="width: 33%">
-    <md-card-title>Dados de desativação</md-card-title>
-    <md-card-content>
+  <mat-card style="width: 33%">
+    <mat-card-title>Dados de desativação</mat-card-title>
+    <mat-card-content>
       <form [formGroup]="formDesativacao">
         <div layout="column">
           <div layout="row">
-             <md-icon class="icon-position">view_comfy</md-icon>
-            <md-input-container style="width: 40%">
-              <input mdInput placeholder="Apiario" value="Nenhum item selecionado" formControlName="controlItensSelecionados">
-            </md-input-container>
-            <button md-raised-button color="primary" style="height: 35px;margin-left: 24px;" (click)="search()"><md-icon>search</md-icon> Pesquisar</button>
+             <mat-icon class="icon-position">view_comfy</mat-icon>
+            <mat-form-field style="width: 40%">
+              <input matInput placeholder="Apiario" value="Nenhum item selecionado" formControlName="controlItensSelecionados">
+            </mat-form-field>
+            <button mat-raised-button color="primary" style="height: 35px;margin-left: 24px;" (click)="search()"><mat-icon>search</mat-icon> Pesquisar</button>
           </div>
           <div layout="row" style="margin-top: 20px;">
-            <md-icon class="icon-position">view_comfy</md-icon>
-            <md-select placeholder="Motivo desativação" name="motivo" style="width: 40%;" formControlName="controlDesativacao">
-              <md-option selected *ngFor="let motivo of listDesativacao" [value]="motivo">
+            <mat-icon class="icon-position">view_comfy</mat-icon>
+            <mat-select placeholder="Motivo desativação" name="motivo" style="width: 40%;" formControlName="controlDesativacao">
+              <mat-option selected *ngFor="let motivo of listDesativacao" [value]="motivo">
                 {{motivo.getNome()}}
-              </md-option>
-            </md-select>
+              </mat-option>
+            </mat-select>
           </div>
           <div layout="row" style="margin-top: 20px">
-            <md-icon class="date-picker-icon">date_range</md-icon>
+            <mat-icon class="date-picker-icon">date_range</mat-icon>
             <app-data-picker-custom #data (onSelect)="selectDate($event)" [fontFamily]="font" [dateFormat]="'DD-MM-YYYY'" [placeholder]="'DD/MM/YYYY'"
               [disabled]="false" class="date-picker-custom date-picker-input" style="margin-left: 12px;">
             </app-data-picker-custom>
           </div>
           <div layout="row">
-            <md-input-container style="width: 40%;margin-top:10px;">
-              <textarea mdInput placeholder="Observação" formControlName="observacao"></textarea>
-            </md-input-container>
+            <mat-form-field style="width: 40%;margin-top:10px;">
+              <textarea matInput placeholder="Observação" formControlName="observacao"></textarea>
+            </mat-form-field>
           </div>
         </div>
       </form>
-    </md-card-content>
-    <md-card-actions layout="row" layout-align="start center">
-      <button md-raised-button color="primary" [disabled]="!(formDesativacao.valid && dataSelecionada)" (click)="salvar()" >Concluir</button>
-      <button md-raised-button color="warn" [routerLink]="['/home/lista/apiarios']">Voltar</button>
-    </md-card-actions>
-  </md-card>
+    </mat-card-content>
+    <mat-card-actions layout="row" layout-align="start center">
+      <button mat-raised-button color="primary" [disabled]="!(formDesativacao.valid && dataSelecionada)" (click)="salvar()" >Concluir</button>
+      <button mat-raised-button color="warn" [routerLink]="['/home/lista/apiarios']">Voltar</button>
+    </mat-card-actions>
+  </mat-card>
 </div>
