@@ -110,38 +110,39 @@ export class EditApiaryComponent implements OnInit, OnDestroy {
   }
 
   showLocation() {
-
-    if (this.apiario && this.apiario.getLocation()) {
-
-      let query = this.parseService.createQuery(Apiario);
-      let locationApiario: parse.GeoPoint = this.apiario.attributes.location;
-      query.withinKilometers('location', locationApiario, 5);
-      let l = [];
-      let lt = undefined;
-      this.parseService.executeQuery(query).then((result: Apiario[]) => {
-
-        for (let i = 0; i < result.length; i++) {
-          let location = result[i].getLocation();
-          let apicultorNome = this.apiario.getApicultor().getNome();
-          let propriedade = this.apiario.getPropriedade().getNome();
-          let especieAbelha = this.apiario.getEspecieAbelha().getNome()
-          location.setPopUp(apicultorNome, propriedade, especieAbelha);
-
-          if (location.key.indexOf(this.apiario.getLocation().key) >= 0) {
-            location.setIcon(LeafletColorMarker.greenIcon);
-            lt = location;
-            continue;
-          }
-          else
-            location.setIcon(LeafletColorMarker.blueIcon);
-
-          l.push(location);
+    
+        if (this.apiario && this.apiario.getLocation()) {
+    
+          let query = this.parseService.createQuery(Apiario);
+          let locationApiario: parse.GeoPoint = this.apiario.attributes.location;
+          query.withinKilometers('location', locationApiario, 5);
+          let l = [];
+          let lt = undefined;
+          this.parseService.executeQuery(query).then((result: Apiario[]) => {
+    
+    
+            result.forEach((apiario)=>{
+                  let location = apiario.getLocation();
+                  let apicultorNome = apiario.getApicultor().getNome();
+                  let propriedade = apiario.getPropriedade().getNome();
+                  let especieAbelha = apiario.getEspecieAbelha().getNome()          
+                  location.setPopUp(apicultorNome, propriedade, especieAbelha);
+    
+                  if (location.key.indexOf(this.apiario.getLocation().key) >= 0) {
+                    location.setIcon(LeafletColorMarker.greenIcon);
+                    lt = location;            
+                  }
+                  else{
+                    location.setIcon(LeafletColorMarker.blueIcon);
+                  }
+                l.push(location);  
+            });
+    
+            l.push(lt);
+            this.locations = l;
+          });
         }
-        l.push(lt);
-        this.locations = l;
-      });
-    }
-  }
+      }
 
   populateForm() {
     this.formApiario.get('apicultor').setValue(this.apiario.getApicultor().getNome());
