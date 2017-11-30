@@ -602,9 +602,7 @@ export class EditUserComponent implements OnInit, OnDestroy {
       }
     }
 
-
     return ret;
-
   }
 
   filterEstado(name: string): Estado[] {

@@ -7,14 +7,17 @@ import { Location } from './../models/location';
 import { EspecieAbelha } from './../models/especie-abelha';
 import { Cultura } from './../models/cultura';
 import { Propriedade } from './../models/propriedade';
-import { FormGroup, FormBuilder, FormControl } from '@angular/forms';
+import { FormGroup, FormBuilder, FormControl} from '@angular/forms';
 import { Component, OnInit, EventEmitter, OnDestroy, SecurityContext } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { DomSanitizer, } from '@angular/platform-browser';
 import { ParseService } from '../service/parse.service';
+import { Observable,Subscription } from 'rxjs/Rx';
 
 import { Mortandade } from '../models/mortandade';
 import * as parse from 'parse';
+import { error } from 'util';
+import { Validators } from '@angular/forms';
 let jquery = require('jquery');
 
 
@@ -33,18 +36,26 @@ export class EditApiaryComponent implements OnInit, OnDestroy {
   listCulturas: Mortandade[] = [];
   listPropriedades: Propriedade[] = [];
   listEspecieAbelha: EspecieAbelha[] = [];
+  listApicultor: Apicultor[] = [];
   motivosMortandade: any = {};
   culturas: any = {};
   motivosHistoricoMortandade: any = {};
   locations: Location[] = [];
   static pop: EventEmitter<Object> = new EventEmitter();
+  filteredOptionsApicultor: Observable<Apicultor[]>;
+  filteredOptionsPropriedade: Observable<Propriedade[]>;
 
+  formError: any = {apicultor:null,propriedade:null};  
+
+  apicultor: FormControl = new FormControl('', Validators.required);
+  propriedade: FormControl = new FormControl('', Validators.required);
 
   formApiario: FormGroup;
   cultura: FormGroup;
   motivoHistoricoMortandade: FormGroup;
   motivoMortandade: FormGroup;
 
+  subscriptionForm: Subscription;
 
   constructor(private routeR: Router, private route: ActivatedRoute, private parseService: ParseService, private sanitizer: DomSanitizer, private dialog: DialogService, private fb: FormBuilder) { }
 
@@ -57,6 +68,7 @@ export class EditApiaryComponent implements OnInit, OnDestroy {
       let promisePropriedade = this.parseService.findAll(Propriedade);
       let promiseCuLtura = this.parseService.findAll(Cultura);
       let promiseEspecieAbelha = this.parseService.findAll(EspecieAbelha);
+      let promiseApicultor = this.parseService.findAll(Apicultor);
 
       let query = this.parseService.createQuery(Apiario);
       query.equalTo('objectId', res['apiario']);
@@ -67,14 +79,15 @@ export class EditApiaryComponent implements OnInit, OnDestroy {
       query.include('propriedade');
       let proomiseApiario = this.parseService.executeQuery(query);
 
-      parse.Promise.when([promiseMortandade, promisePropriedade, promiseCuLtura, proomiseApiario, promiseEspecieAbelha]).then((result: any[]) => {
+      parse.Promise.when([promiseMortandade, promisePropriedade, promiseCuLtura, proomiseApiario, promiseEspecieAbelha, promiseApicultor]).then((result: any[]) => {
 
-
+        
         this.listPropriedades = result[1];
         this.listEspecieAbelha = result[4];
         this.apiario = result[3][0];
+        this.listApicultor = result[5];
 
-        for (let cultur of result[2])
+        for (let cultur of result[2]) 
           this.cultura.addControl(cultur.id, new FormControl());
 
         for (let motivo of result[0])
@@ -85,6 +98,10 @@ export class EditApiaryComponent implements OnInit, OnDestroy {
 
         this.listMortandade = result[0];
         this.listCulturas = result[2];
+
+        
+        this.formApiario.addControl('propriedade', this.propriedade);
+        this.formApiario.addControl('apicultor', this.apicultor);
         this.formApiario.addControl('culturas', this.cultura);
         this.formApiario.addControl('motivoMortandade', this.motivoMortandade);
         this.formApiario.addControl('motivoHistoricoMortandade', this.motivoHistoricoMortandade);
@@ -95,12 +112,44 @@ export class EditApiaryComponent implements OnInit, OnDestroy {
 
       });
     });
+
+
+    // Detecta mudancas no Formulario
+    this.subscriptionForm = this.formApiario.valueChanges.subscribe(values => {
+      this.changeForm(values);
+    });
+
+    //Auto Complete Apicultor
+    this.filteredOptionsApicultor = this.apicultor.valueChanges
+    .startWith(null)
+    .map<string, string>(nome => nome ? nome : '')
+    .map((nome => nome ? this.filterApicultor(nome) : this.listApicultor.slice()));
+
+    this.filteredOptionsPropriedade = this.propriedade.valueChanges
+    .startWith(null)
+    .map<string, string>(nome => nome ? nome : '')
+    .map((nome => nome ? this.filterPropriedade(nome) : this.listPropriedades.slice()));
   }
 
   ngOnDestroy() {
     jquery('#myImg').off('click');
     jquery('#closeModal').off('click');
   }
+
+  private changeForm(data: any) {            
+    
+        if (!this.formApiario) return; 
+
+
+        const form = this.formApiario;
+        for (const field in this.formError) {
+          this.formError[field] = null;
+          const control = form.get(field);
+          if (control && !control.valid) {
+            this.formError[field] = control.errors;
+          }
+        }       
+      }
 
   showPhoto() {
     let fotos = this.apiario.getFotos();
@@ -145,7 +194,7 @@ export class EditApiaryComponent implements OnInit, OnDestroy {
       }
 
   populateForm() {
-    this.formApiario.get('apicultor').setValue(this.apiario.getApicultor().getNome());
+    this.formApiario.get('apicultor').setValue(this.apiario.getApicultor());
     this.formApiario.get('propriedade').setValue(this.listPropriedades.filter(value => { return value.id == this.apiario.getPropriedade().id })[0]);
     this.formApiario.get('especieAbelha').setValue(this.listEspecieAbelha.filter(value => { return value.id == this.apiario.getEspecieAbelha().id })[0]);
 
@@ -191,8 +240,8 @@ export class EditApiaryComponent implements OnInit, OnDestroy {
     this.motivoHistoricoMortandade = this.fb.group({});
     this.motivoMortandade = this.fb.group({});
     this.formApiario = this.fb.group({
-      apicultor: [''],
-      propriedade: [''],
+      // apicultor: [''],
+      // propriedadepropriedade: [''],
       migratorio: [false],
       qtdCaixas: [''],
       distanciaDeslocamentoCaixas: [''],
@@ -222,7 +271,7 @@ export class EditApiaryComponent implements OnInit, OnDestroy {
             queryUser.matchesQuery('apicultor', queryApicultor);
             this.parseService.executeQuery(queryUser).then(result => {
               if (result && result.length > 0) {
-                this.parseService.sendNotification(result[0].id, 'Caro seu apiário foi validado!');
+                this.parseService.sendNotification(result[0].id, 'Apiário validado!');
               }
             });
           }
@@ -302,6 +351,21 @@ export class EditApiaryComponent implements OnInit, OnDestroy {
     jquery('#closeModal').click(function () {
       jquery('#myModal').hide();
     });
+  }
+  filterApicultor(name: string): Apicultor[] {
+    console.log(name);
+    return this.listApicultor.filter(option => {
+      return new RegExp(name, 'gi').test(option.getNome())
+    });
+  }
+  filterPropriedade(name: string): Propriedade[] {
+    return this.listPropriedades.filter(option => {
+      return new RegExp(name, 'gi').test(option.getNome())
+    });
+  }
+
+  displayFn(object: parse.Object): string {
+    return object ? object.attributes.nome : '';
   }
 }
 
