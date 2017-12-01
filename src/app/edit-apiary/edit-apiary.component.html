@@ -14,14 +14,39 @@
         <form [formGroup]="formApiario">
           <div layout="column">
             <div layout="column" layout-align="space-between start">
-              <mat-form-field class="example-full-width" style="margin-bottom: 20px;width: 40%">
+              <!-- <mat-form-field class="example-full-width" style="margin-bottom: 20px;width: 40%">
                 <input matInput placeholder="Apicultor" formControlName="apicultor">
-              </mat-form-field>
-              <mat-select placeholder="Propriedade" name="propriedade" style="width: 40%;margin-bottom: 20px;" formControlName="propriedade">
+              </mat-form-field> -->
+
+              <div flex="100">
+                <mat-form-field class="group-auto-complete" style="width:240px">
+                  <input  type="text" placeholder="Apicultor" matInput [matAutocomplete]="auto1" [formControl]="apicultor">
+                </mat-form-field>
+                <mat-autocomplete #auto1="matAutocomplete" [displayWith]="displayFn" style="width:100%">
+                  <mat-option *ngFor="let option of filteredOptionsApicultor | async" [value]="option">
+                    {{ option.getNome() }}
+                  </mat-option>
+                </mat-autocomplete>
+                <div *ngIf="formError?.apicultor" class="alert-danger">*Campo Obrigatório</div>
+              </div>
+
+              <div flex="100">
+                <mat-form-field class="group-auto-complete" style="width:240px" >
+                  <input  type="text" placeholder="Propriedade" matInput [matAutocomplete]="auto" [formControl]="propriedade">
+                </mat-form-field>
+                <mat-autocomplete #auto="matAutocomplete" [displayWith]="displayFn" style="width:100%">
+                  <mat-option *ngFor="let option of filteredOptionsPropriedade | async" [value]="option">
+                    {{ option.getNome() }}
+                  </mat-option>
+                </mat-autocomplete>
+                <div *ngIf="formError?.propriedade" class="alert-danger">*Campo Obrigatório</div>
+              </div>
+
+              <!-- <mat-select placeholder="Propriedade" name="propriedade" style="width: 40%;margin-bottom: 20px;" formControlName="propriedade">
                 <mat-option *ngFor="let propri of listPropriedades" [value]="propri">
                   {{propri.getNome()}}
                 </mat-option>
-              </mat-select>
+              </mat-select> -->
             </div>
             <div layout="row" style="margin-bottom: 20px;">
               <!--<div layout="column">
@@ -226,7 +251,7 @@
   </mat-card-content>
   <mat-card-actions layout="row" layout-align="start center">
     <button mat-raised-button color="primary" [disabled]="apiario?.isValido()" (click)="validar()">Validar</button>
-    <button mat-raised-button color="accent" [disabled]="apiario?.isValido()" (click)="salvar()">Salvar</button>
+    <button mat-raised-button color="accent" [disabled]="apiario?.isValido() || !formApiario.valid" (click)="salvar()">Salvar</button>
     <button mat-raised-button color="warn" [disabled]="apiario?.isValido()" (click)="excluir()">Excluir</button>
     <button mat-raised-button color="acent" [routerLink]="['/home/lista/apiarios']">Voltar</button>
   </mat-card-actions>
