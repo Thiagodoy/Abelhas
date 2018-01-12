@@ -2,6 +2,7 @@ import { Component, OnInit, Input, Output, EventEmitter, AfterViewInit, OnChange
 import { ITdDataTableColumn, IPageChangeEvent, TdDataTableService, TdDataTableComponent, TdDataTableSortingOrder, ITdDataTableSortChangeEvent } from '@covalent/core';
 
 import { ParseService } from '../service/parse.service';
+import { TdPagingBarComponent } from '@covalent/core/paging/paging-bar.component';
 
 let Jquery = require('jquery');
 
@@ -23,6 +24,7 @@ export class TableComponent implements OnInit, AfterViewInit, OnChanges {
   @Input() showSelectionJquery: boolean = true;
   @Input() itensSelecteds: any[] = []
   @ViewChild('table') table: TdDataTableComponent;
+  @ViewChild('pagingBar') pagingBar:TdPagingBarComponent
   @Input() paginaTotal: number = 10;
 
   @Output('itemSelected2') itemSelected2 = new EventEmitter<Object>();
@@ -77,9 +79,7 @@ export class TableComponent implements OnInit, AfterViewInit, OnChanges {
       tem = this._dataTableService.pageData(tem, this.paginaInicial , this.paginaAtual  * this.paginaTotal);
       this.filteredData = tem;
       this.totalRecords = this.data.length;
-    }
-
-
+    }    
 
     // Seleciona itens na tabela
     if (changes['itensSelecteds']) {
@@ -139,8 +139,20 @@ export class TableComponent implements OnInit, AfterViewInit, OnChanges {
     this.filter();
   }
   search(searchTerm: string): void {
-    this.searchTerm = searchTerm;
-    this.filter();
+    if(searchTerm.length > 0){
+      this.searchTerm = searchTerm;    
+      let newData = this._dataTableService.filterData(this.data, this.searchTerm, true);
+      this.filteredData = newData;  
+      console.log(typeof searchTerm,searchTerm.length);
+      this.showPagination = false;
+
+    }else{
+      this.searchTerm = undefined;
+      this.showPagination = true;
+      this.pagingEvent = {fromRow:1,page:1,maxPage:this.data.length/10,pageSize:10,toRow:10,total:this.data.length};
+      this.filter();
+    }
+    
   }
   sort(sortEvent: ITdDataTableSortChangeEvent): void {
     this.sortBy = sortEvent.name;
@@ -150,7 +162,7 @@ export class TableComponent implements OnInit, AfterViewInit, OnChanges {
 
   filter(): void {
     let newData: any[] = this.data;
-    newData = this._dataTableService.filterData(newData, this.searchTerm, true);
+    //newData = this._dataTableService.filterData(newData, this.searchTerm, true);
     this.filteredTotal = newData.length;
     newData = this._dataTableService.sortData(newData, this.sortBy, this.sortOrder);
     newData = this._dataTableService.pageData(newData, this.pagingEvent.fromRow, this.pagingEvent.page * this.pagingEvent.pageSize);
