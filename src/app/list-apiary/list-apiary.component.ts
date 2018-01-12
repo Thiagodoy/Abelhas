@@ -163,6 +163,7 @@ export class ListApiaryComponent implements OnInit {
         let pontos = apicultorAssociacao ? this.listApicultorAssociacao.find(value => { return value.id == apicultorAssociacao.id }).getQtdPontos() : 0;
         let caixas = apicultorAssociacao ? this.listApicultorAssociacao.find(value => { return value.id == apicultorAssociacao.id }).getQtdCaixas() : 0;
         try {
+          let dt = apiario.getDataColetaCreate() ? apiario.getDataColetaCreate().getTime() : apiario.createdAt.getTime();
           obj = {
             id: apiario.id,
             valido: apiario.isValido(),
@@ -174,7 +175,8 @@ export class ListApiaryComponent implements OnInit {
             coletadoPor: apiario.getColetadoPor(),
             status: apiario.getStatus(),
             excluded: apiario.isExcluded(),
-            data: apiario.getDataColetaCreate() ? apiario.getDataColetaCreate().getTime() : apiario.createdAt.getTime()
+            data: dt ,
+            dataString: this.momentService.core(new Date(dt)).format('DD/MM/YYYY HH:mm')//para buscar data formatada
           }
         } catch (e) {
           console.error('Erro ao montar lista Apiario');
@@ -193,6 +195,7 @@ export class ListApiaryComponent implements OnInit {
           try {
             let pontos = ass ? this.listApicultorAssociacao.find(value => { return value.id == ass.id }).getQtdPontos() : 0;
             let caixas = ass ? this.listApicultorAssociacao.find(value => { return value.id == ass.id }).getQtdCaixas() : 0;
+            let dt = ap.getDataColetaCreate() ? ap.getDataColetaCreate().getTime() : ap.createdAt.getTime();
             let obj = {
               id: ap.id,
               valido: ap.isValido(),
@@ -204,7 +207,8 @@ export class ListApiaryComponent implements OnInit {
               coletadoPor: ap.getColetadoPor(),
               status: ap.getStatus(),
               excluded: ap.isExcluded(),
-              data: ap.getDataColetaCreate() ? ap.getDataColetaCreate().getTime() : ap.createdAt.getTime()
+              data: dt,
+              dataString: this.momentService.core(new Date(dt)).format('DD/MM/YYYY HH:mm')//para buscar data formatada
 
             }
             list3.push(obj);
