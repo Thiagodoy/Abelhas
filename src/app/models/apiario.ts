@@ -9,11 +9,21 @@ import { Apicultor } from './apicultor';
 import { EspecieAbelha } from './especie-abelha';
 import { Location } from './location';
 import * as parse from 'parse';
+import { Associacao } from 'app/models/associacao';
 
 export class Apiario extends Object {
     constructor() {
         super('Apiario');
     }
+
+    getAssociacao():Associacao{
+        return this.get('associacao');
+    }
+
+    setAssociacao(a:Associacao){
+        this.set('associacao',a);
+    }
+
     getId(): string {
         return this.id;
     }

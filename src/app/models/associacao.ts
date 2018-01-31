@@ -5,6 +5,10 @@ export class Associacao extends Object {
         super('Associacao');
     }
 
+    getId(){
+        return this.id;
+    }
+
     getMunicipio(): Municipio {
         return this.get('municipio');
     }

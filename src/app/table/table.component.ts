@@ -114,7 +114,8 @@ export class TableComponent implements OnInit, AfterViewInit, OnChanges {
   itemSelected(event) {
     this.itemCurrent = event;
     // this.itemSelected3.emit(event);    
-    this.itemSelected3.emit(this.selectedRows);    
+    console.log(event)
+    this.itemSelected3.emit(event);    
   }
 
   itemAllSelected(event) {

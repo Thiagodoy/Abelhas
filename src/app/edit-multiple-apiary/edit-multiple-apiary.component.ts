@@ -16,6 +16,7 @@ import { FormControl, Validators, AbstractControl } from '@angular/forms';
 import { ITdDataTableColumn } from '@covalent/core';
 import Constante from '../constantes';
 import * as parse from 'parse';
+import { Associacao } from 'app/models/associacao';
 
 
 @Component({
@@ -33,7 +34,10 @@ export class EditMultipleApiaryComponent implements OnInit {
 
   listApicultor: Apicultor[] = [];
   listApicultor2: Apicultor[] = [];
+  listAssociacao:Associacao[] = [];
+  listAssociacao2:Associacao[] = [];
   listPropriedade: Propriedade[] = [];
+  listPropriedade2: Propriedade[] = [];
   listEspecieAbelha: EspecieAbelha[] = [];
   listMunicipio: Municipio[] = [];
   listApiarios: Apiario[] = []
@@ -45,6 +49,8 @@ export class EditMultipleApiaryComponent implements OnInit {
   controlAbelha: FormControl = new FormControl('', Validators.required);
   controlPropriedade: FormControl = new FormControl('', Validators.required);
   controlPropriedade2: FormControl = new FormControl('', Validators.required);
+  controlAssociacao: FormControl = new FormControl('', Validators.required);
+  controlAssociacao2: FormControl = new FormControl('', Validators.required);
   controlApicultor: FormControl = new FormControl('', Validators.required);
   controlApicultor2: FormControl = new FormControl('', Validators.required);
   controlColetadoPor: FormControl = new FormControl('', Validators.required);
@@ -56,6 +62,8 @@ export class EditMultipleApiaryComponent implements OnInit {
   filteredOptionsPropriedade2: Observable<Propriedade[]>;
   filteredOptionsApicultor2: Observable<Apicultor[]>;
   filteredOptionsColetadorPor: Observable<any[]>;
+  filteredOptionsAssociacao: Observable<Associacao[]>;
+  filteredOptionsAssociacao2: Observable<Associacao[]>;
 
   filtroColetadoPor = false;
 
@@ -75,6 +83,7 @@ export class EditMultipleApiaryComponent implements OnInit {
     let promise_2 = this.parseService.findAll(Apicultor)
     let promise_3 = this.parseService.findAll(EspecieAbelha);
     let promise_4 = this.parseService.findAll(Municipio);
+    let promise_5 = this.parseService.findAll(Associacao);
 
     let query = this.parseService.createQuery(Apiario);
     let queryUser = this.parseService.createQuery(UserWeb);
@@ -113,14 +122,17 @@ export class EditMultipleApiaryComponent implements OnInit {
       }
     });
 
-    parse.Promise.when(promise_1, promise_2, promise_3, promise_4).then((res_1, res_2, res_3, res_4) => {
+    parse.Promise.when(promise_1, promise_2, promise_3, promise_4,promise_5).then((res_1, res_2, res_3, res_4,res_5) => {
       this.zone.run(() => {
 
         this.listPropriedade = res_1;
+        this.listPropriedade2 = res_1;
         this.listApicultor = res_2;
         this.listEspecieAbelha = res_3;
         this.listMunicipio = res_4
         this.listApicultor2 = res_2;
+        this.listAssociacao = res_5;
+        this.listAssociacao2 = res_5;
 
         this.todos();
       });
@@ -151,16 +163,26 @@ export class EditMultipleApiaryComponent implements OnInit {
       .map<string, string>(nome => nome ? nome : '')
       .map((nome => nome ? this.filterPropriedade(nome) : this.listPropriedade.slice()));
 
-    this.filteredOptionsPropriedade2 = this.controlPropriedade.valueChanges
+    this.filteredOptionsPropriedade2 = this.controlPropriedade2.valueChanges
       .startWith(null)
       .map<string, string>(nome => nome ? nome : '')
-      .map((nome => nome ? this.filterPropriedade(nome) : this.listPropriedade.slice()));
+      .map((nome => nome ? this.filterPropriedade2(nome) : this.listPropriedade2.slice()));
 
 
     this.filteredOptionsColetadorPor = this.controlColetadoPor.valueChanges
       .startWith(null)
       .map<string, string>(nome => nome ? nome : '')
       .map((nome => nome ? this.filterColetado(nome) : this.listColetadoPor.slice()));
+
+    this.filteredOptionsAssociacao = this.controlAssociacao.valueChanges
+      .startWith(null)
+      .map<string, string>(nome => nome ? nome : '')
+      .map((nome => nome ? this.filterAssociacao(nome) : this.listAssociacao.slice()));
+
+    this.filteredOptionsAssociacao2 = this.controlAssociacao2.valueChanges
+      .startWith(null)
+      .map<string, string>(nome => nome ? nome : '')
+      .map((nome => nome ? this.filterAssociacao2(nome) : this.listAssociacao2.slice()));
   }
 
 
@@ -182,10 +204,21 @@ export class EditMultipleApiaryComponent implements OnInit {
     municipio.setNome('Todos')
     this.listMunicipio.push(municipio);
 
+    let propriedade2 = new Propriedade();
+    propriedade2.setNome('Manter');
+    this.listPropriedade2.push(propriedade2)
+
+    let associacao2 = new Associacao();
+    associacao2.setNome('Manter');
+    this.listAssociacao2.push(associacao2);
+
+    let associacao = new Associacao();
+    associacao.setNome('Todos');
+    this.listAssociacao.push(associacao);
 
   }
 
-  itensSelected(paran) {
+  itensSelected(paran:any) {
 
     if (paran.selected) {
       if (paran.row) {
@@ -207,13 +240,13 @@ export class EditMultipleApiaryComponent implements OnInit {
       }
     } else {
 
-      if (paran.rows && paran.rows.length == 0) {
+      if (paran.rows) {
         this.listApiarioSelected = [];
         this.locations = this.locations.filter(value => {
           value.setIcon(LeafletColorMarker.blueIcon);
           return value;
         });
-      } else {
+      } else  {
         let apiario: Apiario = paran.row;
         this.leaflet.removeLocation(apiario.getLocation());
         apiario.getLocation().setIcon(LeafletColorMarker.blueIcon);
@@ -237,13 +270,15 @@ export class EditMultipleApiaryComponent implements OnInit {
         controlAb.set('coletado', this.controlColetadoPor)
 
       controlAb.set('propriedade', this.controlPropriedade);
+      controlAb.set('associacao', this.controlAssociacao);
 
     } else {
       controlAb.set('propriedade2', this.controlPropriedade2);
       controlAb.set('apicultor2', this.controlApicultor2);
+      controlAb.set('associacao2', this.controlAssociacao2);
     }
 
-    let option = ['municipio', 'abelha', 'apicultor', 'propriedade', 'apicultor2', 'propriedade2', 'coletado'];
+    let option = ['municipio', 'abelha', 'apicultor', 'propriedade', 'apicultor2', 'propriedade2', 'coletado','associacao','associacao2'];
 
     for (let key of option) {
 
@@ -278,13 +313,18 @@ export class EditMultipleApiaryComponent implements OnInit {
 
       let apicultor: Apicultor = this.controlApicultor2.value
       let propriedade: Propriedade = this.controlPropriedade2.value;
+      let associacao: Associacao = this.controlAssociacao2.value;
 
       parse.Promise.as<any>(() => { }).then(() => {
 
         let promises: parse.Promise<any>[] = []
         for (let apiario of this.listApiarioSelected) {
           apiario.setApicultor(apicultor);
-          apiario.setPropriedade(propriedade);
+
+          if(!(propriedade.getNome().indexOf('Manter') >= 0))
+            apiario.setPropriedade(propriedade);
+          if(!(associacao.getNome().indexOf('Manter') >= 0))
+            apiario.setAssociacao(associacao);  
 
           let promise = this.parseService.save(apiario)
           promises.push(promise);
@@ -324,6 +364,11 @@ export class EditMultipleApiaryComponent implements OnInit {
       let queryApicultor = this.parseService.createQuery(Apicultor);
       let apicultor: Apicultor = this.controlApicultor.value;
 
+      let queryAssociacao = this.parseService.createQuery(Associacao);
+      let associacao:Associacao = this.controlAssociacao.value;
+
+      queryAssociacao.equalTo('objectId',associacao.getId());
+
       if (!this.filtroColetadoPor)
         queryApicultor.equalTo('objectId', apicultor.getId());
 
@@ -348,6 +393,8 @@ export class EditMultipleApiaryComponent implements OnInit {
       else if(apicultor.getNome().indexOf('Todos') < 0)
         queryApiario.matchesQuery('apicultor', queryApicultor);
 
+      if(associacao.getNome().indexOf('Todos') < 0)
+        queryApiario.matchesQuery('associacao',queryAssociacao);  
       if (especieAbelha.getNome().indexOf('Todos') < 0)
         queryApiario.matchesQuery('especieAbelha', queryAbelha);
       if (propriedade.getNome().indexOf('Todos') < 0)
@@ -381,6 +428,16 @@ export class EditMultipleApiaryComponent implements OnInit {
       return new RegExp(name, 'gi').test(option.getNome())
     });
   }
+  filterAssociacao(name: string): Associacao[] {
+    return this.listAssociacao.filter(option => {
+      return new RegExp(name, 'gi').test(option.getNome())
+    });
+  }
+  filterAssociacao2(name: string): Associacao[] {
+    return this.listAssociacao2.filter(option => {
+      return new RegExp(name, 'gi').test(option.getNome())
+    });
+  }
   filterAbelha(name: string): EspecieAbelha[] {
     //this.validar('abelha',this.controlAbelha.status);
     return this.listEspecieAbelha.filter(option => {
@@ -395,7 +452,7 @@ export class EditMultipleApiaryComponent implements OnInit {
   }
   filterPropriedade2(name: string): Propriedade[] {
     // this.validar('propriedade',this.controlPropriedade.status);
-    return this.listPropriedade.filter(option => {
+    return this.listPropriedade2.filter(option => {
       return new RegExp(name, 'gi').test(option.getNome())
     });
   }
