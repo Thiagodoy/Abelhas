@@ -203,14 +203,17 @@ export class EditMultipleApiaryComponent implements OnInit {
     let municipio = new Municipio();
     municipio.setNome('Todos')
     this.listMunicipio.push(municipio);
-
+   
     let propriedade2 = new Propriedade();
     propriedade2.setNome('Manter');
     this.listPropriedade2.push(propriedade2)
+    this.listPropriedade2 =  this.listPropriedade2.filter(t=>t.getNome().indexOf('Todos') < 0);
+
 
     let associacao2 = new Associacao();
     associacao2.setNome('Manter');
     this.listAssociacao2.push(associacao2);
+    this.listAssociacao2 =  this.listAssociacao2.filter(t=>t.getNome().indexOf('Todos') < 0);
 
     let associacao = new Associacao();
     associacao.setNome('Todos');
@@ -229,7 +232,7 @@ export class EditMultipleApiaryComponent implements OnInit {
         location.setIcon(LeafletColorMarker.greenIcon);
         this.leaflet.putLocation(location);
       } else {
-        this.listApiarioSelected.concat(paran.rows);
+        this.listApiarioSelected = this.listApiarioSelected.concat(paran.rows);
 
         for (let apiario of paran.rows) {
           let location = apiario.getLocation();
@@ -352,8 +355,11 @@ export class EditMultipleApiaryComponent implements OnInit {
     this.controlPropriedade.reset('');
     this.controlApicultor2.reset('');
     this.controlPropriedade2.reset('');
+    this.controlAssociacao.reset('');
+    this.controlAssociacao2.reset('');
     this.listApiarios = [];
     this.listApiarioSelected = [];
+    this.leaflet.removeAll();
   }
 
   pesquisar() {

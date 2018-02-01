@@ -645,10 +645,11 @@ export class EditUserComponent implements OnInit, OnDestroy {
       asso = asso.filter(value => { return this.listApicultorAssociacao.find(v => { return v.attributes.associacao.id == value.id }) == undefined });
     }
 
-    this.dialog.confirm('Escolha as associações', '', 'TABLE', this.view, asso, columns, [], true).subscribe((value: any[]) => {
-
-      if (value.length > 0) {
-        let temp = value.map(val1 => {
+    this.dialog.confirm('Escolha as associações', '', 'TABLE', this.view, asso, columns, [], true).subscribe((value: any) => {
+      
+      if (value.selected) {
+        let ar = value.row ? [value.row] : value.rows;
+        let temp = ar.map(val1 => {
           let apicultorAssociacao = new ApicultorAssociacao();
           apicultorAssociacao.setAssociacao(this.listAssociacao.find((val2) => { return val1.id == val2.id }));
           this.parseService.save(apicultorAssociacao);
