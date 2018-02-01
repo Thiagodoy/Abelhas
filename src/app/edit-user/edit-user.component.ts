@@ -262,7 +262,7 @@ export class EditUserComponent implements OnInit, OnDestroy {
     if (user.attributes.tipo == 'APICULTOR') {
 
       let apicultor: Apicultor = user.attributes.apicultor;
-      console.log(Object.keys(apicultor.attributes));
+      
       Object.keys(apicultor.attributes).forEach(name => {
         if (this.formUser.contains(name))
           this.formUser.get(name).setValue(apicultor.attributes[name]);
@@ -356,8 +356,7 @@ export class EditUserComponent implements OnInit, OnDestroy {
 
       setTimeout(()=>{
         if(this.table)
-          this.table.refresh()
-          console.log('refresh');
+          this.table.refresh()          
           this.forceChange.detectChanges();
           
       },4000);

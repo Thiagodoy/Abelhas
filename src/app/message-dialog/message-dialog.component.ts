@@ -49,8 +49,7 @@ export class MessageDialogComponent implements OnInit {
     else if(this.mapItemSelecionados.has(paran.row.id) && !paran.selected)
       this.mapItemSelecionados.delete(paran.row.id);   
 
-    console.log(this.mapItemSelecionados);
-  }
+   }
 
   closeTable(action: string) {
 

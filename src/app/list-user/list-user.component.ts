@@ -82,8 +82,7 @@ export class ListUserComponent implements OnInit {
         list.push(user);
 
       } catch (erro) {
-        console.error(erro);
-        console.log(us);
+        console.error(erro);       
       }
 
     }
