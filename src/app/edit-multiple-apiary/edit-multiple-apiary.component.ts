@@ -29,6 +29,7 @@ export class EditMultipleApiaryComponent implements OnInit {
   columns: ITdDataTableColumn[] = [
     { name: 'attributes.propriedade.attributes.nome', label: 'ProPriedade' },
     { name: 'attributes.apicultor.attributes.nome', label: 'Apicultor' },
+    { name: 'attributes.associacao.attributes.nome', label: 'Associação' },
     { name: 'createdAt', label: 'Data', format: (value) => { return this.momentService.core(value).format('DD/MM/YYYY HH:mm') } },
   ];
 
