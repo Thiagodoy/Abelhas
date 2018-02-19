@@ -353,8 +353,7 @@ export class EditApiaryComponent implements OnInit, OnDestroy {
     });
   }
   filterApicultor(name: string): Apicultor[] {
-    console.log(name);
-    return this.listApicultor.filter(option => {
+     return this.listApicultor.filter(option => {
       return new RegExp(name, 'gi').test(option.getNome())
     });
   }

@@ -113,8 +113,8 @@ export class TableComponent implements OnInit, AfterViewInit, OnChanges {
 
   itemSelected(event) {
     this.itemCurrent = event;
-    // this.itemSelected3.emit(event);    
-    this.itemSelected3.emit(this.selectedRows);    
+    // this.itemSelected3.emit(event);   
+    this.itemSelected3.emit(event);    
   }
 
   itemAllSelected(event) {
@@ -143,7 +143,6 @@ export class TableComponent implements OnInit, AfterViewInit, OnChanges {
       this.searchTerm = searchTerm;    
       let newData = this._dataTableService.filterData(this.data, this.searchTerm, true);
       this.filteredData = newData;  
-      console.log(typeof searchTerm,searchTerm.length);
       this.showPagination = false;
 
     }else{

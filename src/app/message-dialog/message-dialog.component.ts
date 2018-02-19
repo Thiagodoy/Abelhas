@@ -16,7 +16,7 @@ export class MessageDialogComponent implements OnInit {
   public message: string;
   public title: string;
   public type: string = 'MESSAGE';
-  listItensSelected: any[] = [];
+  mapItemSelecionados: Map<any,any> = new Map();
   itensSelected: any[] = [];
   data: any[] = [];
   columns: ITdDataTableColumn[] = [];
@@ -44,35 +44,24 @@ export class MessageDialogComponent implements OnInit {
 
   itensSelecionados(paran) {
 
-    this.listItensSelected = paran;
+    if(!this.mapItemSelecionados.has(paran.row.id) && paran.selected)
+      this.mapItemSelecionados.set(paran.row.id,paran.row);
+    else if(this.mapItemSelecionados.has(paran.row.id) && !paran.selected)
+      this.mapItemSelecionados.delete(paran.row.id);   
 
-    // if (paran.selected) {
-    //   if (paran.row) {
-    //     if (!this.multiple)
-    //       this.listItensSelected.pop();
-    //     this.listItensSelected.push(paran.row);
-    //   } else {
-    //     this.listItensSelected.concat(paran.rows);
-    //   }
-    // } else {
-
-    //   if (paran.rows && paran.rows.length == 0) {
-    //     this.listItensSelected = [];
-    //   } else {
-    //     this.listItensSelected = this.listItensSelected.filter((value, index) => { return value.id != paran.row.id });
-    //   }
-    // }
-
-    console.log(this.listItensSelected.length);
-  }
+   }
 
   closeTable(action: string) {
 
     if (action == 'CANCELAR' && !this.multiple) {
-      this.dialogRef.close([]);
+      this.dialogRef.close({selected:false});
+      return false;
     }
+    
+    let array = [];
+    this.mapItemSelecionados.forEach((value)=>array.push(value));
 
-    this.dialogRef.close(this.listItensSelected);
+    this.dialogRef.close({rows:array, selected: array.length > 0});
   }
 
   editApicultorAssociacao(data:ApicultorAssociacao){

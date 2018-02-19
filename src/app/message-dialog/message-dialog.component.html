@@ -39,7 +39,7 @@
       <button mat-raised-button color="warn" *ngIf="type == 'MESSAGE' || type == 'EDITAR_ASC'" (click)="dialogRef.close(false)"
         style="margin-left: 80px;">Não</button>
       <button mat-raised-button color="primary" *ngIf="type == 'ERRO' || type == 'SUCCESS'" (click)="dialogRef.close(false)">Ok</button>
-      <button mat-raised-button color="primary" class="button-m-right" *ngIf="type == 'TABLE'" [disabled]="listItensSelected.length == 0"
+      <button mat-raised-button color="primary" class="button-m-right" *ngIf="type == 'TABLE'" [disabled]="mapItemSelecionados.size == 0"
         (click)="closeTable()">OK</button>
       <button mat-raised-button color="warn" *ngIf="type == 'TABLE'" (click)="closeTable('CANCELAR')">Cancelar</button>
 

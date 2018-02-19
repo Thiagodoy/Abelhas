@@ -141,9 +141,6 @@ export class ParseService {
 
             parse.Push.send(pushData, { useMasterKey: true }).fail(erro => {
               i.showErrorPopUp(erro);
-            }).then(result => {
-              console.log('Notification sent');
-              console.log(result);
             });
 
           }
@@ -369,7 +366,7 @@ export class ParseService {
 
     let message = '<p>Não foi possivel processar solicitação!</p>' + '<p> descrição : ' + s + '</p><p>Code: <strong>' + erro.code + '</strong></p>'
     this.dialogService.confirm('Erro', message, 'ERRO', null);
-    console.log(erro);
+   
   }
 
   forceCloseLoading() {

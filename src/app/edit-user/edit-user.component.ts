@@ -262,7 +262,7 @@ export class EditUserComponent implements OnInit, OnDestroy {
     if (user.attributes.tipo == 'APICULTOR') {
 
       let apicultor: Apicultor = user.attributes.apicultor;
-      console.log(Object.keys(apicultor.attributes));
+      
       Object.keys(apicultor.attributes).forEach(name => {
         if (this.formUser.contains(name))
           this.formUser.get(name).setValue(apicultor.attributes[name]);
@@ -356,8 +356,7 @@ export class EditUserComponent implements OnInit, OnDestroy {
 
       setTimeout(()=>{
         if(this.table)
-          this.table.refresh()
-          console.log('refresh');
+          this.table.refresh()          
           this.forceChange.detectChanges();
           
       },4000);
@@ -645,10 +644,11 @@ export class EditUserComponent implements OnInit, OnDestroy {
       asso = asso.filter(value => { return this.listApicultorAssociacao.find(v => { return v.attributes.associacao.id == value.id }) == undefined });
     }
 
-    this.dialog.confirm('Escolha as associações', '', 'TABLE', this.view, asso, columns, [], true).subscribe((value: any[]) => {
-
-      if (value.length > 0) {
-        let temp = value.map(val1 => {
+    this.dialog.confirm('Escolha as associações', '', 'TABLE', this.view, asso, columns, [], true).subscribe((value: any) => {
+      
+      if (value.selected) {
+        let ar = value.row ? [value.row] : value.rows;
+        let temp = ar.map(val1 => {
           let apicultorAssociacao = new ApicultorAssociacao();
           apicultorAssociacao.setAssociacao(this.listAssociacao.find((val2) => { return val1.id == val2.id }));
           this.parseService.save(apicultorAssociacao);
