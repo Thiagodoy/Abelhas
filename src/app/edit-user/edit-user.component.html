@@ -29,13 +29,13 @@
           <div *ngIf="selectedValue =='APICULTOR' || selectedValue == 'ASSOCIACAO'" layout="row">
             <mat-icon class="icon-position" [style.color]="formError?.endereco ? 'red' :black">home</mat-icon>
             <mat-form-field  class="width-60">
-              <input matInput placeholder="Endereço" value="Av. Sylvio Marcondes, Adalberto Roxo" formControlName="endereco">
+              <input matInput placeholder="Endereço"  formControlName="endereco">
             </mat-form-field >
           </div>
            <div *ngIf="selectedValue == 'ASSOCIACAO'" layout="row">
             <mat-icon class="icon-position" [style.color]="formError?.bairro ? 'red' :black">home</mat-icon>
             <mat-form-field  class="width-60">
-              <input matInput placeholder="Bairro" value="Av. Sylvio Marcondes, Adalberto Roxo" formControlName="bairro">
+              <input matInput placeholder="Bairro"  formControlName="bairro">
             </mat-form-field >
           </div>
           <div *ngIf="selectedValue =='APICULTOR'" layout="row">
@@ -94,7 +94,7 @@
           <div *ngIf="selectedValue =='APICULTOR' || selectedValue == 'ASSOCIACAO' || selectedValue == 'GESTOR'" layout="row">
             <mat-icon class="icon-position" [style.color]="formError?.email ? 'red' :black">email</mat-icon>
             <mat-form-field  class="width-60">
-              <input matInput placeholder="Email" value="example@example.com.br" formControlName="email">
+              <input matInput placeholder="Email"  formControlName="email">
             </mat-form-field >
           </div>
           <div *ngIf="selectedValue =='APICULTOR' || selectedValue == 'ASSOCIACAO' || selectedValue == 'GESTOR'" layout="row">
