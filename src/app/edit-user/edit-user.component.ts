@@ -261,9 +261,10 @@ export class EditUserComponent implements OnInit, OnDestroy {
 
     if (user.attributes.tipo == 'APICULTOR') {
 
-      let apicultor: Apicultor = user.attributes.apicultor;
-      
-      Object.keys(apicultor.attributes).forEach(name => {
+      let apicultor: Apicultor = user.attributes.apicultor;    
+
+      Object.keys(apicultor.attributes).forEach(name => {      
+
         if (this.formUser.contains(name))
           this.formUser.get(name).setValue(apicultor.attributes[name]);
       });
@@ -274,11 +275,8 @@ export class EditUserComponent implements OnInit, OnDestroy {
           this.parseService.get(ap.id, ApicultorAssociacao).then(result => {
             ap = result;
           });
-        }
-        
+        }        
       });
-
-
 
       let registroSif = apicultor.getRegistroSif();
       if (registroSif == undefined || registroSif == null)
@@ -322,7 +320,8 @@ export class EditUserComponent implements OnInit, OnDestroy {
       this.formUser.get('estado').setValue(this.listEstados.filter(value => { return value.id == estado.id })[0]);
 
       if (apicultor.getDataTermoCompromisso())
-        this.dataTermoCompromisso = apicultor.getDataTermoCompromisso()
+        this.dataTermoCompromisso = apicultor.getDataTermoCompromisso();
+               
 
     } else if (user.attributes.tipo == 'ASSOCIACAO') {
       let associacao: Associacao = user.attributes.associacao;
@@ -337,15 +336,14 @@ export class EditUserComponent implements OnInit, OnDestroy {
 
       if (associacao.getDataTermoCompromisso())
         this.dataTermoCompromisso = associacao.getDataTermoCompromisso();
-
+        
     }
 
     // atributos da user comum a todos
-    Object.keys(user.attributes).forEach(name => {
-      if (this.formUser.contains(name))
+    Object.keys(user.attributes).forEach(name => {        
+      if (this.formUser.contains(name) && user.attributes[name])
         this.formUser.get(name).setValue(user.attributes[name]);
     });
-
 
 
     if (user.attributes.tipo == 'GESTOR')
@@ -360,7 +358,7 @@ export class EditUserComponent implements OnInit, OnDestroy {
           this.forceChange.detectChanges();
           
       },4000);
-
+    
   }
 
   salvar() {
