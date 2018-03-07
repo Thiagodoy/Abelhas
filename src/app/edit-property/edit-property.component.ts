@@ -91,6 +91,7 @@ export class EditPropertyComponent implements OnInit {
   }
 
   populateForm() {
+    
     this.formPropriedade.get('rotaAcesso').setValue(this.propriedade.getRotaAcesso());
     this.formPropriedade.get('nome').setValue(this.propriedade.getNome());
     this.formPropriedade.get('municipio').setValue(this.listMunicipios.filter(m => { return m.id == this.propriedade.getMunicipio().id })[0]);
@@ -99,7 +100,7 @@ export class EditPropertyComponent implements OnInit {
         uniqueId: value.id,
         id: value.id
       }
-    });
+    });    
     this.formPropriedade.get('controlItensSelecionados').setValue('' + this.propriedade.getApicultores().length + ' itens selecionados');
   }
 
@@ -114,11 +115,15 @@ export class EditPropertyComponent implements OnInit {
     }
     
     let temp = [];
-    for (let a of this.listApicultoresSelected) {
+
+    this.listApicultoresSelected =  this.listApicultoresSelected || [];
+debugger;
+    this.listApicultoresSelected.forEach(a=> {
       let value = this.listApicultor.find((value) => { return value.id == a.id })
       if (value)
         temp.push(value)
-    }
+    });
+
     propriedade.setApicultores(temp);
     return propriedade;
   }
@@ -145,14 +150,14 @@ export class EditPropertyComponent implements OnInit {
         }
       } catch (error) {
         console.error(error);
-        console.error(value.id);
+        console.error('Erro ao criar o objecto',value.id);
         return {
           uniqueId: -1,
           id: -1
         }
       }
 
-    });
+    }).filter(e=>e.id != -1);
 
     let api2 = [];
     if (this.propriedade) {
@@ -178,10 +183,10 @@ export class EditPropertyComponent implements OnInit {
     api = api.sort((a, b) => { return api2.find(value => { return value.id == a.id }) ? -1 : 1; });
 
     this.dialog.confirm('Escolha os Apicultores', '', 'TABLE', this.view, api, columns, api2, true).subscribe((value) => {
-
-      if (value.length > 0) {
-        this.listApicultoresSelected = value;
-        this.formPropriedade.get('controlItensSelecionados').setValue('' + value.length + ' itens selecionados');
+      
+      if (value.rows.length > 0) {
+        this.listApicultoresSelected = value.rows;
+        this.formPropriedade.get('controlItensSelecionados').setValue('' + value.rows.length + ' itens selecionados');
       } else {
         this.listApicultoresSelected = [];
         this.formPropriedade.get('controlItensSelecionados').setValue('Nenhum item selecionado.');
