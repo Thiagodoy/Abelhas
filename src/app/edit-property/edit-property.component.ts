@@ -109,7 +109,10 @@ export class EditPropertyComponent implements OnInit {
     propriedade.setNome(this.formPropriedade.get('nome').value);
     propriedade.setMunicipio(this.formPropriedade.get('municipio').value);
 
-
+    if(!this.propriedade){
+      propriedade.generateUuid();
+    }
+    
     let temp = [];
     for (let a of this.listApicultoresSelected) {
       let value = this.listApicultor.find((value) => { return value.id == a.id })

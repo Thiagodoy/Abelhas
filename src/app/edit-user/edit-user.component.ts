@@ -405,6 +405,8 @@ export class EditUserComponent implements OnInit, OnDestroy {
         return false;
       }
 
+      associacao.generateUuid();
+
       this.parseService.save(associacao).then(result => {
 
         if (!result) return false;
@@ -463,7 +465,7 @@ export class EditUserComponent implements OnInit, OnDestroy {
 
       let newUser = this.createUser();
 
-
+      apicultor.generateUuid();
 
       if (!!this.userCadastrado(newUser.getUsername())) {
         this.dialog.confirm('Erro', ' Usuário já cadastrado!', 'ERRO', this.view)
