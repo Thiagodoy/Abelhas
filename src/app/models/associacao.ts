@@ -1,9 +1,9 @@
 import { Municipio } from './municipio';
-import { Object } from 'parse';
-export class Associacao extends Object {
+import { Base } from './base';
+export class Associacao extends Base {
     constructor() {
-        super('Associacao');
-    }
+        super('Associacao');               
+    }  
 
     getId(){
         return this.id;

@@ -1,7 +1,7 @@
 import { Apicultor } from './apicultor';
 import { Municipio } from './municipio';
-import { Object } from 'parse';
-export class Propriedade extends Object {
+import { Base } from './base';
+export class Propriedade extends Base {
     constructor() {
         super('Propriedade');
     }

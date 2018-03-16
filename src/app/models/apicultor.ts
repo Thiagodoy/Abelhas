@@ -1,10 +1,10 @@
 import { ApicultorAssociacao } from './apicultor-associacao';
 import { Municipio } from './municipio';
 import { Associacao } from './associacao';
-import { Object } from 'parse';
-export class Apicultor extends Object {
+import { Base } from './base';
+export class Apicultor extends Base {
     constructor() {
-        super('Apicultor');
+        super('Apicultor');        
     }
     getId(): string {
         return this.id;
