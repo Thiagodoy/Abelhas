@@ -1,6 +1,6 @@
 {
   "name": "abelhas-web",
-  "version": "2.0.3",
+  "version": "2.0.4",
   "license": "MIT",
   "angular-cli": {},
   "scripts": {
@@ -18,7 +18,6 @@
   "dependencies": {
     "@angular/animations": "^4.2.0",
     "@angular/cdk": "^2.0.0-beta.10",
-    "@angular/cli": "^1.0.0-rc.0",
     "@angular/common": "^4.2.0",
     "@angular/compiler": "^4.2.0",
     "@angular/compiler-cli": "^4.2.0",
@@ -54,7 +53,7 @@
     "zone.js": "^0.8.11"
   },
   "devDependencies": {
-    "@angular/cli": "^1.0.0-rc.0",
+    "@angular/cli": "^1.7.4",
     "@angular/compiler-cli": "^4.2.0",
     "@angular/material": "^2.0.0-beta.10",
     "@covalent/core": "1.0.0-beta.8-1",
