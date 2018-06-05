@@ -18,19 +18,19 @@
           </div>
           <div layout="row">
             <mat-icon class="icon-position">font_download</mat-icon>
-            <mat-form-field class>
+            <mat-form-field >
               <input matInput placeholder="Sigla" formControlName="sigla">
             </mat-form-field>
           </div>
           <div layout="row">
             <mat-icon class="icon-position" [style.color]="formError?.endereco ? 'red' :'black'">home</mat-icon>
-            <mat-form-field class>
+            <mat-form-field >
               <input matInput placeholder="Endereço" formControlName="endereco">
             </mat-form-field>
           </div>
           <div layout="row">
             <mat-icon class="icon-position">home</mat-icon>
-            <mat-form-field class>
+            <mat-form-field >
               <input matInput placeholder="Bairro" formControlName="bairro">
             </mat-form-field>
           </div>
@@ -42,10 +42,10 @@
           </div>
           <div layout="row">
             <mat-icon style="margin-right: 10px;margin-top: 5px;" [style.color]="formError?.estado ? 'red' :'black'">view_comfy</mat-icon>
-            <mat-form-field class>
+            <mat-form-field >
               <input type="text" matInput [matAutocomplete]="api" formControlName="estado" placeholder="Estado">
             </mat-form-field>
-            <mat-autocomplete #api="matAutocomplete" [displayWith]="displayFn" class>
+            <mat-autocomplete #api="matAutocomplete" [displayWith]="displayFn" >
               <mat-option *ngFor="let estado of listEstadosFiltered | async" [value]="estado">
                 {{ estado.getNome() }}
               </mat-option>
@@ -53,14 +53,15 @@
           </div>
           <div layout="row">
             <mat-icon style="margin-right: 10px;margin-top: 5px;" [style.color]="formError?.municipio ? 'red' :'black'">view_comfy</mat-icon>
-            <mat-form-field class>
+            <mat-form-field  style="width: 250px;">
               <input type="text" matInput [matAutocomplete]="apii" formControlName="municipio" placeholder="Municipio">
+              <mat-autocomplete  #apii="matAutocomplete" [displayWith]="displayFn" >
+                <mat-option *ngFor="let municipio of listMunicipioFiltered | async" [value]="municipio">
+                  {{ municipio.getNome() }}
+                </mat-option>
+              </mat-autocomplete>
             </mat-form-field>
-            <mat-autocomplete #apii="matAutocomplete" [displayWith]="displayFn" class>
-              <mat-option *ngFor="let municipio of listMunicipioFiltered | async" [value]="municipio">
-                {{ municipio.getNome() }}
-              </mat-option>
-            </mat-autocomplete>
+            
           </div>
           <div layout="row">
             <mat-icon class="icon-position">home</mat-icon>
@@ -70,14 +71,14 @@
           </div>
           <div layout="row">
             <mat-icon class="icon-position">email</mat-icon>
-            <mat-form-field class>
+            <mat-form-field >
               <input matInput placeholder="Email" formControlName="email">
             </mat-form-field>
           </div>
           <div layout="row">
             <mat-icon class="icon-position" [style.color]="formError?.senha ? 'red' :'black'">lock</mat-icon>
             <div layout="column" class="width-60">
-              <mat-form-field class>
+              <mat-form-field >
                 <input matInput placeholder="Senha" type="password" value="123123123123" formControlName="senha">
               </mat-form-field>
             </div>

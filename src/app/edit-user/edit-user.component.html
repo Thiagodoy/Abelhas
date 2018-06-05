@@ -76,14 +76,14 @@
           </div>
           <div layout="row" *ngIf="selectedValue =='APICULTOR' || selectedValue == 'ASSOCIACAO'">
             <mat-icon class="icons-group" [style.color]="formError?.municipio ? 'red' :black">view_comfy</mat-icon>
-            <mat-form-field  class="width-40">
+            <mat-form-field  style="width: 250px">
               <input type="text" matInput [matAutocomplete]="apii" formControlName="municipio" placeholder="Municipio">
-            </mat-form-field >
-            <mat-autocomplete #apii="matAutocomplete" [displayWith]="displayFn" class="width-60">
-              <mat-option *ngFor="let municipio of listMunicipioFiltered | async" [value]="municipio">
-                {{ municipio.getNome() }}
-              </mat-option>
-            </mat-autocomplete>
+              <mat-autocomplete #apii="matAutocomplete" [displayWith]="displayFn" >
+                <mat-option *ngFor="let municipio of listMunicipioFiltered | async" [value]="municipio">
+                  {{ municipio.getNome() }}
+                </mat-option>
+              </mat-autocomplete>
+            </mat-form-field >            
           </div>
           <div *ngIf="selectedValue =='APICULTOR' || selectedValue == 'ASSOCIACAO' || selectedValue == 'GESTOR'" layout="row">
             <mat-icon class="mat-24 icon-position" mat-list-avatar svgIcon="cpf" [style.color]="formError?.cpf ? 'red' :black"></mat-icon>

@@ -117,7 +117,7 @@ export class EditPropertyComponent implements OnInit {
     let temp = [];
 
     this.listApicultoresSelected =  this.listApicultoresSelected || [];
-debugger;
+
     this.listApicultoresSelected.forEach(a=> {
       let value = this.listApicultor.find((value) => { return value.id == a.id })
       if (value)

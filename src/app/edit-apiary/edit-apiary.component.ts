@@ -312,11 +312,11 @@ export class EditApiaryComponent implements OnInit, OnDestroy {
     this.apiario.setMotivoHistoricoMortandade(this.listMortandade.filter(value => { return this.motivoHistoricoMortandade.get(value.id).value }));
     this.apiario.setHistroricoMortandade(this.formApiario.get('historicoMortandade').value);
     this.apiario.setObservacao(this.formApiario.get('observacao').value)
-    this.apiario.setMigratorio(this.formApiario.get('migratorio').value);
+    this.apiario.setMigratorio(!!this.formApiario.get('migratorio').value);
     this.apiario.setExistenciaMortalidadeAbelha(this.formApiario.get('existenciaMortalidadeAbelha').value);
-    this.apiario.setComprovadoPorAnalise(this.formApiario.get('comprovadoPorAnalise').value);
-    this.apiario.setHistoricoComprovadoPorAnalise(this.formApiario.get('historicoComprovadoPorAnalise').value);
-    this.apiario.setDialogoVizinhos(this.formApiario.get('dialogoVizinhos').value);
+    this.apiario.setComprovadoPorAnalise(!!this.formApiario.get('comprovadoPorAnalise').value);
+    this.apiario.setHistoricoComprovadoPorAnalise(!!this.formApiario.get('historicoComprovadoPorAnalise').value);
+    this.apiario.setDialogoVizinhos(!!this.formApiario.get('dialogoVizinhos').value);
 
 
   }
