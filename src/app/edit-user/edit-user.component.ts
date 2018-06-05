@@ -115,6 +115,8 @@ export class EditUserComponent implements OnInit, OnDestroy {
         this.listAssociacao = result[0];
         this.listEstados = result[1];
         this.listMunicipios = result[2];
+
+       
         if (result.length > 3) {
           this.userCurrent = result[3][0];
 

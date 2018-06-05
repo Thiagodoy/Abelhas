@@ -28,7 +28,7 @@ export class ParseService {
   @Output() loaderEvent: EventEmitter<Boolean> = new EventEmitter();
   usuarioLogado: UserWeb;
   private instance: ParseService = undefined;
-  private limitQuery: number = 1000;
+  private limitQuery: number = 10000;
 
   // Cache
   listUser:any[];

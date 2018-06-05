@@ -12,7 +12,7 @@
     "heroku-postbuild": "ng build --env=prod"
   },
   "engines": {
-    "node": "6.9.2"
+    "node": "8.11.2"
   },
   "private": true,
   "dependencies": {
