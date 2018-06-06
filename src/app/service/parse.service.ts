@@ -75,7 +75,7 @@ export class ParseService {
         query.include(j);
       }
     }
-
+    
     return query.find<T>(options).done(result => {
 
       i.toogleLoading(false);
@@ -175,6 +175,7 @@ export class ParseService {
   executeQuery(query: parse.Query, useMasterKey?: boolean) {
     let i = this;
     i.toogleLoading(true);
+    query.limit(this.limitQuery);
     return query.find({ useMasterKey: useMasterKey }).done((result) => {
       i.toogleLoading(false);
       return result;

@@ -42,14 +42,15 @@
           </div>
           <div layout="row">
             <mat-icon style="margin-right: 10px;margin-top: 5px;" [style.color]="formError?.estado ? 'red' :'black'">view_comfy</mat-icon>
-            <mat-form-field >
-              <input type="text" matInput [matAutocomplete]="api" formControlName="estado" placeholder="Estado">
+            <mat-form-field style="width: 250px;" >
+              <input type="text" matInput [matAutocomplete]="api" formControlName="estado" placeholder="Estado" (optionSelected)="loadMunicipios($event)">
+              <mat-autocomplete #api="matAutocomplete" [displayWith]="displayFn" (optionSelected)="loadMunicipios($event)" >
+                <mat-option *ngFor="let estado of listEstadosFiltered | async" [value]="estado">
+                  {{ estado.getNome() }}
+                </mat-option>
+              </mat-autocomplete>
             </mat-form-field>
-            <mat-autocomplete #api="matAutocomplete" [displayWith]="displayFn" >
-              <mat-option *ngFor="let estado of listEstadosFiltered | async" [value]="estado">
-                {{ estado.getNome() }}
-              </mat-option>
-            </mat-autocomplete>
+           
           </div>
           <div layout="row">
             <mat-icon style="margin-right: 10px;margin-top: 5px;" [style.color]="formError?.municipio ? 'red' :'black'">view_comfy</mat-icon>

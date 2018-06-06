@@ -3,7 +3,7 @@ import { UserWeb } from './../models/user-web';
 import { Observable, Subscription } from 'rxjs/Rx';
 import { Municipio } from './../models/municipio';
 import { Estado } from './../models/estado';
-import { FormGroup, FormBuilder } from '@angular/forms';
+import { FormGroup, FormBuilder, Validators } from '@angular/forms';
 import { ParseService } from './../service/parse.service';
 import { Associacao } from './../models/associacao';
 import { ActivatedRoute, Router } from '@angular/router';
@@ -11,6 +11,8 @@ import { Component, OnInit, OnDestroy, ViewContainerRef, NgZone } from '@angular
 import * as parse from 'parse';
 import ValidaCustom from '../edit-user/validator/validator-custom';
 import constantes from '../constantes'
+import { MatAutocompleteSelectedEvent } from '@angular/material';
+import 'rxjs/add/operator/debounceTime';
 
 @Component({
   selector: 'app-edit-association',
@@ -56,15 +58,15 @@ export class EditAssociationComponent implements OnInit, OnDestroy {
     this.routerA.queryParams.subscribe(res => {
 
       let promiseEstado = this.parseService.findAll(Estado);
-      let promiseMunicipio = this.parseService.findAll(Municipio);
-      let promiseAllUser = this.parseService.runCloud('listUsers', { noInclude: true });
+     // let promiseMunicipio = this.parseService.findAll(Municipio);
+      let promiseAllUser =  this.parseService.findAll(UserWeb,{useMasterKey:true});
       
-      parse.Promise.when([promiseEstado, promiseMunicipio, promiseAllUser]).then(response => {
+      parse.Promise.when([promiseEstado,  promiseAllUser]).then(response => {
         
 
         this.listEstados = response[0];
-        this.listMunicipio = response[1];
-        this.parseService.listUser = response[2];
+       // this.listMunicipio = response[1];
+        this.parseService.listUser = response[1];
 
         if (res.associacao) {
           let query = this.parseService.createQuery(Associacao);
@@ -286,6 +288,21 @@ export class EditAssociationComponent implements OnInit, OnDestroy {
     }
 
   }
+
+  loadMunicipios(data:MatAutocompleteSelectedEvent){
+   
+    this.formAssociacao.get('municipio').setValue("");
+    let queryMunicipio = this.parseService.createQuery(Municipio);
+    let queryEstado = this.parseService.createQuery(Estado);
+    queryEstado.equalTo('objectId', data.option.value.id);
+    queryMunicipio.matchesQuery('estado',queryEstado);
+
+    this.parseService.executeQuery(queryMunicipio).then(r=>{      
+      this.listMunicipio = <Municipio[]>r; 
+    })
+
+  }
+
   createForm(type: string) {
 
 
@@ -297,8 +314,8 @@ export class EditAssociationComponent implements OnInit, OnDestroy {
       contatoPresidenteNome: [null, ValidaCustom.validateCustomContatoPresidente()],
       endereco: [null, ValidaCustom.validateCustomEndereco()],
       telefone: [null, ValidaCustom.validateCustomTelefone()],
-      municipio: [],
-      estado: [],
+      municipio: [null,Validators.required],
+      estado: [null,Validators.required],
       cep: [],
       registro: [],
       numeroSif: [],
@@ -314,11 +331,13 @@ export class EditAssociationComponent implements OnInit, OnDestroy {
     });
 
     this.listEstadosFiltered = this.formAssociacao.get('estado').valueChanges
+      .debounceTime(400)
       .startWith(null)
       .map<string, string>(nome => nome ? nome : '')
       .map(nome => nome ? this.filterEstado(nome) : this.listEstados.slice());
 
     this.listMunicipioFiltered = this.formAssociacao.get('municipio').valueChanges
+      .debounceTime(400)
       .startWith(null)
       .map<string, string>(nome => nome ? nome : '')
       .map(nome => nome ? this.filterMunicipio(nome) : this.listMunicipio.slice());
