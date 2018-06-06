@@ -2,6 +2,8 @@
 import { Associacao } from './../../models/associacao';
 import { AbstractControl, ValidatorFn } from '@angular/forms';
 import constantes from '../../constantes'
+import { Municipio } from '../../models/municipio';
+import { Estado } from '../../models/estado';
 
 function validateCustomNome(): ValidatorFn {
     return (control: AbstractControl): { [key: string]: any } => {
@@ -73,6 +75,42 @@ function validateCustomAssociacao(): ValidatorFn {
 
         if (p.value === constantes.APICULTOR) {
             return !ass ? { 'validateCustomAssociacao': { associacao: 'invalido' } } : null;
+        } else {
+            return null;
+        }
+    };
+}
+
+function validateCustomMunicipio(): ValidatorFn {
+    return (control: AbstractControl): { [key: string]: any } => {
+        
+        if (!control.parent || !control.parent.get('municipio')){
+            return null;
+        }
+
+        let p = control.parent.get('tipo');
+        let ass: Municipio = control.value;
+
+        if (p.value === constantes.ASSOCIACAO) {
+            return !ass ? { 'validateCustomMunicipio': { municipio: 'invalido' } } : null;
+        } else {
+            return null;
+        }
+    };
+}
+
+function validateCustomEstado(): ValidatorFn {
+    return (control: AbstractControl): { [key: string]: any } => {
+        
+        if (!control.parent || !control.parent.get('estado')){
+            return null;
+        }
+
+        let p = control.parent.get('tipo');
+        let ass: Estado = control.value;
+
+        if (p.value === constantes.ASSOCIACAO) {
+            return !ass ? { 'validateCustomEstado': { estado: 'invalido' } } : null;
         } else {
             return null;
         }
@@ -257,6 +295,12 @@ function validateCustomSenhaConf(param: string) {
 }
 
 export default {
+    validateCustomEstado():ValidatorFn{
+        return validateCustomEstado();
+    },
+    validateCustomMunicipio():ValidatorFn{
+        return validateCustomMunicipio();
+    },
     validateCustomNome(): ValidatorFn {
         return validateCustomNome();
     },

@@ -17,4 +17,7 @@ export class Municipio extends Object {
     getEstado(): Estado {
         return this.get('estado');
     }
+    setEstado( e:Estado) {
+        return this.set('estado',e);
+    }
 }

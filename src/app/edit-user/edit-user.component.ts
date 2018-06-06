@@ -16,6 +16,9 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { Component, OnInit, OnDestroy, ViewContainerRef, ViewChild, NgZone,ChangeDetectorRef } from '@angular/core';
 import ValidatorCustom from './validator/validator-custom';
 import constantes from '../constantes';
+import 'rxjs/add/operator/debounceTime';
+
+import { MatAutocompleteSelectedEvent } from '@angular/material';
 
 
 @Component({
@@ -91,10 +94,11 @@ export class EditUserComponent implements OnInit, OnDestroy {
 
       let promiseAssociacao = this.parseService.findAll(Associacao);
       let promisseEstado = this.parseService.findAll(Estado);
-      let promiseMunicipio = this.parseService.findAll(Municipio);
+      let promiseAllUser = this.parseService.findAll(UserWeb,{useMasterKey:true});//runCloud('listUsers', { noInclude: true });
+      //let promiseMunicipio = this.parseService.findAll(Municipio);
       promises.push(promiseAssociacao);
       promises.push(promisseEstado);
-      promises.push(promiseMunicipio);
+      promises.push(promiseAllUser);
 
 
       if (userId) {
@@ -114,7 +118,7 @@ export class EditUserComponent implements OnInit, OnDestroy {
 
         this.listAssociacao = result[0];
         this.listEstados = result[1];
-        this.listMunicipios = result[2];
+        this.parseService.listUser = result[2];
 
        
         if (result.length > 3) {
@@ -211,8 +215,8 @@ export class EditUserComponent implements OnInit, OnDestroy {
         celular2: [null],
         telefone: [null, ValidatorCustom.validateCustomTelefone()],
         contatoPresidenteTelefone: [null, ValidatorCustom.validateCustomContatoPresidente()],
-        estado: [null],
-        municipio: [null],
+        estado: [null,ValidatorCustom.validateCustomEstado()],
+        municipio: [null,ValidatorCustom.validateCustomMunicipio()],
         cpf: [null, ValidatorCustom.validateCustomCpfOrCnpj()],
         email: [null],
         senha: [null, ValidatorCustom.validateCustomSenha(paran)],
@@ -235,13 +239,15 @@ export class EditUserComponent implements OnInit, OnDestroy {
     });
 
     this.listEstadosFiltered = this.formUser.get('estado').valueChanges
+      .debounceTime(400)
       .startWith(null)
       .map<string, string>(nome => nome ? nome : '')
       .map(nome => nome ? this.filterEstado(nome) : this.listEstados.slice());
 
     this.listMunicipioFiltered = this.formUser.get('municipio').valueChanges
+      .debounceTime(400)
       .startWith(null)
-      .map<string, string>(nome => nome ? nome : '')
+      .map<string, string>(nome => nome ? nome : '')      
       .map(nome => nome ? this.filterMunicipio(nome) : this.listMunicipios.slice());
   }
 
@@ -606,13 +612,28 @@ export class EditUserComponent implements OnInit, OnDestroy {
     return ret;
   }
 
+  loadMunicipios(data:MatAutocompleteSelectedEvent){
+   
+    this.formUser.get('municipio').setValue("");
+    let queryMunicipio = this.parseService.createQuery(Municipio);
+    let queryEstado = this.parseService.createQuery(Estado);
+    queryEstado.equalTo('objectId', data.option.value.id);
+    queryMunicipio.matchesQuery('estado',queryEstado);
+
+    this.parseService.executeQuery(queryMunicipio).then(r=>{      
+      this.listMunicipios = <Municipio[]>r; 
+    })
+
+  }
+
   filterEstado(name: string): Estado[] {
     return this.listEstados.filter(option => {
       return new RegExp(name, 'gi').test(option.getNome())
     });
   }
 
-  filterMunicipio(name: string): Municipio[] {
+  filterMunicipio(name: string):Municipio[] {   
+    
     return this.listMunicipios.filter(option => {
       return new RegExp(name, 'gi').test(option.getNome())
     });
@@ -700,7 +721,7 @@ export class EditUserComponent implements OnInit, OnDestroy {
   }
   userCadastrado(username) {
     let temp = this.parseService.listUser.find((o) => {
-      if (o['username'].indexOf(username) >= 0)
+      if (o.getUsername().indexOf(username) >= 0)
         return o;
     });
 
