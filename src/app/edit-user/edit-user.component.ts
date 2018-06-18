@@ -79,11 +79,11 @@ export class EditUserComponent implements OnInit, OnDestroy {
 
 
 
-    this.subscriptionRouter = this.route.queryParams.subscribe(value => {
-
+   this.subscriptionRouter = this.route.queryParams.subscribe(value => {
 
       let userId = value['user'];
       let type = value['type'];
+      this.selectedValue = type;
       let email = value['email'];
       let query = undefined;
       let promiseUser = undefined;
@@ -228,6 +228,10 @@ export class EditUserComponent implements OnInit, OnDestroy {
         acordoCooperacaoAbelha: [false]
       }
     );
+
+
+    if(this.selectedValue)
+    this.formUser.get('tipo').setValue(this.selectedValue);
 
     // Detecta mudancas no Formulario
     this.subscriptionForm = this.formUser.valueChanges.subscribe(values => {
