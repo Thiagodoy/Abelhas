@@ -70,6 +70,7 @@ export class EditAssociationComponent implements OnInit, OnDestroy {
 
         if (res.associacao) {
           let query = this.parseService.createQuery(Associacao);
+          query.include('municipio');
           query.equalTo('objectId', res.associacao);
 
           let queryUser = this.parseService.createQuery(UserWeb);
@@ -84,7 +85,8 @@ export class EditAssociationComponent implements OnInit, OnDestroy {
               }
 
               this.user = result[0];
-              this.associacao = this.user.attributes.associacao;
+              this.associacao = this.user.attributes.associacao;      
+              
               this.createForm(this.user ? constantes.CHANGE : constantes.CREATE);
               if (this.user && this.associacao)
                 this.populateForm();
@@ -128,8 +130,20 @@ export class EditAssociationComponent implements OnInit, OnDestroy {
     this.formAssociacao.get('contatoPresidenteNome').setValue(associacao.getContatoPresidenteNome());
     this.formAssociacao.get('endereco').setValue(associacao.getEndereco());
     this.formAssociacao.get('telefone').setValue(associacao.getTelefone());
-    this.formAssociacao.get('municipio').setValue(this.listMunicipio.filter(municipio => { return municipio.id == associacao.getMunicipio().id })[0]);
-    this.formAssociacao.get('estado').setValue(this.listEstados.filter(estado => { return estado.id == associacao.getMunicipio().getEstado().id })[0]);
+
+    let queryMunicipio = this.parseService.createQuery(Municipio);
+    queryMunicipio.equalTo('objectId',associacao.getMunicipio().getId());
+    this.parseService.executeQuery(queryMunicipio).then((result:Municipio[])=>{
+      let municipio:Municipio = result[0];
+      this.formAssociacao.get('municipio').setValue(municipio);
+      this.formAssociacao.get('estado').setValue(municipio.getEstado());      
+    });
+    
+
+    // this.formAssociacao.get('municipio').setValue(this.listMunicipio.filter(municipio => { return municipio.id == associacao.getMunicipio().id })[0]);
+    // this.formAssociacao.get('estado').setValue(this.listEstados.filter(estado => { return estado.id == associacao.getMunicipio().getEstado().id })[0]);
+    
+
     this.formAssociacao.get('cep').setValue(associacao.getCep());
     this.formAssociacao.get('registro').setValue(associacao.getRegistro());
     this.formAssociacao.get('numeroSif').setValue(associacao.getNumeroSif());

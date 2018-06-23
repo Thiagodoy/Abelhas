@@ -7,4 +7,7 @@ export class Estado extends Object {
     getNome():string{
         return this.get('nome');
     }
+    getId(): string {
+        return this.id;
+    }
 }
