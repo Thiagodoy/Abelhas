@@ -2,7 +2,8 @@ import { Municipio } from './municipio';
 import { Base } from './base';
 export class Associacao extends Base {
     constructor() {
-        super('Associacao');               
+        super('Associacao'); 
+        this.setExcluded(false);              
     }  
 
     getId(){
@@ -121,5 +122,8 @@ export class Associacao extends Base {
     }
     getDataTermoCompromisso(): Date {
         return this.get('dataTermoCompromisso');
+    }    
+    getExcluded():boolean{
+        return this.get('excluded');
     }
 }
