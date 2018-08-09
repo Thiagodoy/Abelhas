@@ -4,7 +4,8 @@ import { Associacao } from './associacao';
 import { Base } from './base';
 export class Apicultor extends Base {
     constructor() {
-        super('Apicultor');        
+        super('Apicultor'); 
+        this.setExcluded(false);       
     }
     getId(): string {
         return this.id;
@@ -90,5 +91,10 @@ export class Apicultor extends Base {
     getApiculorAssociacao(): ApicultorAssociacao[] {
         return this.get('apicultorAssociacao') ? this.get('apicultorAssociacao') : [];
     }
-
+    setExcluded(value:boolean){
+        this.set('excluded',value);
+    }
+    getExcluded():boolean{
+        return this.get('excluded');
+    }
 }

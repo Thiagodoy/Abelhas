@@ -326,10 +326,15 @@ export class EditUserComponent implements OnInit, OnDestroy {
       }
 
       let municipio = apicultor.getMunicipio();
-      this.formUser.get('municipio').setValue(this.listMunicipios.filter(value => { return value.id == municipio.id })[0]);
 
-      let estado = municipio.getEstado();
-      this.formUser.get('estado').setValue(this.listEstados.filter(value => { return value.id == estado.id })[0]);
+      let queryMunicipio = this.parseService.createQuery(Municipio);
+        queryMunicipio.equalTo('objectId',municipio.getId());
+        this.parseService.executeQuery(queryMunicipio).then((result:Municipio[])=>{
+          let municipio:Municipio = result[0];
+          this.formUser.get('municipio').setValue(municipio);
+          this.formUser.get('estado').setValue(this.listEstados.filter(value => { return value.id == municipio.getEstado().getId() })[0]);     
+        });
+     
 
       if (apicultor.getDataTermoCompromisso())
         this.dataTermoCompromisso = apicultor.getDataTermoCompromisso();
@@ -342,9 +347,16 @@ export class EditUserComponent implements OnInit, OnDestroy {
           this.formUser.get(name).setValue(associacao.attributes[name]);
       });
 
+
       let municipio = associacao.getMunicipio();
-      this.formUser.get('municipio').setValue(this.listMunicipios.filter(value => { return value.id == municipio.id })[0]);
-      this.formUser.get('acordoCooperacaoAbelha').setValue(associacao.getAcordoCooperacaoAbelha());
+
+      let queryMunicipio = this.parseService.createQuery(Municipio);
+      queryMunicipio.equalTo('objectId',municipio.getId());
+      this.parseService.executeQuery(queryMunicipio).then((result:Municipio[])=>{
+        let municipio:Municipio = result[0];
+        this.formUser.get('municipio').setValue(municipio);
+        this.formUser.get('estado').setValue(this.listEstados.filter(value => { return value.id == municipio.getEstado().getId() })[0]);     
+      });      
 
       if (associacao.getDataTermoCompromisso())
         this.dataTermoCompromisso = associacao.getDataTermoCompromisso();
