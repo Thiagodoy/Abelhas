@@ -1,4 +1,4 @@
-import { Component, OnInit, Input, Output, EventEmitter, AfterViewInit, OnChanges, SimpleChanges, ViewChild } from '@angular/core';
+import { Component, OnInit, Input, Output, EventEmitter, AfterViewInit, OnChanges, SimpleChanges, ViewChild, AfterViewChecked } from '@angular/core';
 import { ITdDataTableColumn, IPageChangeEvent, TdDataTableService, TdDataTableComponent, TdDataTableSortingOrder, ITdDataTableSortChangeEvent } from '@covalent/core';
 
 import { ParseService } from '../service/parse.service';
@@ -22,6 +22,7 @@ export class TableComponent implements OnInit, AfterViewInit, OnChanges {
   @Input() sortBy: string;
   @Input() showPagination: boolean;
   @Input() showSelectionJquery: boolean = true;
+  @Input() showDisableapiary:boolean = false;
   @Input() itensSelecteds: any[] = []
   @ViewChild('table') table: TdDataTableComponent;
   @ViewChild('pagingBar') pagingBar:TdPagingBarComponent
@@ -58,11 +59,12 @@ export class TableComponent implements OnInit, AfterViewInit, OnChanges {
         Jquery(el.currentTarget).addClass('td-data-table-clicked');
       });
     }
-   // this.table.uniqueId = this.uniqueId;
+   
+
   }
-
-  ngOnChanges(changes: SimpleChanges) {
-
+  
+ 
+  ngOnChanges(changes: SimpleChanges) {    
 
     this.filteredData = this.data;
     this.selectedRows = [];

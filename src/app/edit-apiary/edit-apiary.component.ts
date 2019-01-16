@@ -207,10 +207,10 @@ export class EditApiaryComponent implements OnInit, OnDestroy {
 
     this.formApiario.get('observacao').setValue(this.apiario.getObservacao());
 
-    let qtdCaixas = (!!this.apiario.getQtdCaixas()) ? 0 : this.apiario.getQtdCaixas();
-    this.formApiario.get('qtdCaixas').setValue(this.apiario.getQtdCaixas());
+    let qtdCaixas = (!!this.apiario.getQtdCaixas()) ? this.apiario.getQtdCaixas() : 0;
+    this.formApiario.get('qtdCaixas').setValue(qtdCaixas);
 
-    let distanciaDeslocamento = (!!this.apiario.getDistanciaDeslocamentoCaixas()) ? 0 : this.apiario.getDistanciaDeslocamentoCaixas();
+    let distanciaDeslocamento = (!!this.apiario.getDistanciaDeslocamentoCaixas()) ? this.apiario.getDistanciaDeslocamentoCaixas() : 0;
     this.formApiario.get('distanciaDeslocamentoCaixas').setValue(distanciaDeslocamento);
 
     

@@ -1,125 +1,126 @@
 <div layout="row" layout-align="start center" class="pad-left-sm pad-right-sm">
- <td-search-box *ngIf="filteredData.length > 0 || searchTerm" #searchBox backIcon="arrow_back" class="push-right-sm" placeholder="Pesquisar aqui" (searchDebounce)="search($event)" flex>
-  </td-search-box>
+    <td-search-box *ngIf="filteredData.length > 0 || searchTerm" #searchBox backIcon="arrow_back" class="push-right-sm" placeholder="Pesquisar aqui" (searchDebounce)="search($event)" flex>
+    </td-search-box>
 </div>
 
-<mat-divider *ngIf="filteredData.length > 0" ></mat-divider>
+<mat-divider *ngIf="filteredData.length > 0"></mat-divider>
 
-<td-data-table [selectable]="selectable" [data]="filteredData" style="width: 100%" [columns]="columns" [multiple]="multiple" [sortable]="sortable"
-  [sortBy]="sortBy" [sortOrder]="sortOrder" (sortChange)="sortTable($event)" (rowSelect)="itemSelected($event)"  [(ngModel)]="selectedRows"  (selectAll)="itemAllSelected($event)"  (sortChange)="sort($event)" #table>
-  <!--Template Lista Apiario-->
-  <ng-template tdDataTableTemplate="valido" let-value="value" let-row="row" let-column="column">
-    <div layout="row">
-      <mat-icon [style.color]="row[column]  ? 'green' :  'red' ">{{row[column] ? 'check_circle': row[column] ? 'report':'warning' }}</mat-icon>
-    </div>
-  </ng-template>
-  <ng-template tdDataTableTemplate="acoes" let-value="value" let-row="row" let-column="column">
-    <div layout="row">
-      <button mat-button [matMenuTriggerFor]="menu">
+<td-data-table id="table" [selectable]="selectable" [data]="filteredData" style="width: 100%" [columns]="columns" [multiple]="multiple" [sortable]="sortable" [sortBy]="sortBy" [sortOrder]="sortOrder" (sortChange)="sortTable($event)" (rowSelect)="itemSelected($event)"
+    [(ngModel)]="selectedRows" (selectAll)="itemAllSelected($event)" (sortChange)="sort($event)" #table>
+    <!--Template Lista Apiario-->
+    <ng-template tdDataTableTemplate="valido" let-value="value" let-row="row" let-column="column">
+        <span [ngClass]="{'desativado': !row['ativo']}" style="display:none"></span>
+        <div layout="row">
+            <mat-icon [style.color]="row[column]  ? 'green' :  'red' ">{{row[column] ? 'check_circle': row[column] ? 'report':'warning' }}</mat-icon>
+        </div>
+    </ng-template>
+    <ng-template tdDataTableTemplate="acoes" let-value="value" let-row="row" let-column="column">
+        <div layout="row">
+            <button mat-button [matMenuTriggerFor]="menu">
               <mat-icon>menu</mat-icon>
               </button>
-      <mat-menu #menu="matMenu">
-        <button mat-menu-item *ngIf="!row['excluded']" [disabled]="row['valido']" (click)="acoes('VALIDAR',row)"> <mat-icon>check</mat-icon> Validar </button>
-        <button mat-menu-item *ngIf="!row['excluded']" (click)="acoes('EDITAR',row)"> <mat-icon>mode_edit</mat-icon>Editar </button>
-        <button mat-menu-item *ngIf="!row['excluded']"(click)="acoes('EXCLUIR',row)"> <mat-icon>delete</mat-icon> Excluir </button>
-        <button mat-menu-item *ngIf="!row['excluded']" (click)="acoes('HISTORICO',row)"> <mat-icon>history</mat-icon> Histórico </button>
-        <button mat-menu-item *ngIf="row['excluded']" (click)="acoes('ATIVAR',row)"> <mat-icon>autorenew</mat-icon> Ativar </button>
+            <mat-menu #menu="matMenu">
+                <button mat-menu-item *ngIf="!row['excluded']" [disabled]="row['valido']" (click)="acoes('VALIDAR',row)"> <mat-icon>check</mat-icon> Validar </button>
+                <button mat-menu-item *ngIf="!row['excluded']" (click)="acoes('EDITAR',row)"> <mat-icon>mode_edit</mat-icon>Editar </button>
+                <button mat-menu-item *ngIf="!row['excluded']" (click)="acoes('EXCLUIR',row)"> <mat-icon>delete</mat-icon> Excluir </button>
+                <button mat-menu-item *ngIf="!row['excluded']" (click)="acoes('HISTORICO',row)"> <mat-icon>history</mat-icon> Histórico </button>
+                <button mat-menu-item *ngIf="row['excluded']" (click)="acoes('ATIVAR',row)"> <mat-icon>autorenew</mat-icon> Ativar </button>
 
-      </mat-menu>
-    </div>
-  </ng-template>
-  <!--Template Lista Apiario-->
+            </mat-menu>
+        </div>
+    </ng-template>
+    <!--Template Lista Apiario-->
 
-   <ng-template tdDataTableTemplate="nome_xx" let-value="value" let-row="row" let-column="column">
-    <div layout="row">
-      <mat-icon style="margin-right: 10px;">view_comfy</mat-icon><span class="md-body-1">{{value}}</span>
-    </div>
-  </ng-template>
+    <ng-template tdDataTableTemplate="nome_xx" let-value="value" let-row="row" let-column="column">
+        <div layout="row">
+            <mat-icon style="margin-right: 10px;">view_comfy</mat-icon><span class="md-body-1">{{value}}</span>
+        </div>
+    </ng-template>
 
- <!--Template List Usuário-->
-  <ng-template tdDataTableTemplate="nome" let-value="value" let-row="row" let-column="column">
-    <div layout="row">
-      <mat-icon style="margin-right: 10px;">person</mat-icon><span class="md-body-1">{{value}}</span>
-    </div>
-  </ng-template>
-  <ng-template tdDataTableTemplate="propriedade" let-value="value" let-row="row" let-column="column">
-    <div layout="row">
-      <mat-icon style="margin-right: 10px;">label</mat-icon><span class="md-body-1">{{row[column]}}</span>
-    </div>
-  </ng-template>
-  <!--Template List Usuário-->
-  <ng-template tdDataTableTemplate="propriedade" let-value="value" let-row="row" let-column="column">
-    <div layout="row">
-      <mat-icon style="margin-right: 10px;">room</mat-icon><span class="md-body-1">{{row[column]}}</span>
-    </div>
-  </ng-template>
+    <!--Template List Usuário-->
+    <ng-template tdDataTableTemplate="nome" let-value="value" let-row="row" let-column="column">
+        <div layout="row">
+            <mat-icon style="margin-right: 10px;">person</mat-icon><span class="md-body-1">{{value}}</span>
+        </div>
+    </ng-template>
+    <ng-template tdDataTableTemplate="propriedade" let-value="value" let-row="row" let-column="column">
+        <div layout="row">
+            <mat-icon style="margin-right: 10px;">label</mat-icon><span class="md-body-1">{{row[column]}}</span>
+        </div>
+    </ng-template>
+    <!--Template List Usuário-->
+    <ng-template tdDataTableTemplate="propriedade" let-value="value" let-row="row" let-column="column">
+        <div layout="row">
+            <mat-icon style="margin-right: 10px;">room</mat-icon><span class="md-body-1">{{row[column]}}</span>
+        </div>
+    </ng-template>
     <!--<template tdDataTableTemplate="attributes.username" let-value="value" let-row="row" let-column="column">
     <div layout="row">
       <mat-icon style="margin-right: 10px;">person</mat-icon><span class="md-body-1">{{row[column]}}</span>
     </div>
   </template>-->
-  <ng-template tdDataTableTemplate="acoes_usuario" let-value="value" let-row="row" let-column="column">
-    <div layout="row">
-      <button mat-button [matMenuTriggerFor]="menuUser" >
+    <ng-template tdDataTableTemplate="acoes_usuario" let-value="value" let-row="row" let-column="column">
+        <div layout="row">
+            <button mat-button [matMenuTriggerFor]="menuUser">
               <mat-icon>menu</mat-icon>
               </button>
-      <mat-menu #menuUser="matMenu" (onMenuOpen)="openMenu($event)">
-        <button mat-menu-item *ngIf="perfil == 'GESTOR' && row.tipo !='GESTOR' && row.tipo !='ASSOCIACAO'" [disabled]="row.habilitado" (click)="acoes('HABILITAR',row)"> <mat-icon>check</mat-icon>Habilitar</button>
-        <button mat-menu-item [disabled]="perfil == 'ASSOCIACAO'" (click)="acoes('EDITAR',row)"> <mat-icon>mode_edit</mat-icon>Editar</button>
-        <button mat-menu-item *ngIf="!(row.status == 'Desativado')" (click)="acoes('EXCLUIR',row)"> <mat-icon>delete</mat-icon> Desabilitar </button>
-      </mat-menu>
-    </div>
-  </ng-template>
-  <!--Template List Usuário-->
-  <!--Template de gestão das associações-->
-  <ng-template tdDataTableTemplate="acoes_associacao" let-value="value" let-row="row" let-column="column">
-    <div layout="row">
-      <button mat-button [matMenuTriggerFor]="menuAssociacao">
+            <mat-menu #menuUser="matMenu" (onMenuOpen)="openMenu($event)">
+                <button mat-menu-item *ngIf="perfil == 'GESTOR' && row.tipo !='GESTOR' && row.tipo !='ASSOCIACAO'" [disabled]="row.habilitado" (click)="acoes('HABILITAR',row)"> <mat-icon>check</mat-icon>Habilitar</button>
+                <button mat-menu-item [disabled]="perfil == 'ASSOCIACAO'" (click)="acoes('EDITAR',row)"> <mat-icon>mode_edit</mat-icon>Editar</button>
+                <button mat-menu-item *ngIf="!(row.status == 'Desativado')" (click)="acoes('EXCLUIR',row)"> <mat-icon>delete</mat-icon> Desabilitar </button>
+            </mat-menu>
+        </div>
+    </ng-template>
+    <!--Template List Usuário-->
+    <!--Template de gestão das associações-->
+    <ng-template tdDataTableTemplate="acoes_associacao" let-value="value" let-row="row" let-column="column">
+        <div layout="row">
+            <button mat-button [matMenuTriggerFor]="menuAssociacao">
               <mat-icon>menu</mat-icon>
               </button>
-      <mat-menu #menuAssociacao="matMenu">
-        <button mat-menu-item (click)="acoes('EDITAR',row)"> <mat-icon>mode_edit</mat-icon>Editar </button>
-        <button mat-menu-item (click)="acoes('EXCLUIR',row)"> <mat-icon>delete</mat-icon> Excluir </button>
-      </mat-menu>
-    </div>
-  </ng-template>
-  <!--Template de gestão das associações-->
-  <!--Template de gestão das propriedades-->
-  <ng-template tdDataTableTemplate="acoes_propriedade" let-value="value" let-row="row" let-column="column">
-    <div layout="row">
-      <button mat-button [matMenuTriggerFor]="menuPropriedade">
+            <mat-menu #menuAssociacao="matMenu">
+                <button mat-menu-item (click)="acoes('EDITAR',row)"> <mat-icon>mode_edit</mat-icon>Editar </button>
+                <button mat-menu-item (click)="acoes('EXCLUIR',row)"> <mat-icon>delete</mat-icon> Excluir </button>
+            </mat-menu>
+        </div>
+    </ng-template>
+    <!--Template de gestão das associações-->
+    <!--Template de gestão das propriedades-->
+    <ng-template tdDataTableTemplate="acoes_propriedade" let-value="value" let-row="row" let-column="column">
+        <div layout="row">
+            <button mat-button [matMenuTriggerFor]="menuPropriedade">
               <mat-icon>menu</mat-icon>
               </button>
-      <mat-menu #menuPropriedade="matMenu">
-        <button mat-menu-item (click)="acoes('EDITAR',row)"> <mat-icon>mode_edit</mat-icon>Editar </button>
-        <button mat-menu-item (click)="acoes('EXCLUIR',row)" > <mat-icon>delete</mat-icon> Excluir </button>
-      </mat-menu>
-    </div>
-  </ng-template>
-  <!--Template de gestão das propriedades-->
-  <!--Template de gestão ApicultorAssociação-->
-  <ng-template tdDataTableTemplate="acoes_apicultor_asso" let-value="value" let-row="row" let-column="column">
-    <div layout="row">
-      <button mat-button [matMenuTriggerFor]="menuApicultorAssociacao">
+            <mat-menu #menuPropriedade="matMenu">
+                <button mat-menu-item (click)="acoes('EDITAR',row)"> <mat-icon>mode_edit</mat-icon>Editar </button>
+                <button mat-menu-item (click)="acoes('EXCLUIR',row)"> <mat-icon>delete</mat-icon> Excluir </button>
+            </mat-menu>
+        </div>
+    </ng-template>
+    <!--Template de gestão das propriedades-->
+    <!--Template de gestão ApicultorAssociação-->
+    <ng-template tdDataTableTemplate="acoes_apicultor_asso" let-value="value" let-row="row" let-column="column">
+        <div layout="row">
+            <button mat-button [matMenuTriggerFor]="menuApicultorAssociacao">
           <mat-icon>menu</mat-icon>
       </button>
-      <mat-menu #menuApicultorAssociacao="matMenu">
-        <button mat-menu-item (click)="acoes('EDITAR',row)"> <mat-icon>mode_edit</mat-icon>Editar </button>
-        <button mat-menu-item (click)="acoes('EXCLUIR',row)" > <mat-icon>delete</mat-icon> Excluir </button>
-      </mat-menu>
-    </div>
-  </ng-template>
-  <!--Template de gestão ApicultorAssociação-->
+            <mat-menu #menuApicultorAssociacao="matMenu">
+                <button mat-menu-item (click)="acoes('EDITAR',row)"> <mat-icon>mode_edit</mat-icon>Editar </button>
+                <button mat-menu-item (click)="acoes('EXCLUIR',row)"> <mat-icon>delete</mat-icon> Excluir </button>
+            </mat-menu>
+        </div>
+    </ng-template>
+    <!--Template de gestão ApicultorAssociação-->
 </td-data-table>
-<td-paging-bar *ngIf="showPagination && data.length>0"  #pagingBar [pageSize]="pageSize" [total]="data.length" (change)="page($event)">
-  <span  hide-xs>Linhas por pagina:</span>
-  <mat-select [style.width.px]="50" [(ngModel)]="pageSize">
-    <mat-option *ngFor="let size of [5, 10, 15, 20]" [value]="size">
-      {{size}}
-    </mat-option>
-  </mat-select>
-  <span>{{pagingBar.range}} <span hide-xs>de {{pagingBar.total}}</span></span>
-  <!-- <div *ngIf="!((paginaAtual * paginaTotal) >= filteredTotal) " > {{paginaAtual * paginaTotal }} <span hide-xs>de {{filteredTotal}}</span></div> -->
+<td-paging-bar *ngIf="showPagination && data.length>0" #pagingBar [pageSize]="pageSize" [total]="data.length" (change)="page($event)">
+    <span hide-xs>Linhas por pagina:</span>
+    <mat-select [style.width.px]="50" [(ngModel)]="pageSize">
+        <mat-option *ngFor="let size of [5, 10, 15, 20]" [value]="size">
+            {{size}}
+        </mat-option>
+    </mat-select>
+    <span>{{pagingBar.range}} <span hide-xs>de {{pagingBar.total}}</span></span>
+    <!-- <div *ngIf="!((paginaAtual * paginaTotal) >= filteredTotal) " > {{paginaAtual * paginaTotal }} <span hide-xs>de {{filteredTotal}}</span></div> -->
 </td-paging-bar>
 <!--
 <td-paging-bar2 *ngIf="showPagination && data.length>0" [pageSizes]="[5, 10, 15, 20]" [total]="totalRecords" (change)="page($event)"></td-paging-bar2>-->

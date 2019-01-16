@@ -17,6 +17,7 @@ import Constante from '../constantes';
 import * as parse from 'parse';
 
 
+
 @Component({
   selector: 'app-list-apiary',
   templateUrl: './list-apiary.component.html',
@@ -45,7 +46,8 @@ export class ListApiaryComponent implements OnInit {
 
 
   columns: ITdDataTableColumn[] = [
-    { name: 'valido', label: 'Validado' },
+    { name: 'valido', label: 'Validado', width: 70},
+    { name: 'ativo', label: 'Ativo', format:(value)=> value ? 'Ativo': 'Desativado' },
     { name: 'especie', label: 'Espécie' },
     { name: 'apicultor', label: 'Apicultor' },
     { name: 'propriedadea', label: 'Propriedade' },
@@ -166,6 +168,7 @@ export class ListApiaryComponent implements OnInit {
           let dt = apiario.getDataColetaCreate() ? apiario.getDataColetaCreate().getTime() : apiario.createdAt.getTime();
           obj = {
             id: apiario.id,
+            ativo: apiario.isAtivo(),
             valido: apiario.isValido(),
             especie: apiario.getEspecieAbelha().getNome(),
             apicultor: apiario.getApicultor().getNome(),
@@ -198,6 +201,7 @@ export class ListApiaryComponent implements OnInit {
             let dt = ap.getDataColetaCreate() ? ap.getDataColetaCreate().getTime() : ap.createdAt.getTime();
             let obj = {
               id: ap.id,
+              ativo: ap.isAtivo(),
               valido: ap.isValido(),
               especie: ap.getEspecieAbelha().getNome(),
               apicultor: ap.getApicultor().getNome(),
@@ -221,7 +225,7 @@ export class ListApiaryComponent implements OnInit {
       }
 
       list = list.concat(list3);
-      this.getValidadoPor(list);
+      this.getValidadoPor(list);      
 
     });
 
