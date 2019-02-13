@@ -46,15 +46,15 @@ export class EditMultipleApiaryComponent implements OnInit {
   listColetadoPor: any[] = [];
   locations: Location[] = [];
 
-  controlMunicipio: FormControl = new FormControl('', [Validators.required]);
-  controlAbelha: FormControl = new FormControl('', Validators.required);
-  controlPropriedade: FormControl = new FormControl('', Validators.required);
+  controlMunicipio: FormControl = new FormControl(null);
+  controlAbelha: FormControl = new FormControl(null);
+  controlPropriedade: FormControl = new FormControl(null);
   controlPropriedade2: FormControl = new FormControl('', Validators.required);
-  controlAssociacao: FormControl = new FormControl('', Validators.required);
+  controlAssociacao: FormControl = new FormControl(null);
   controlAssociacao2: FormControl = new FormControl('', Validators.required);
-  controlApicultor: FormControl = new FormControl('', Validators.required);
+  controlApicultor: FormControl = new FormControl(null);
   controlApicultor2: FormControl = new FormControl('', Validators.required);
-  controlColetadoPor: FormControl = new FormControl('', Validators.required);
+  controlColetadoPor: FormControl = new FormControl(null);
 
   filteredOptionsMunicipio: Observable<Municipio[]>;
   filteredOptionsEspecieAbelha: Observable<EspecieAbelha[]>;
@@ -141,12 +141,12 @@ export class EditMultipleApiaryComponent implements OnInit {
 
     this.filteredOptionsMunicipio = this.controlMunicipio.valueChanges
       .startWith(null)
-      .map<string, string>(nome => nome ? nome : '')
+      .map<string, string>(nome => nome ? nome : null)
       .map((nome => nome ? this.filterMunicipio(nome) : this.listMunicipio.slice()));
 
     this.filteredOptionsApicultor = this.controlApicultor.valueChanges
       .startWith(null)
-      .map<string, string>(nome => nome ? nome : '')
+      .map<string, string>(nome => nome ? nome : null)
       .map((nome => nome ? this.filterApicultor(nome) : this.listApicultor.slice()));
 
     this.filteredOptionsApicultor2 = this.controlApicultor2.valueChanges
@@ -156,12 +156,12 @@ export class EditMultipleApiaryComponent implements OnInit {
 
     this.filteredOptionsEspecieAbelha = this.controlAbelha.valueChanges
       .startWith(null)
-      .map<string, string>(nome => nome ? nome : '')
+      .map<string, string>(nome => nome ? nome : null)
       .map((nome => nome ? this.filterAbelha(nome) : this.listEspecieAbelha.slice()));
 
     this.filteredOptionsPropriedade = this.controlPropriedade.valueChanges
       .startWith(null)
-      .map<string, string>(nome => nome ? nome : '')
+      .map<string, string>(nome => nome ? nome : null)
       .map((nome => nome ? this.filterPropriedade(nome) : this.listPropriedade.slice()));
 
     this.filteredOptionsPropriedade2 = this.controlPropriedade2.valueChanges
@@ -172,12 +172,12 @@ export class EditMultipleApiaryComponent implements OnInit {
 
     this.filteredOptionsColetadorPor = this.controlColetadoPor.valueChanges
       .startWith(null)
-      .map<string, string>(nome => nome ? nome : '')
+      .map<string, string>(nome => nome ? nome : null)
       .map((nome => nome ? this.filterColetado(nome) : this.listColetadoPor.slice()));
 
     this.filteredOptionsAssociacao = this.controlAssociacao.valueChanges
       .startWith(null)
-      .map<string, string>(nome => nome ? nome : '')
+      .map<string, string>(nome => nome ? nome : null)
       .map((nome => nome ? this.filterAssociacao(nome) : this.listAssociacao.slice()));
 
     this.filteredOptionsAssociacao2 = this.controlAssociacao2.valueChanges
@@ -350,13 +350,13 @@ export class EditMultipleApiaryComponent implements OnInit {
   }
 
   clear() {
-    this.controlMunicipio.reset('');
-    this.controlApicultor.reset('');
-    this.controlAbelha.reset('');
-    this.controlPropriedade.reset('');
+    this.controlMunicipio.reset(null);
+    this.controlApicultor.reset(null);
+    this.controlAbelha.reset(null);
+    this.controlPropriedade.reset(null);
     this.controlApicultor2.reset('');
     this.controlPropriedade2.reset('');
-    this.controlAssociacao.reset('');
+    this.controlAssociacao.reset(null);
     this.controlAssociacao2.reset('');
     this.listApiarios = [];
     this.listApiarioSelected = [];
@@ -365,7 +365,8 @@ export class EditMultipleApiaryComponent implements OnInit {
 
   pesquisar() {
 
-    if (this.validar('BUSCAR')) {
+    if (true) {
+      debugger;
       let queryApiario = this.parseService.createQuery(Apiario);
 
       let queryApicultor = this.parseService.createQuery(Apicultor);
@@ -374,39 +375,46 @@ export class EditMultipleApiaryComponent implements OnInit {
       let queryAssociacao = this.parseService.createQuery(Associacao);
       let associacao:Associacao = this.controlAssociacao.value;
 
-      queryAssociacao.equalTo('objectId',associacao.getId());
+      if(!!associacao)
+        queryAssociacao.equalTo('objectId',associacao.getId());
 
-      if (!this.filtroColetadoPor)
+      if (!this.filtroColetadoPor && !!apicultor)
         queryApicultor.equalTo('objectId', apicultor.getId());
 
 
       let queryAbelha = this.parseService.createQuery(EspecieAbelha);
       let especieAbelha: EspecieAbelha = this.controlAbelha.value;
-      queryAbelha.equalTo('objectId', especieAbelha.getId());
+
+      if(!!especieAbelha)
+        queryAbelha.equalTo('objectId', especieAbelha.getId());
 
       let queryMunicipio = this.parseService.createQuery(Municipio);
       let municipio: Municipio = this.controlMunicipio.value;
-      queryMunicipio.equalTo('objectId', municipio.getId())
+
+      if(!!municipio)
+        queryMunicipio.equalTo('objectId', municipio.getId())
 
       let queryPropriedade = this.parseService.createQuery(Propriedade);
       let propriedade: Propriedade = this.controlPropriedade.value;
-      queryPropriedade.equalTo('objectId', propriedade.getId())
+      
+      if(!!propriedade)
+        queryPropriedade.equalTo('objectId', propriedade.getId())
 
       if (this.filtroColetadoPor) {
         let queryUser = this.parseService.createQuery(UserWeb);
         queryUser.equalTo('objectId', this.controlColetadoPor.value.id);
         queryApiario.matchesQuery('coletadoPor', queryUser);
       }
-      else if(apicultor.getNome().indexOf('Todos') < 0)
+      else if(!!apicultor && apicultor.getNome().indexOf('Todos') < 0)
         queryApiario.matchesQuery('apicultor', queryApicultor);
 
-      if(associacao.getNome().indexOf('Todos') < 0)
+      if(!!associacao && associacao.getNome().indexOf('Todos') < 0)
         queryApiario.matchesQuery('associacao',queryAssociacao);  
-      if (especieAbelha.getNome().indexOf('Todos') < 0)
+      if (!!especieAbelha && especieAbelha.getNome().indexOf('Todos') < 0)
         queryApiario.matchesQuery('especieAbelha', queryAbelha);
-      if (propriedade.getNome().indexOf('Todos') < 0)
+      if (!!propriedade && propriedade.getNome().indexOf('Todos') < 0)
         queryApiario.matchesQuery('propriedade', queryPropriedade);
-      if (municipio.getNome().indexOf('Todos') < 0)
+      if (!!municipio && municipio.getNome().indexOf('Todos') < 0)
         queryApiario.matchesQuery('municipio', queryMunicipio);
 
       queryApiario.limit(2000);
@@ -422,10 +430,11 @@ export class EditMultipleApiaryComponent implements OnInit {
           this.locations = tempLocation;
         })
       });
-    } else {
-      let message = '<p>Campos obrigatórios não foram preenchidos!</p>'
-      this.dialogService.confirm('Erro', message, 'ERRO', this.view);
-    }
+    } 
+    // else {
+    //   let message = '<p>Campos obrigatórios não foram preenchidos!</p>'
+    //   this.dialogService.confirm('Erro', message, 'ERRO', this.view);
+    // }
 
 
   }

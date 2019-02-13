@@ -1,135 +1,134 @@
 <mat-card>
-  <mat-card-title>Edição Multipla</mat-card-title>
-  <mat-card-content>
-    <div layout="column">
-       <section class="example-section">
-          <mat-slide-toggle   [checked]="false" (change)="change($event)" style="margin-bottom:15px;">
-            Coletado Por
-          </mat-slide-toggle>
-        </section>
-      <div layout="row">
-        <mat-icon style="margin-right: 10px;margin-top: 5px;"  [style.color]="error?.municipio ? 'red' :'black'">view_comfy</mat-icon>
-        <mat-form-field style="width: 20%" >
-          <input type="text" matInput placeholder="Municipio"  [matAutocomplete]="auto" [formControl]="controlMunicipio">
-          <mat-hint *ngIf="error?.municipio" [ngStyle]="{'color': 'red'}" align="start">*Campo obrigatório.</mat-hint>
-        </mat-form-field>
-        <mat-autocomplete #auto="matAutocomplete" [displayWith]="displayFn" style="width: 20%">
-          <mat-option *ngFor="let option of filteredOptionsMunicipio | async" [value]="option">
-            {{ option.getNome() }}
-          </mat-option>
-        </mat-autocomplete>        
-      </div>
-      <div layout="row" *ngIf="!filtroColetadoPor">
-        <mat-icon style="margin-right: 10px;margin-top: 5px;"  [style.color]="error?.apicultor ? 'red' :'black'">person</mat-icon>
-        <mat-form-field style="width: 20%">
-          <input type="text" matInput  [matAutocomplete]="api" [formControl]="controlApicultor" placeholder="Apicultor">
-          <mat-hint *ngIf="error?.apicultor" [ngStyle]="{'color': 'red'}" align="start">*Campo obrigatório.</mat-hint>
-        </mat-form-field>
-        <mat-autocomplete #api="matAutocomplete" [displayWith]="displayFn" style="width: 20%">
-          <mat-option *ngFor="let option of filteredOptionsApicultor | async" [value]="option">
-            {{ option.getNome() }}
-          </mat-option>
-        </mat-autocomplete>
-      </div>
-      <div layout="row" *ngIf="filtroColetadoPor">
-        <mat-icon style="margin-right: 10px;margin-top: 5px;"  [style.color]="error?.coletado ? 'red' :'black'">person</mat-icon>
-        <mat-form-field style="width: 20%">
-          <input type="text" matInput  [matAutocomplete]="api2" [formControl]="controlColetadoPor" placeholder="Coletado por">
-          <mat-hint *ngIf="error?.coletado" [ngStyle]="{'color': 'red'}" align="start">*Campo obrigatório.</mat-hint>
-        </mat-form-field>
-        <mat-autocomplete #api2="matAutocomplete" [displayWith]="displayFn2" style="width: 20%">
-          <mat-option *ngFor="let option of filteredOptionsColetadorPor | async" [value]="option">
-            {{ option.nome }}
-          </mat-option>
-        </mat-autocomplete>
-      </div>
-      <div layout="row">
-        <mat-icon class="mat-20" mat-list-avatar svgIcon="bee" style="margin-right: 10px;"  [style.color]="error?.abelha ? 'red' :'black'"></mat-icon>
-       <mat-form-field style="width: 20%">
-          <input type="text" matInput  [matAutocomplete]="abelha" [formControl]="controlAbelha" placeholder="Especie Abelha">
-          <mat-hint *ngIf="error?.abelha" [ngStyle]="{'color': 'red'}" align="start">*Campo obrigatório.</mat-hint>
-        </mat-form-field>
-        <mat-autocomplete #abelha="matAutocomplete" [displayWith]="displayFn" style="width: 20%">
-          <mat-option *ngFor="let option of filteredOptionsEspecieAbelha | async" [value]="option">
-            {{ option.getNome() }}
-          </mat-option>
-        </mat-autocomplete>
-      </div>
-      <div layout="row">
-        <mat-icon style="margin-right: 10px;margin-top: 5px;" [style.color]="error?.propriedade ? 'red' :'black'">view_comfy</mat-icon>
-        <mat-form-field style="width: 20%">
-          <input type="text" matInput  [matAutocomplete]="propri" [formControl]="controlPropriedade" placeholder="Propriedade">
-          <mat-hint *ngIf="error?.propriedade" [ngStyle]="{'color': 'red'}" align="start">*Campo obrigatório.</mat-hint>
-        </mat-form-field>
-        <mat-autocomplete #propri="matAutocomplete" [displayWith]="displayFn" style="width: 20%">
-          <mat-option *ngFor="let option of filteredOptionsPropriedade | async" [value]="option">
-            {{ option.getNome() }}
-          </mat-option>
-        </mat-autocomplete>       
-      </div> 
-      <div layout="row">
-        <mat-icon style="margin-right: 10px;margin-top: 5px;" [style.color]="error?.associacao ? 'red' :'black'">view_comfy</mat-icon>
-        <mat-form-field style="width: 20%">
-          <input type="text" matInput  [matAutocomplete]="associ1" [formControl]="controlAssociacao" placeholder="Associação">
-          <mat-hint *ngIf="error?.associacao" [ngStyle]="{'color': 'red'}" align="start">*Campo obrigatório.</mat-hint>
-        </mat-form-field>
-        <mat-autocomplete #associ1="matAutocomplete" [displayWith]="displayFn" style="width: 20%">
-          <mat-option *ngFor="let option of filteredOptionsAssociacao | async" [value]="option">
-            {{ option.getNome() }}
-          </mat-option>
-        </mat-autocomplete>       
-      </div>       
-    </div>
-    <div layout="row">  
-       <button mat-raised-button (click)="pesquisar()" color="primary" style="height: 35px;">Pesquisar</button>
-    </div>
-    <div layout="row">
-      <app-table style="width: 100%" [data]="listApiarios" [columns]="columns" [selectable]="true" [showPagination]="true" [multiple]="true" (itemSelectedAll)="itensSelected($event)" (itemSelected3)="itensSelected($event)" 
-        [showSelectionJquery]="false"></app-table>
-    </div>
-    <div layout="column">
-    
-      <div layout="row">
-        <mat-icon style="margin-right: 10px;margin-top: 5px;">person</mat-icon>
-         <mat-form-field style="width: 20%">
-          <input type="text" matInput  [matAutocomplete]="api1" [formControl]="controlApicultor2" placeholder="Apicultor">
-           <mat-hint *ngIf="error?.apicultor2" [ngStyle]="{'color': 'red'}" align="start">*Campo obrigatório.</mat-hint>
-        </mat-form-field>
-        <mat-autocomplete #api1="matAutocomplete" [displayWith]="displayFn" style="width: 20%">
-          <mat-option *ngFor="let option of filteredOptionsApicultor2 | async" [value]="option">
-            {{ option.getNome() }}
-          </mat-option>
-        </mat-autocomplete>
-      </div>
-      <div layout="row">
-        <mat-icon style="margin-right: 10px;margin-top: 5px;">view_comfy</mat-icon>
-         <mat-form-field style="width: 20%">
-          <input type="text" matInput  [matAutocomplete]="propri1" [formControl]="controlPropriedade2"  placeholder="Propriedade">
-           <mat-hint *ngIf="error?.propriedade2" [ngStyle]="{'color': 'red'}" align="start">*Campo obrigatório.</mat-hint>
-        </mat-form-field>
-        <mat-autocomplete #propri1="matAutocomplete" [displayWith]="displayFn" style="width: 20%">
-          <mat-option *ngFor="let option of filteredOptionsPropriedade2 | async" [value]="option">
-            {{ option.getNome() }}
-          </mat-option>
-        </mat-autocomplete>
-      </div>
-      <div layout="row">
-        <mat-icon style="margin-right: 10px;margin-top: 5px;" [style.color]="error?.associacao2 ? 'red' :'black'">view_comfy</mat-icon>
-        <mat-form-field style="width: 20%">
-          <input type="text" matInput  [matAutocomplete]="associ" [formControl]="controlAssociacao2" placeholder="Associação">
-          <mat-hint *ngIf="error?.associacao2" [ngStyle]="{'color': 'red'}" align="start">*Campo obrigatório.</mat-hint>
-        </mat-form-field>
-        <mat-autocomplete #associ="matAutocomplete" [displayWith]="displayFn" style="width: 20%">
-          <mat-option *ngFor="let option of filteredOptionsAssociacao2 | async" [value]="option">
-            {{ option.getNome() }}
-          </mat-option>
-        </mat-autocomplete>       
-      </div>  
-      <mat-card-actions layout="row" layout-align="start center">  
-        <button mat-raised-button color="primary" style="margin-bottom: 25px;height: 35px;" (click)="mover()">Mover</button>
-        <button mat-raised-button color="acent"  [routerLink]="['/home/lista/apiarios']">Voltar</button>
-      </mat-card-actions>
-    </div>
-  </mat-card-content>
+    <mat-card-title>Edição Multipla</mat-card-title>
+    <mat-card-content>
+        <div layout="column">
+            <section class="example-section">
+                <mat-slide-toggle [checked]="false" (change)="change($event)" style="margin-bottom:15px;">
+                    Coletado Por
+                </mat-slide-toggle>
+            </section>
+            <div layout="row">
+                <mat-icon style="margin-right: 10px;margin-top: 5px;" [style.color]="error?.municipio ? 'red' :'black'">view_comfy</mat-icon>
+                <mat-form-field style="width: 20%">
+                    <input type="text" matInput placeholder="Municipio" [matAutocomplete]="auto" [formControl]="controlMunicipio">
+                    <!-- <mat-hint *ngIf="error?.municipio" [ngStyle]="{'color': 'red'}" align="start">*Campo obrigatório.</mat-hint> -->
+                </mat-form-field>
+                <mat-autocomplete #auto="matAutocomplete" [displayWith]="displayFn" style="width: 20%">
+                    <mat-option *ngFor="let option of filteredOptionsMunicipio | async" [value]="option">
+                        {{ option.getNome() }}
+                    </mat-option>
+                </mat-autocomplete>
+            </div>
+            <div layout="row" *ngIf="!filtroColetadoPor">
+                <mat-icon style="margin-right: 10px;margin-top: 5px;" [style.color]="error?.apicultor ? 'red' :'black'">person</mat-icon>
+                <mat-form-field style="width: 20%">
+                    <input type="text" matInput [matAutocomplete]="api" [formControl]="controlApicultor" placeholder="Apicultor">
+                    <!-- <mat-hint *ngIf="error?.apicultor" [ngStyle]="{'color': 'red'}" align="start">*Campo obrigatório.</mat-hint> -->
+                </mat-form-field>
+                <mat-autocomplete #api="matAutocomplete" [displayWith]="displayFn" style="width: 20%">
+                    <mat-option *ngFor="let option of filteredOptionsApicultor | async" [value]="option">
+                        {{ option.getNome() }}
+                    </mat-option>
+                </mat-autocomplete>
+            </div>
+            <div layout="row" *ngIf="filtroColetadoPor">
+                <mat-icon style="margin-right: 10px;margin-top: 5px;" [style.color]="error?.coletado ? 'red' :'black'">person</mat-icon>
+                <mat-form-field style="width: 20%">
+                    <input type="text" matInput [matAutocomplete]="api2" [formControl]="controlColetadoPor" placeholder="Coletado por">
+                    <!-- <mat-hint *ngIf="error?.coletado" [ngStyle]="{'color': 'red'}" align="start">*Campo obrigatório.</mat-hint> -->
+                </mat-form-field>
+                <mat-autocomplete #api2="matAutocomplete" [displayWith]="displayFn2" style="width: 20%">
+                    <mat-option *ngFor="let option of filteredOptionsColetadorPor | async" [value]="option">
+                        {{ option.nome }}
+                    </mat-option>
+                </mat-autocomplete>
+            </div>
+            <div layout="row">
+                <mat-icon class="mat-20" mat-list-avatar svgIcon="bee" style="margin-right: 10px;" [style.color]="error?.abelha ? 'red' :'black'"></mat-icon>
+                <mat-form-field style="width: 20%">
+                    <input type="text" matInput [matAutocomplete]="abelha" [formControl]="controlAbelha" placeholder="Especie Abelha">
+                    <!-- <mat-hint *ngIf="error?.abelha" [ngStyle]="{'color': 'red'}" align="start">*Campo obrigatório.</mat-hint> -->
+                </mat-form-field>
+                <mat-autocomplete #abelha="matAutocomplete" [displayWith]="displayFn" style="width: 20%">
+                    <mat-option *ngFor="let option of filteredOptionsEspecieAbelha | async" [value]="option">
+                        {{ option.getNome() }}
+                    </mat-option>
+                </mat-autocomplete>
+            </div>
+            <div layout="row">
+                <mat-icon style="margin-right: 10px;margin-top: 5px;" [style.color]="error?.propriedade ? 'red' :'black'">view_comfy</mat-icon>
+                <mat-form-field style="width: 20%">
+                    <input type="text" matInput [matAutocomplete]="propri" [formControl]="controlPropriedade" placeholder="Propriedade">
+                    <!-- <mat-hint *ngIf="error?.propriedade" [ngStyle]="{'color': 'red'}" align="start">*Campo obrigatório.</mat-hint> -->
+                </mat-form-field>
+                <mat-autocomplete #propri="matAutocomplete" [displayWith]="displayFn" style="width: 20%">
+                    <mat-option *ngFor="let option of filteredOptionsPropriedade | async" [value]="option">
+                        {{ option.getNome() }}
+                    </mat-option>
+                </mat-autocomplete>
+            </div>
+            <div layout="row">
+                <mat-icon style="margin-right: 10px;margin-top: 5px;" [style.color]="error?.associacao ? 'red' :'black'">view_comfy</mat-icon>
+                <mat-form-field style="width: 20%">
+                    <input type="text" matInput [matAutocomplete]="associ1" [formControl]="controlAssociacao" placeholder="Associação">
+                    <!-- <mat-hint *ngIf="error?.associacao" [ngStyle]="{'color': 'red'}" align="start">*Campo obrigatório.</mat-hint> -->
+                </mat-form-field>
+                <mat-autocomplete #associ1="matAutocomplete" [displayWith]="displayFn" style="width: 20%">
+                    <mat-option *ngFor="let option of filteredOptionsAssociacao | async" [value]="option">
+                        {{ option.getNome() }}
+                    </mat-option>
+                </mat-autocomplete>
+            </div>
+        </div>
+        <div layout="row">
+            <button mat-raised-button (click)="pesquisar()" color="primary" style="height: 35px;">Pesquisar</button>
+        </div>
+        <div layout="row">
+            <app-table style="width: 100%" [data]="listApiarios" [columns]="columns" [selectable]="true" [showPagination]="true" [multiple]="true" (itemSelectedAll)="itensSelected($event)" (itemSelected3)="itensSelected($event)" [showSelectionJquery]="false"></app-table>
+        </div>
+        <div layout="column">
+
+            <div layout="row">
+                <mat-icon style="margin-right: 10px;margin-top: 5px;">person</mat-icon>
+                <mat-form-field style="width: 20%">
+                    <input type="text" matInput [matAutocomplete]="api1" [formControl]="controlApicultor2" placeholder="Apicultor">
+                    <mat-hint *ngIf="error?.apicultor2" [ngStyle]="{'color': 'red'}" align="start">*Campo obrigatório.</mat-hint>
+                </mat-form-field>
+                <mat-autocomplete #api1="matAutocomplete" [displayWith]="displayFn" style="width: 20%">
+                    <mat-option *ngFor="let option of filteredOptionsApicultor2 | async" [value]="option">
+                        {{ option.getNome() }}
+                    </mat-option>
+                </mat-autocomplete>
+            </div>
+            <div layout="row">
+                <mat-icon style="margin-right: 10px;margin-top: 5px;">view_comfy</mat-icon>
+                <mat-form-field style="width: 20%">
+                    <input type="text" matInput [matAutocomplete]="propri1" [formControl]="controlPropriedade2" placeholder="Propriedade">
+                    <mat-hint *ngIf="error?.propriedade2" [ngStyle]="{'color': 'red'}" align="start">*Campo obrigatório.</mat-hint>
+                </mat-form-field>
+                <mat-autocomplete #propri1="matAutocomplete" [displayWith]="displayFn" style="width: 20%">
+                    <mat-option *ngFor="let option of filteredOptionsPropriedade2 | async" [value]="option">
+                        {{ option.getNome() }}
+                    </mat-option>
+                </mat-autocomplete>
+            </div>
+            <div layout="row">
+                <mat-icon style="margin-right: 10px;margin-top: 5px;" [style.color]="error?.associacao2 ? 'red' :'black'">view_comfy</mat-icon>
+                <mat-form-field style="width: 20%">
+                    <input type="text" matInput [matAutocomplete]="associ" [formControl]="controlAssociacao2" placeholder="Associação">
+                    <mat-hint *ngIf="error?.associacao2" [ngStyle]="{'color': 'red'}" align="start">*Campo obrigatório.</mat-hint>
+                </mat-form-field>
+                <mat-autocomplete #associ="matAutocomplete" [displayWith]="displayFn" style="width: 20%">
+                    <mat-option *ngFor="let option of filteredOptionsAssociacao2 | async" [value]="option">
+                        {{ option.getNome() }}
+                    </mat-option>
+                </mat-autocomplete>
+            </div>
+            <mat-card-actions layout="row" layout-align="start center">
+                <button mat-raised-button color="primary" style="margin-bottom: 25px;height: 35px;" (click)="mover()">Mover</button>
+                <button mat-raised-button color="acent" [routerLink]="['/home/lista/apiarios']">Voltar</button>
+            </mat-card-actions>
+        </div>
+    </mat-card-content>
 </mat-card>
 <app-mapa style="margin-top: 10px;" [groupLocations]="locations"></app-mapa>
