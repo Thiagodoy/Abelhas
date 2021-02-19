@@ -7,3 +7,6 @@ export const environment = {
     return this.environment;
   }
 };
+
+
+//parse-dashboard --dev --appId "myAppId" --masterKey "myMasterKey" --serverURL "https://abelhas.herokuapp.com/parse" 
